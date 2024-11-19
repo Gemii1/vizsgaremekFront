@@ -1,0 +1,27 @@
+.container{
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    min-width: 300px;
+}
+
+.container h3{
+    text-align: center;
+}
+
+.userTypePicker{
+    background: lightgray;
+    padding: 5px;
+    border-radius: 10px;
+    margin: 5px;
+    border: 1px solid black;
+    font-weight: 500;
+    overflow: hidden; 
+    display: flex;
+    justify-content: space-between; 
+
+}
+
+.closeButton{
+    margin-top: 10px;
+}
