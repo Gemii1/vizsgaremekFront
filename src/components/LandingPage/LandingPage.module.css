@@ -1,0 +1,9 @@
+.banner{
+    background-image: url('img2.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+    max-width: 100%;
+    min-height: 1000px;
+    height: auto;
+}

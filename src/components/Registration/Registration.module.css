@@ -12,16 +12,20 @@
 .userTypePicker{
     background: lightgray;
     padding: 5px;
-    border-radius: 10px;
-    margin: 5px;
-    border: 1px solid black;
     font-weight: 500;
     overflow: hidden; 
     display: flex;
     justify-content: space-between; 
-
+    font-size: 25px;
+    align-items: center;
+    margin-top: 4px;
+    border-radius: 3px;
 }
 
-.closeButton{
+.container .closeButton{
     margin-top: 10px;
+}
+
+.userTypePicker:hover{
+    border: 1px solid black;
 }

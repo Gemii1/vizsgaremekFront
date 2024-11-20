@@ -5,6 +5,7 @@ import Navbar from './components/Navbar/Navbar';
 
 import Modal from '@mui/material/Modal';
 import Registration from './components/Registration/Registration';
+import LandingPage from './components/LandingPage/LandingPage';
 
 
 function App() {
@@ -25,16 +26,22 @@ function App() {
 
     },[])
 
-  
 
+
+  const [isUserLoggedIn,setIsUserLoggedIn] = useState(false)
+
+  function login() {
+    if (!isUserLoggedIn) {
+      return(
+          <LandingPage/>
+          
+      )
+    }
+  }
 
   return (
    <>
-    <Navbar/>
-
-
-        
-   
+      {login()}
    </>
   );
 }

@@ -8,7 +8,7 @@ function Registration({close}) {
     return(
         <>
             <div className={styles.container}>
-                <h3>Pick a User</h3>
+                <h3>Válassz felhasználót</h3>
                 <div className={styles.userTypePicker}>
                     Kliensként
                     {<ArrowForwardIosIcon className={styles.arrow} fontSize='small'/>}
