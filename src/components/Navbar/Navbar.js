@@ -33,9 +33,7 @@ function Navbar() {
                             <div className={styles.pageBlog}>Blogok</div>
                             <div className={styles.pageTraining}>Tréning</div>
 
-                            <Button  variant="contained"
-
-                                    onClick={() => setIsRegistration(true)}>Regisztrálás</Button>
+                            <Button  variant="contained" onClick={() => setIsRegistration(true)}>Regisztrálás</Button>
                         </div>
 
                     </div>

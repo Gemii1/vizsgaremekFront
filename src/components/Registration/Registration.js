@@ -4,26 +4,50 @@ import Tabs from '@mui/joy/Tabs';
 import TabList from '@mui/joy/TabList';
 import Tab from '@mui/joy/Tab';
 import TabPanel from '@mui/joy/TabPanel';
+import Form from '../Form/Form'
+import {useState} from "react";
 
 function Registration({close}) {
+
+    //False == Cliens, True == Edző
+    const [userType, setUserType]=useState(true);
+
+    function save(){
+
+    }
     return (
         <>
             <div className={styles.container}>
                 <Tabs >
                     <TabList tabFlex="auto">
-                        <Tab>Edzőként</Tab>
-                        <Tab>Kliensként</Tab>
+                        <Tab className={styles.tab}>
+                            <div className={styles.tabText} style={{}}
+                            onClick={()=>{
+                                setUserType(true);
+                            }}>
+                                Edzőként
+                            </div>
+                        </Tab>
+                        <Tab className={styles.tab}>
+                            <div className={styles.tabText}
+                            onClick={()=>{
+                                setUserType(false);
+                            }}>
+                                Kliensként
+                            </div>
+                        </Tab>
                     </TabList>
                     <TabPanel value={0}>
-                        <b>First</b> tab panel
+                        <Form userType={userType}/>
                     </TabPanel>
                     <TabPanel value={1}>
-                        <b>Second</b> tab panel
+                        <Form userType={userType}/>
                     </TabPanel>
                 </Tabs>
-                <Button className={styles.closeButton} variant="outlined" color="error" onClick={() => {
-                    close()
-                }}>Close</Button>
+                <div className={styles.buttons}>
+                    <Button className={styles.closeButton} variant="contained" color="error" onClick={() => {close()}}>Bezárás</Button>
+                    <Button className={styles.closeButton} variant="contained" color="info" onClick={() => {save()}}>Regisztrálás</Button>
+                </div>
             </div>
         </>
     )
@@ -32,18 +56,3 @@ function Registration({close}) {
 
 
 export default Registration;
-
-/*
-<h3>Válassz felhasználót</h3>
-<div className={styles.userTypePicker}>
-    Kliensként
-    {<ArrowForwardIosIcon className={styles.arrow} fontSize='small'/>}
-</div>
-<div className={styles.userTypePicker}>
-    Edzőként
-    {<ArrowForwardIosIcon className={styles.arrow} fontSize='small'/>}
-</div>
-
-<div></div>
-
- */
