@@ -1,9 +1,48 @@
+
+
 .banner{
-    background-image: url('img2.jpg');
+    background-image: url('asd.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 50% 50%;
     max-width: 100%;
     min-height: 1000px;
-    height: auto;
+    min-height: 1400px;
+}
+
+.title{
+    font-size: 50px;
+}
+
+.container{
+    background-color: whitesmoke;
+    margin: 0px;
+    padding: 0px;
+    font-size: 25px;
+    text-align: center;
+    min-height: 500px;
+}
+.cardsContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.cards{
+    padding: 10px;
+    margin: 10px;
+}
+
+.trainerImage{
+    background-position: 50% 10%;
+    background-repeat: no-repeat;
+}
+
+.registration{
+    position: relative;
+    top: 200px;
+    left: 200px;
+    right: 200px;
+
+
 }

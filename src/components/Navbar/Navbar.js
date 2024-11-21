@@ -1,9 +1,10 @@
 import styles from './Navbar.module.css';
 import FitnessCenterOutlinedIcon from '@mui/icons-material/FitnessCenterOutlined';
 import { useState } from 'react';
-
+import * as React from 'react';
 import Modal from '@mui/material/Modal';
 import Registration from '../Registration/Registration';
+import Button from '@mui/material/Button';
 
 
 function Navbar() {
@@ -14,7 +15,10 @@ function Navbar() {
         setIsRegistration(false)
       }
 
-    return(
+
+
+
+        return(
         <>
             <div className={styles.body}>
                 <div className={styles.container}>
@@ -23,21 +27,22 @@ function Navbar() {
                     <div className={styles.logo}>
                         {<FitnessCenterOutlinedIcon fontSize='large'/>}
                     </div>
-                    
-                    <div>
-                        <div>Blogok</div>
-                        <div>Tréning</div>
-                        <div onClick={()=>{
-                            setIsRegistration(true)
-                        }}>Regisztrálás</div>
-                      
-                    </div>
-                    
+
+                        <div>
+
+                            <div className={styles.pageBlog}>Blogok</div>
+                            <div className={styles.pageTraining}>Tréning</div>
+
+                            <Button  variant="contained"
+
+                                    onClick={() => setIsRegistration(true)}>Regisztrálás</Button>
+                        </div>
+
                     </div>
                 </div>
             </div>
             <Modal open={isRegistrationOpen} className={styles.modal}>
-                <Registration close={closeRegistration}/>
+                <Registration  close={closeRegistration}/>
             </Modal>
         
         </>

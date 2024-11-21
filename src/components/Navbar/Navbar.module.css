@@ -22,14 +22,12 @@
     align-items: center; 
     padding: 0 20px;
     font-size: larger;
-
     position: fixed;
     top: 0px;
     left: 0px;
     right: 0px;
-    z-index: 1030px;
+    z-index: 1000;
     overflow: hidden;
-    
   
 }
 .nav div{
@@ -37,8 +35,20 @@
     display: block;
     color: #f2f2f2;
     text-align: center; 
-    padding: 14px 16px; 
-    text-decoration: none; 
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+
+.nav Button{
+    padding: 14px 16px;
+}
+
+
+
+
+.pageBlog:hover, .pageTraining:hover{
+    color: lightgray;
 }
   
   
