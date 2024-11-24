@@ -1,3 +1,13 @@
 .form > *{
     margin: 20px;
 }
+
+.formRadio{
+    display: flex;
+    gap: 10px;
+}
+.modal{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}

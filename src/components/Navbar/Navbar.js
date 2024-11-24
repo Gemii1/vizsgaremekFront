@@ -5,6 +5,7 @@ import * as React from 'react';
 import Modal from '@mui/material/Modal';
 import Registration from '../Registration/Registration';
 import Button from '@mui/material/Button';
+import LoginPage from "../LoginPage/LoginPage";
 
 
 function Navbar() {
@@ -18,7 +19,9 @@ function Navbar() {
 
 
 
-        return(
+
+
+    return(
         <>
             <div className={styles.body}>
                 <div className={styles.container}>
@@ -39,9 +42,12 @@ function Navbar() {
                     </div>
                 </div>
             </div>
-            <Modal open={isRegistrationOpen} className={styles.modal}>
-                <Registration  close={closeRegistration}/>
+            <Modal open={isRegistrationOpen} onClose={closeRegistration} className={styles.modal}>
+                <div>
+                    <Registration close={closeRegistration}/>
+                </div>
             </Modal>
+
         
         </>
     )

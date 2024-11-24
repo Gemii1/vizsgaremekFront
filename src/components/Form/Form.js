@@ -1,8 +1,31 @@
 import Input from '@mui/joy/Input';
 import styles from './Form.module.css';
+import Radio from '@mui/joy/Radio';
+import * as React from 'react';
+import LoginPage from "../LoginPage/LoginPage";
+import Button from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
+import {useState} from "react";
+import {Login} from "@mui/icons-material";
+import Registration from "../Registration/Registration";
+
+function Form({userType, close}){
+
+    const [selectedValue, setSelectedValue] =useState('MALE')
+    const [isLoginOpen, setIsLoginOpen] =useState(false)
+
+    function openLogin(){
+        setIsLoginOpen(true)
+    }
 
 
-function Form({userType}){
+    const handleChange = (event) => {
+        setSelectedValue(event.target.value);
+    };
+
+
+
+
 
     function handleUserType(){
         if (userType){
@@ -13,13 +36,40 @@ function Form({userType}){
                         <Input type='email' placeholder="Emailcím"/>
                         <Input type='tel' placeholder="Telefonszám"/>
                         <Input type='date' placeholder="Születési év"/>
-                        {/*Gender input comes here*/}
-
+                        <div className={styles.formRadio}>
+                            <Radio
+                                checked={selectedValue === 'MALE'}
+                                onChange={handleChange}
+                                value="MALE"
+                                name="radio-buttons"
+                                label="Férfi"
+                            />
+                            <Radio
+                                checked={selectedValue === 'FEMALE'}
+                                onChange={handleChange}
+                                value="FEMALE"
+                                name="radio-buttons"
+                                label="nő"
+                            />
+                            <Radio
+                                checked={selectedValue === 'OTHER'}
+                                onChange={handleChange}
+                                value="OTHER"
+                                name="radio-buttons"
+                                label="egyéb"
+                            />
+                        </div>
                         <Input type='password' placeholder="Jelszó"/>
-                        <div><a href=" ">Már edző vagyok..</a></div>
+                        <div><Button
+                        onClick={() => {
+                            openLogin()
+                        }}>Már edző vagyok..
+                        </Button>
                     </div>
+                </div>
+                    <LoginPage isLoginOpen={isLoginOpen} openLogin={openLogin}/>
                 </>
-            );
+        );
         } else if (!userType) {
             return (
                 <>
@@ -28,10 +78,38 @@ function Form({userType}){
                         <Input type='email' placeholder="Emailcím"/>
                         <Input type='tel' placeholder="Telefonszám"/>
                         <Input type='date' placeholder="Születési év"/>
-                        {/*Gender input comes here*/}
+                        <div className={styles.formRadio}>
+                            <Radio
+                                checked={selectedValue === 'MALE'}
+                                onChange={handleChange}
+                                value="MALE"
+                                name="radio-buttons"
+                                label="Férfi"
+                            />
+                            <Radio
+                                checked={selectedValue === 'FEMALE'}
+                                onChange={handleChange}
+                                value="FEMALE"
+                                name="radio-buttons"
+                                label="nő"
+                            />
+                            <Radio
+                                checked={selectedValue === 'OTHER'}
+                                onChange={handleChange}
+                                value="OTHER"
+                                name="radio-buttons"
+                                label="egyéb"
+                            />
+                        </div>
                         <Input type='password' placeholder="Jelszó"/>
-                        <div><a href=" ">Már kliens vagyok..</a></div>
+                        <div><div onClick={()=>{
+                            close()
+                            openLogin()
+                        }}>Már kliens vagyok..</div></div>
                     </div>
+
+                    <LoginPage isLoginOpen={isLoginOpen} openLogin={openLogin}/>
+
                 </>
             );
         }
@@ -40,6 +118,8 @@ function Form({userType}){
     return (
         <>
             {handleUserType()}
+
+
         </>
     )
 

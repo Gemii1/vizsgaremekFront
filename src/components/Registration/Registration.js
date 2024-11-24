@@ -38,10 +38,10 @@ function Registration({close}) {
                         </Tab>
                     </TabList>
                     <TabPanel value={0}>
-                        <Form userType={userType}/>
+                        <Form close={close}userType={userType}/>
                     </TabPanel>
                     <TabPanel value={1}>
-                        <Form userType={userType}/>
+                        <Form close={close} userType={userType}/>
                     </TabPanel>
                 </Tabs>
                 <div className={styles.buttons}>

@@ -1,5 +1,14 @@
 .modal{
+
     display:flex;
     justify-content: center;
     align-items: center;
+}
+
+.modalContent{
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    min-width: 300px;
+
 }

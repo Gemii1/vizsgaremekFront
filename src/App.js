@@ -72,7 +72,7 @@ function App() {
     if (!isUserLoggedIn) {
       return(
           <LandingPage trainers={trainers}/>
-          
+
       )
     }
   }

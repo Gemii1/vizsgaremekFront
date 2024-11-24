@@ -2,13 +2,11 @@
     background: white;
     padding: 30px;
     border-radius: 10px;
-    min-width: 300px;
+    min-width: 450px;
 }
-
 .container h3{
     text-align: center;
 }
-
 .tabText{
     width: 100%;
     height: 100%;
@@ -18,19 +16,20 @@
 .tab{
     padding: 0px
 }
-
-
-
 .container .closeButton{
     margin-top: 10px;
 }
-
-
-
 .buttons{
     overflow: hidden;
     display: flex;
     justify-content: space-between;
+}
+
+
+@media (max-width: 500px) {
+    .container{
+        min-width: 300px;
+    }
 }
 
 
