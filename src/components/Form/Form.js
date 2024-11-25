@@ -8,8 +8,11 @@ import Modal from "@mui/material/Modal";
 import {useState} from "react";
 import {Login} from "@mui/icons-material";
 import Registration from "../Registration/Registration";
+import PhoneInput from "react-phone-input-2";
+import 'react-phone-input-2/lib/style.css'
 
-function Form({userType, close}){
+
+function Form({userType, close}) {
 
     const [selectedValue, setSelectedValue] =useState('MALE')
     const [isLoginOpen, setIsLoginOpen] =useState(false)
@@ -34,7 +37,12 @@ function Form({userType, close}){
                     <div className={styles.form}>
                         <Input placeholder="Teljes Név"/>
                         <Input type='email' placeholder="Emailcím"/>
-                        <Input type='tel' placeholder="Telefonszám"/>
+
+                        <PhoneInput
+                            className="number"
+                            country={"hu"}
+
+                            className = {styles.phoneInput}/>
                         <Input type='date' placeholder="Születési év"/>
                         <div className={styles.formRadio}>
                             <Radio
