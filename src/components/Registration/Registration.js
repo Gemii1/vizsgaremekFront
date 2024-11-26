@@ -11,10 +11,16 @@ function Registration({close}) {
 
     //False == Cliens, True == Edző
     const [userType, setUserType]=useState(true);
+    const [image, setImage]=useState(null);
 
     function save(){
 
     }
+    const handleImage=(image)=>{
+        setImage(image);
+    }
+
+
     return (
         <>
             <div className={styles.container}>
@@ -38,15 +44,15 @@ function Registration({close}) {
                         </Tab>
                     </TabList>
                     <TabPanel value={0}>
-                        <Form close={close}userType={userType}/>
+                        <Form sendImage={handleImage} userType={userType}/>
                     </TabPanel>
                     <TabPanel value={1}>
-                        <Form close={close} userType={userType}/>
+                        <Form sendImage={handleImage} userType={userType}/>
                     </TabPanel>
                 </Tabs>
                 <div className={styles.buttons}>
                     <Button className={styles.closeButton} variant="contained" color="error" onClick={() => {close()}}>Bezárás</Button>
-                    <Button className={styles.closeButton} variant="contained" color="info" onClick={() => {save()}}>Regisztrálás</Button>
+                    <Button className={styles.closeButton} variant="contained" color="info" onClick={() => {console.log(image)}}>Regisztrálás</Button>
                 </div>
             </div>
         </>

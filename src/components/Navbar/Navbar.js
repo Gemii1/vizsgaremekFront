@@ -8,15 +8,16 @@ import Button from '@mui/material/Button';
 import LoginPage from "../LoginPage/LoginPage";
 
 
-function Navbar() {
+function Navbar(){
 
-    const [isRegistrationOpen,setIsRegistration]=useState(false)
+    const [isLoginOpen,setIsLoginOpen]=useState(false)
 
-    function closeRegistration() {
-        setIsRegistration(false)
-      }
-
-
+    function closeLoginModal(){
+        setIsLoginOpen(false);
+    }
+    function openLoginModal(){
+        setIsLoginOpen(true);
+    }
 
 
 
@@ -27,30 +28,30 @@ function Navbar() {
                 <div className={styles.container}>
                     <div className={styles.nav}>
 
-                    <div className={styles.logo}>
-                        {<FitnessCenterOutlinedIcon fontSize='large'/>}
-                    </div>
-
+                        <div className={styles.logo}>
+                            {<FitnessCenterOutlinedIcon fontSize='large'/>}
+                        </div>
                         <div>
 
                             <div className={styles.pageBlog}>Blogok</div>
                             <div className={styles.pageTraining}>Tréning</div>
 
-                            <Button  variant="contained" onClick={() => setIsRegistration(true)}>Regisztrálás</Button>
+                            <Button  variant="contained" onClick={() => openLoginModal()}>Bejelentkezés</Button>
                         </div>
 
                     </div>
                 </div>
             </div>
-            <Modal open={isRegistrationOpen} onClose={closeRegistration} className={styles.modal}>
-                <div>
-                    <Registration close={closeRegistration}/>
-                </div>
-            </Modal>
 
-        
+            <div>
+                <LoginPage isLoginOpen={isLoginOpen} closeLoginModal={closeLoginModal}/>
+
+            </div>
+
+
+
+
         </>
     )
 }
-
 export default Navbar;

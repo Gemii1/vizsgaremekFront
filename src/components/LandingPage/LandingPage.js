@@ -7,10 +7,19 @@ import CardContent from '@mui/joy/CardContent';
 import CardOverflow from '@mui/joy/CardOverflow';
 import Typography from '@mui/joy/Typography';
 import Grid from '@mui/joy/Grid';
+import Registration from "../Registration/Registration";
+import Modal from "@mui/material/Modal";
+import {useState} from "react";
 
 
 
 function LandingPage({trainers, open}){
+
+    const [isRegistrationOpen,setIsRegistration]=useState(false)
+
+    function closeRegistration() {
+        setIsRegistration(false)
+    }
 
 
 
@@ -23,10 +32,9 @@ function LandingPage({trainers, open}){
                 <Navbar/>
                 <section>
                     <div className={styles.banner}>
-                        <div className={styles.registration}></div>
+                        <div className={styles.registration}> Edz Nálunk</div>
                     </div>
                 </section>
-
                 <section>
                     <div className={styles.container}>
                         <div className={styles.title}>Edzőink</div>
@@ -62,8 +70,13 @@ function LandingPage({trainers, open}){
 
                     </div>
                 </section>
-
             </div>
+
+            <Modal open={isRegistrationOpen} onClose={closeRegistration} className={styles.modal}>
+                <div>
+                    <Registration close={closeRegistration}/>
+                </div>
+            </Modal>
 
         </>
     )

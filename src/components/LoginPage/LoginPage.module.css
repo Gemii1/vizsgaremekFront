@@ -12,3 +12,27 @@
     min-width: 300px;
 
 }
+
+.buttons{
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+.container{
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    min-width: 450px;
+}
+.container h3{
+    text-align: center;
+}
+
+.inputs{
+    padding: 20px;
+}
+.inputs > *{
+    margin: 10px;
+    padding: 10px;
+}
