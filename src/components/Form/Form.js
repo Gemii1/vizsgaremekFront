@@ -39,10 +39,10 @@ function Form({userType, close}) {
                         <Input type='email' placeholder="Emailcím"/>
 
                         <PhoneInput
-                            className="number"
                             country={"hu"}
-
-                            className = {styles.phoneInput}/>
+                            className = {styles.phone}
+                            inputStyle={{(this.state.viewport.width <500)?}}
+                        />
                         <Input type='date' placeholder="Születési év"/>
                         <div className={styles.formRadio}>
                             <Radio
@@ -111,7 +111,7 @@ function Form({userType, close}) {
                         </div>
                         <Input type='password' placeholder="Jelszó"/>
                         <div><div onClick={()=>{
-                            close()
+
                             openLogin()
                         }}>Már kliens vagyok..</div></div>
                     </div>

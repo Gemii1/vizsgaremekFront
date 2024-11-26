@@ -1,7 +1,7 @@
 
 
 .banner{
-    background-image: url('asd.jpg');
+    background-image: url('../../../public/Images/asd.jpg');
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 50% 50%;

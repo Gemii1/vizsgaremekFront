@@ -18,33 +18,33 @@ function App() {
         name:"Joska",
         birthYear:1991,
         phoneNumber:"+3620 756 32 32",
-        imgURL:"img1.jpg"
+        imgURL:"Images/img1.jpg"
 
       },
         {
             name:"Joska",
             birthYear:1991,
             phoneNumber:"+3620 756 32 32",
-            imgURL:"img1.jpg"
+            imgURL:"Images/img1.jpg"
 
         },
         {
             name:"Joska",
             birthYear:1991,
             phoneNumber:"+3620 756 32 32",
-            imgURL:"img1.jpg"
+            imgURL:"Images/img1.jpg"
 
         },{
             name:"Joska",
             birthYear:1991,
             phoneNumber:"+3620 756 32 32",
-            imgURL:"img1.jpg"
+            imgURL:"Images/img1.jpg"
 
         },{
             name:"Joska",
             birthYear:1991,
             phoneNumber:"+3620 756 32 32",
-            imgURL:"https://media.discordapp.net/attachments/952640543253475348/1308903299805745203/img1.jpg?ex=673fa2b0&is=673e5130&hm=0fbb60c26d55d00d098e636e399ef60b4e8179d6eec53e085ba751a37994df5e&=&format=webp&width=718&height=718"
+            imgURL:"Images/img1.jpg"
 
         },
 
