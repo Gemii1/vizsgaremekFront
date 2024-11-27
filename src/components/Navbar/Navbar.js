@@ -36,7 +36,7 @@ function Navbar(){
                             <div className={styles.pageBlog}>Blogok</div>
                             <div className={styles.pageTraining}>Tréning</div>
 
-                            <Button  variant="contained" onClick={() => openLoginModal()}>Bejelentkezés</Button>
+                            <Button className={styles.loginButton}  variant="contained" color="inherit" onClick={() => openLoginModal()}>Bejelentkezés</Button>
                         </div>
 
                     </div>

@@ -10,6 +10,7 @@ import Grid from '@mui/joy/Grid';
 import Registration from "../Registration/Registration";
 import Modal from "@mui/material/Modal";
 import {useState} from "react";
+import Button from "@mui/material/Button";
 
 
 
@@ -19,6 +20,9 @@ function LandingPage({trainers, open}){
 
     function closeRegistration() {
         setIsRegistration(false)
+    }
+    function openRegistration(){
+        setIsRegistration(true)
     }
 
 
@@ -30,9 +34,12 @@ function LandingPage({trainers, open}){
             <div style={{fontFamily:"Kalam"}}>
 
                 <Navbar/>
-                <section>
-                    <div className={styles.banner}>
-                        <div className={styles.registration}> Edz Nálunk</div>
+                <section className={styles.banner}>
+                    <div >
+                        <div className={styles.registration}>
+                            <h3>Edz nálunk</h3>
+                            <Button style={{fontSize:'200%'}} variant="contained" className={styles.registrationButton} color="info" onClick={() => {openRegistration()}}>Regisztrálás</Button>
+                        </div>
                     </div>
                 </section>
                 <section>

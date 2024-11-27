@@ -28,7 +28,6 @@
     right: 0px;
     z-index: 1000;
     overflow: hidden;
-  
 }
 .nav div{
     float: left; 
@@ -38,19 +37,17 @@
     padding: 14px 16px;
     text-decoration: none;
 }
-
-
 .nav Button{
     padding: 14px 16px;
 }
-
-
-
-
 .pageBlog:hover, .pageTraining:hover{
     color: lightgray;
 }
-  
+
+.loginButton{
+    color: black;
+    font-weight: bold;
+}
   
 @media screen { 
     .navbar {

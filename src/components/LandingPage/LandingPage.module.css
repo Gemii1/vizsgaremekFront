@@ -2,16 +2,18 @@
 
 .banner{
     background-image: url('../../../public/Images/asd.jpg');
-    background-repeat: no-repeat;
     background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
     background-position: 50% 50%;
-    max-width: 100%;
-    min-height: 1000px;
-    min-height: 1400px;
+    min-width: 100vh;
+    height: 1000px;
 }
 
 .title{
     font-size: 50px;
+    min-width: 100vh;
+
 }
 
 .container{
@@ -26,6 +28,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    min-width: 100vh;
 
 }
 .cardsContainer >*{
@@ -43,12 +46,17 @@
 }
 
 .registration{
-    position: relative;
-    top: 200px;
-    left: 200px;
-    right: 200px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+.registration > *{
+    font-size: 80px
 
-
+}
+.registrationButton{
 }
 
 .modal{
@@ -57,4 +65,9 @@
     align-items: center;
 }
 
+@media (max-width: 350px) {
+    .cardContainer {
+
+    }
+}
 

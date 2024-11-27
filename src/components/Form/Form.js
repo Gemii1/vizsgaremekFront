@@ -54,7 +54,8 @@ function Form({sendImage,userType}) {
                             inputStyle={mediaMatch.matches?{width:'90.5%'}:{width:'85%'}}
                         />
                         <Input type='date' placeholder="Születési év"/>
-                        <Input type='p'></Input>
+                        {/* Select lesz a végezettség*/}
+                        <Input type='text' placeholder="Végzettség"></Input>
                         <Input type='password' placeholder="Jelszó"/>
                         <div className={styles.formRadio}>
                             <Radio
@@ -80,7 +81,6 @@ function Form({sendImage,userType}) {
                             />
                         </div>
                         <Input type='file' onChange={onImageChange} placeholder="File"/>
-                        <img style={{width:'100px',height:'100px'}} src={image} alt="preview image"/>
                     </div>
                 </>
         );
