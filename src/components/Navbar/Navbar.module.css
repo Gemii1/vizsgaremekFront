@@ -26,7 +26,7 @@
     top: 0px;
     left: 0px;
     right: 0px;
-    z-index: 1000;
+    z-index: 2;
     overflow: hidden;
 }
 .nav div{
@@ -45,19 +45,22 @@
 }
 
 .loginButton{
-    color: black;
+    color: black !important;
     font-weight: bold;
 }
-  
-@media screen { 
-    .navbar {
-      flex-direction: column; 
-      align-items: flex-end; 
+
+.pages{
+    font-size: 20px;
+}
+@media only screen and (max-width: 720px) {
+    .pages {
+        font-size: 1.5rem;
     }
-    .navbar div {
-      text-align: left; 
-      width: 100%; 
+    .loginButton{
+        font-size: 1.5rem !important;
+    }
+    .pageBlog, .pageTraining{
+        margin: 10px;
     }
 }
-  
 

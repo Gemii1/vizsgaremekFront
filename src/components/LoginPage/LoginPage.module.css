@@ -1,16 +1,11 @@
-.modal{
-
+.login{
     display:flex;
     justify-content: center;
     align-items: center;
+    height: 100vh;
+    background-color: whitesmoke;
 }
 
-.modalContent{
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    min-width: 300px;
-}
 
 .buttons{
     overflow: hidden;
@@ -29,7 +24,8 @@
 }
 
 .inputs{
-    padding: 20px;
+    padding: 30px;
+    margin-bottom: 10px;
 }
 .inputs > *{
     margin: 10px;

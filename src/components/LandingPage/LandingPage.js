@@ -7,38 +7,35 @@ import CardContent from '@mui/joy/CardContent';
 import CardOverflow from '@mui/joy/CardOverflow';
 import Typography from '@mui/joy/Typography';
 import Grid from '@mui/joy/Grid';
-import Registration from "../Registration/Registration";
-import Modal from "@mui/material/Modal";
 import {useState} from "react";
 import Button from "@mui/material/Button";
+import {useNavigate} from "react-router";
 
 
 
 function LandingPage({trainers, open}){
 
-    const [isRegistrationOpen,setIsRegistration]=useState(false)
 
-    function closeRegistration() {
-        setIsRegistration(false)
-    }
-    function openRegistration(){
-        setIsRegistration(true)
-    }
-
-
+    let navigate = useNavigate();
 
     return(
         <>
             {/* Font import */}
             <link href="https://fonts.googleapis.com/css?family=Kalam" rel="stylesheet"/>
-            <div style={{fontFamily:"Kalam"}}>
+            <meta name="viewport" content="width=720"/>
+            <div style={{fontFamily: "Kalam"}}>
 
                 <Navbar/>
                 <section className={styles.banner}>
-                    <div >
+                    <div>
                         <div className={styles.registration}>
-                            <h3>Edz nálunk</h3>
-                            <Button style={{fontSize:'200%'}} variant="contained" className={styles.registrationButton} color="info" onClick={() => {openRegistration()}}>Regisztrálás</Button>
+                            <h3 style={{margin: '10px'}}>Edz velünk</h3>
+                            <p className={styles.quote}>„Nem a kő súlya az, ami számít. Hanem az ok, amiért felemeled.”
+                                --Hugo Girard</p>
+                            <Button style={{fontSize: '200%'}} variant="contained" className={styles.registrationButton}
+                                    color="info" onClick={() => {
+                                    navigate("/registration")
+                            }}>Regisztrálás</Button>
                         </div>
                     </div>
                 </section>
@@ -79,11 +76,9 @@ function LandingPage({trainers, open}){
                 </section>
             </div>
 
-            <Modal open={isRegistrationOpen} onClose={closeRegistration} className={styles.modal}>
-                <div>
-                    <Registration close={closeRegistration}/>
-                </div>
-            </Modal>
+
+
+
 
         </>
     )

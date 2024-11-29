@@ -6,6 +6,9 @@ import Navbar from './components/Navbar/Navbar';
 import Modal from '@mui/material/Modal';
 import Registration from './components/Registration/Registration';
 import LandingPage from './components/LandingPage/LandingPage';
+import { BrowserRouter, Routes, Route } from "react-router";
+import LoginPage from "./components/LoginPage/LoginPage";
+import PageNotFound from "./components/PageNotFound/PageNotFound";
 
 
 function App() {
@@ -68,19 +71,20 @@ function App() {
 
   const [isUserLoggedIn,setIsUserLoggedIn] = useState(false)
 
-  function login() {
-    if (!isUserLoggedIn) {
-      return(
-          <LandingPage trainers={trainers}/>
-
-      )
-    }
-  }
 
   return (
-   <>
-      {login()}
-   </>
+   <div>
+       <BrowserRouter>
+           <Routes>
+               <Route index element={<LandingPage trainers={trainers}/>} />
+               <Route path="/landingPage" element={<LandingPage trainers={trainers}/>} />
+               <Route path="/login" element={<LoginPage/>} />
+               <Route path="/registration" element={<Registration />} />
+               <Route path="*" element={<PageNotFound />} />
+           </Routes>
+       </BrowserRouter>
+
+   </div>
   );
 }
 

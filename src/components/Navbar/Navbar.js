@@ -6,6 +6,7 @@ import Modal from '@mui/material/Modal';
 import Registration from '../Registration/Registration';
 import Button from '@mui/material/Button';
 import LoginPage from "../LoginPage/LoginPage";
+import {useNavigate} from "react-router"
 
 
 function Navbar(){
@@ -19,7 +20,7 @@ function Navbar(){
         setIsLoginOpen(true);
     }
 
-
+    let navigate = useNavigate();
 
 
     return(
@@ -27,28 +28,18 @@ function Navbar(){
             <div className={styles.body}>
                 <div className={styles.container}>
                     <div className={styles.nav}>
-
-                        <div className={styles.logo}>
+                        <div>
                             {<FitnessCenterOutlinedIcon fontSize='large'/>}
                         </div>
-                        <div>
-
+                        <div className={styles.pages}>
                             <div className={styles.pageBlog}>Blogok</div>
                             <div className={styles.pageTraining}>Tréning</div>
-
-                            <Button className={styles.loginButton}  variant="contained" color="inherit" onClick={() => openLoginModal()}>Bejelentkezés</Button>
+                            <Button className={styles.loginButton}  variant="contained" color="inherit" onClick={() => navigate("/login")}>Bejelentkezés</Button>
                         </div>
 
                     </div>
                 </div>
             </div>
-
-            <div>
-                <LoginPage isLoginOpen={isLoginOpen} closeLoginModal={closeLoginModal}/>
-
-            </div>
-
-
 
 
         </>

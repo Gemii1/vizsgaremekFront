@@ -20,17 +20,16 @@ function Form({sendImage,userType}) {
     function openLogin(){
         setIsLoginOpen(true)
     }
+
     const handleChange = (event) => {
         setSelectedValue(event.target.value);
     };
-
     //Ablakméret figyelő
     useEffect(() => {
         const handler = e => setMatches(e.matches);
         mediaMatch.addListener(handler);
         return () => mediaMatch.removeListener(handler);
     });
-
     //Image kezelő
     const onImageChange = (event) => {
         if (event.target.files && event.target.files[0]) {
@@ -126,13 +125,11 @@ function Form({sendImage,userType}) {
             );
         }
     }
-
     return (
         <>
             {handleUserType()}
         </>
     )
-
 }
 
 export default Form;

@@ -6,8 +6,9 @@ import Tab from '@mui/joy/Tab';
 import TabPanel from '@mui/joy/TabPanel';
 import Form from '../Form/Form'
 import {useState} from "react";
+import {useNavigate} from "react-router";
 
-function Registration({close}) {
+function Registration() {
 
     //False == Cliens, True == Edző
     const [userType, setUserType]=useState(true);
@@ -19,6 +20,8 @@ function Registration({close}) {
     const handleImage=(image)=>{
         setImage(image);
     }
+
+    let navigate = useNavigate();
 
 
     return (
@@ -51,7 +54,7 @@ function Registration({close}) {
                     </TabPanel>
                 </Tabs>
                 <div className={styles.buttons}>
-                    <Button className={styles.closeButton} variant="contained" color="error" onClick={() => {close()}}>Bezárás</Button>
+                    <Button className={styles.closeButton} variant="contained" color="error" onClick={() => {navigate("/landingPage")}}>Bezárás</Button>
                     <Button className={styles.closeButton} variant="contained" color="info" onClick={() => {console.log(image)}}>Regisztrálás</Button>
                 </div>
             </div>
