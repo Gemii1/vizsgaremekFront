@@ -29,7 +29,7 @@ function LandingPage({trainers, open}){
                 <section className={styles.banner}>
                     <div>
                         <div className={styles.registration}>
-                            <h3 style={{margin: '10px'}}>Edz velünk</h3>
+                            <h3 style={{margin: '10px'}}>Eddz velünk</h3>
                             <p className={styles.quote}>„Nem a kő súlya az, ami számít. Hanem az ok, amiért felemeled.”
                                 --Hugo Girard</p>
                             <Button style={{fontSize: '200%'}} variant="contained" className={styles.registrationButton}

@@ -1,5 +1,3 @@
-
-import Modal from '@mui/material/Modal';
 import styles from './LoginPage.module.css'
 import * as React from 'react';
 import Button from "@mui/material/Button";
@@ -29,7 +27,7 @@ function LoginPage() {
                         <Button className={styles.closeButton} variant="contained" color="info"
                                 onClick={() => {
 
-                                }}>Regisztrálás</Button>
+                                }}>Bejelentkezés</Button>
                     </div>
                 </div>
             </div>
