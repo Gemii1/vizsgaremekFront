@@ -2,23 +2,10 @@ import styles from './Navbar.module.css';
 import FitnessCenterOutlinedIcon from '@mui/icons-material/FitnessCenterOutlined';
 import { useState } from 'react';
 import * as React from 'react';
-import Modal from '@mui/material/Modal';
-import Registration from '../Registration/Registration';
 import Button from '@mui/material/Button';
-import LoginPage from "../LoginPage/LoginPage";
 import {useNavigate} from "react-router"
 
-
 function Navbar(){
-
-    const [isLoginOpen,setIsLoginOpen]=useState(false)
-
-    function closeLoginModal(){
-        setIsLoginOpen(false);
-    }
-    function openLoginModal(){
-        setIsLoginOpen(true);
-    }
 
     let navigate = useNavigate();
 

@@ -13,13 +13,15 @@ body{
     position: relative;
     background-position: 50% 50%;
     min-width: 100%;
-    min-height: 1400px;
+    min-height: 100vh;
+}
+.registration h3{
+    align-content: center !important;
 }
 
 .title{
     font-size: 50px;
     min-width: 100vw;
-
 }
 
 .container{
@@ -70,6 +72,12 @@ body{
     display:flex;
     justify-content: center;
     align-items: center;
+}
+
+@media only screen and (min-width: 720px) {
+    .registration h3{
+        width: 500px;
+    }
 }
 
 

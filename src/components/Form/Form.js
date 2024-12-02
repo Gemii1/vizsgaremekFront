@@ -2,8 +2,6 @@ import Input from '@mui/joy/Input';
 import styles from './Form.module.css';
 import Radio from '@mui/joy/Radio';
 import * as React from 'react';
-import LoginPage from "../LoginPage/LoginPage";
-import Button from "@mui/material/Button";
 import {useState, useEffect} from "react";
 import PhoneInput from "react-phone-input-2";
 import 'react-phone-input-2/lib/style.css'
@@ -12,18 +10,15 @@ import 'react-phone-input-2/lib/style.css'
 function Form({sendImage,userType}) {
 
     const [selectedValue, setSelectedValue] =useState('MALE')
-    const [isLoginOpen, setIsLoginOpen] =useState(false)
     const mediaMatch = window.matchMedia('(min-width:500px)');
     const [matches, setMatches] = useState(mediaMatch.matches);
     const [image,setImage]=useState(null);
 
-    function openLogin(){
-        setIsLoginOpen(true)
-    }
 
     const handleChange = (event) => {
         setSelectedValue(event.target.value);
     };
+
     //Ablakméret figyelő
     useEffect(() => {
         const handler = e => setMatches(e.matches);

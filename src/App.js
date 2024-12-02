@@ -1,9 +1,6 @@
 import styles from './App.module.css';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import Navbar from './components/Navbar/Navbar';
-
-import Modal from '@mui/material/Modal';
 import Registration from './components/Registration/Registration';
 import LandingPage from './components/LandingPage/LandingPage';
 import { BrowserRouter, Routes, Route } from "react-router";
