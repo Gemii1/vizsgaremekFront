@@ -74,7 +74,7 @@ body{
     align-items: center;
 }
 
-@media only screen and (min-width: 720px) {
+@media only screen and (max-width: 720px) {
     .registration h3{
         width: 500px;
     }

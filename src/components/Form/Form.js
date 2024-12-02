@@ -34,6 +34,7 @@ function Form({sendImage,userType}) {
     }
 
 
+
     function handleUserType(){
         if (userType){
             return (
