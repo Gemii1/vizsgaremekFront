@@ -56,7 +56,9 @@ function Navbar(){
                                         <Menu>
                                             <MenuItem>Profile</MenuItem>
                                             <MenuItem>My account</MenuItem>
-                                            <MenuItem>Logout</MenuItem>
+                                            <MenuItem><div onClick={()=>{
+                                                setUserLoggedIn(false)
+                                            }}>Logout </div></MenuItem>
                                         </Menu>
                                     </Dropdown>
                                 </div>

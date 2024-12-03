@@ -57,21 +57,28 @@
 
 .menuButton{
     padding:3px !important;
-    color:white;
+    color:white !important;
 }
 
 .menuButton:hover{
-    background-color: darkgray;
+    background-color: darkgray !important;
 }
 @media only screen and (max-width: 720px) {
     .pages {
         font-size: 1.5rem;
     }
     .loginButton{
-        font-size: 1.5rem !important;
+        font-size: 1rem !important;
+        margin: 10px ! important;
+
     }
     .pageBlog, .pageTraining{
         margin: 10px;
     }
+
+    .menuButton{
+        margin: 10px !important;
+    }
+
 }
 
