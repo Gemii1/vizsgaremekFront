@@ -55,7 +55,7 @@ function LandingPage({trainers, open}){
                                                         <CardOverflow>
                                                             <AspectRatio minHeight="675px">
                                                                 <div className={styles.trainerImage}
-                                                                     style={{backgroundImage: `url(${trainer.imgURL})`}}></div>
+                                                                     style={{backgroundImage: `url(${trainer.picture})`}}></div>
                                                             </AspectRatio>
                                                         </CardOverflow>
                                                         <CardContent>

@@ -27,8 +27,8 @@ function Navbar(){
                                     {<FitnessCenterOutlinedIcon fontSize='large'/>}
                                 </div>
                                 <div className={styles.pages}>
-                                    <div className={styles.pageBlog}>Blogok</div>
-                                    <div className={styles.pageTraining}>Tréning</div>
+                                    <div className={styles.pageBlog} onClick={() => navigate("/blogs")}>Blogok</div>
+                                    <div className={styles.pageTraining} onClick={() => navigate("/training")}>Tréning</div>
                                     <Button className={styles.loginButton} variant="contained" color="inherit"
                                             onClick={() => navigate("/login")}>Bejelentkezés</Button>
                                 </div>
@@ -48,17 +48,20 @@ function Navbar(){
                                     {<FitnessCenterOutlinedIcon fontSize='large'/>}
                                 </div>
                                 <div className={styles.pages}>
-                                    <div className={styles.pageBlog}>Blogok</div>
-                                    <div className={styles.pageTraining}>Tréning</div>
-
+                                    <div className={styles.pageBlog} onClick={() => navigate("/blogs")}>Blogok</div>
+                                    <div className={styles.pageTraining} onClick={() => navigate("/training")}>Tréning</div>
                                     <Dropdown>
-                                        <MenuButton className={styles.menuButton}><AccountCircleIcon style={{fontSize: 'xxx-large'}} /></MenuButton>
+                                        <MenuButton className={styles.menuButton}><AccountCircleIcon
+                                            style={{fontSize: 'xxx-large'}}/></MenuButton>
                                         <Menu>
                                             <MenuItem>Profile</MenuItem>
                                             <MenuItem>My account</MenuItem>
-                                            <MenuItem><div onClick={()=>{
-                                                setUserLoggedIn(false)
-                                            }}>Logout </div></MenuItem>
+                                            <MenuItem>
+                                                <div onClick={() => {
+                                                    setUserLoggedIn(false)
+                                                }}>Logout
+                                                </div>
+                                            </MenuItem>
                                         </Menu>
                                     </Dropdown>
                                 </div>
