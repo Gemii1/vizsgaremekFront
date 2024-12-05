@@ -35,6 +35,9 @@ function Form({sendImage,userType}) {
 
 
 
+
+
+
     function handleUserType(){
         if (userType){
             return (
@@ -75,7 +78,7 @@ function Form({sendImage,userType}) {
                                 label="egyéb"
                             />
                         </div>
-                        <Input type='file' onChange={onImageChange} placeholder="File"/>
+                        {/*<Input type='file' onChange={onImageChange} placeholder="File"/>*/}
                     </div>
                 </>
         );

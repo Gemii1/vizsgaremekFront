@@ -1,0 +1,14 @@
+.container{
+    margin: 100px;
+    min-height: 90vh;
+    text-align: center;
+    background-color: lightgray;
+
+}
+
+.blogs{
+
+}
+body{
+    overflow: hidden;
+}

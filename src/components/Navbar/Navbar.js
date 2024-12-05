@@ -15,6 +15,11 @@ function Navbar(){
 
     let navigate = useNavigate();
     const [isUserLoggedIn, setUserLoggedIn] = useState(true);
+    const [user, setUser] = useState({
+        name:'rawr',
+        email:''
+    });
+
 
     function handleLoginNavbarChange(){
         if(!isUserLoggedIn){
@@ -23,7 +28,7 @@ function Navbar(){
                     <div className={styles.body}>
                         <div className={styles.container}>
                             <div className={styles.nav}>
-                                <div>
+                                <div onClick={() => navigate("/landingPage")}>
                                     {<FitnessCenterOutlinedIcon fontSize='large'/>}
                                 </div>
                                 <div className={styles.pages}>
@@ -44,7 +49,7 @@ function Navbar(){
                     <div className={styles.body}>
                         <div className={styles.container}>
                             <div className={styles.nav}>
-                                <div>
+                                <div onClick={() => navigate("/landingPage")}>
                                     {<FitnessCenterOutlinedIcon fontSize='large'/>}
                                 </div>
                                 <div className={styles.pages}>
@@ -54,7 +59,7 @@ function Navbar(){
                                         <MenuButton className={styles.menuButton}><AccountCircleIcon
                                             style={{fontSize: 'xxx-large'}}/></MenuButton>
                                         <Menu>
-                                            <MenuItem>Profile</MenuItem>
+                                            <MenuItem>{user.name}</MenuItem>
                                             <MenuItem>My account</MenuItem>
                                             <MenuItem>
                                                 <div onClick={() => {

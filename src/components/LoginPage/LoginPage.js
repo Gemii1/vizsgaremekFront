@@ -5,6 +5,7 @@ import Input from '@mui/joy/Input';
 import {useNavigate} from "react-router";
 import {useState} from "react";
 import axios from "axios";
+import useSignIn from "react-auth-kit/hooks/useSignIn";
 
 
 function LoginPage() {
@@ -17,23 +18,20 @@ function LoginPage() {
     });
 
 
-    const onSubmit = () => {
 
+    const onSubmit = async () => {
 
-        axios.get('http://localhost:8080/trainer/listAll').then(({data})=>{
-            const users = data;
-            setUsers(users);
+       const respone =  await axios.get('http://localhost:8080/trainer/listAll')
 
-
-        }).catch((error)=>{
-            console.log(error)
+        respone.data.map((user)=>{
+            console.log(user.contact.email);
         })
 
-        setUser({
-            email: users[1].email,
-            password: users[1].password
-        })
-        console.log(user);
+    }
+
+    const handleChange = (event) => {
+        setUser(values => ({...values,
+            [event.target.name]: event.target.value}))
     }
 
     return (
@@ -42,8 +40,8 @@ function LoginPage() {
                 <div className={styles.container}>
                     <h3>Bejelentkezés</h3>
                     <div className={styles.inputs}>
-                        <Input type='email' placeholder="Emailcím"/>
-                        <Input type='password' placeholder="Jelszó"/>
+                        <Input onChange={handleChange} name='email' type='email' placeholder="Emailcím"/>
+                        <Input onChange={handleChange} name='password' type='password' placeholder="Jelszó"/>
                     </div>
                     <div className={styles.buttons}>
                         <Button className={styles.closeButton} variant="contained" color="error"
