@@ -17,7 +17,7 @@ function Navbar(){
     const [isUserLoggedIn, setUserLoggedIn] = useState(true);
     const [user, setUser] = useState({
         name:'rawr',
-        email:''
+        email:'myemail@gmail.com'
     });
 
 
@@ -60,7 +60,7 @@ function Navbar(){
                                             style={{fontSize: 'xxx-large'}}/></MenuButton>
                                         <Menu>
                                             <MenuItem>{user.name}</MenuItem>
-                                            <MenuItem>My account</MenuItem>
+                                            <MenuItem>{user.email}</MenuItem>
                                             <MenuItem>
                                                 <div onClick={() => {
                                                     setUserLoggedIn(false)

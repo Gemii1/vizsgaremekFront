@@ -44,7 +44,6 @@ function LandingPage({trainers, open}){
                         <div className={styles.title}>Edzőink</div>
                         <div className={styles.cardsContainer}>
                             <Grid container spacing={2} sx={{flexGrow: 1}}>
-
                                 {
                                     trainers.map((trainer) => {
                                         return (
@@ -71,7 +70,6 @@ function LandingPage({trainers, open}){
                                 }
                             </Grid>
                         </div>
-
                     </div>
                 </section>
             </div>

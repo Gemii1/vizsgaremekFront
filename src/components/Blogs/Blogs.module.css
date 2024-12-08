@@ -3,12 +3,35 @@
     min-height: 90vh;
     text-align: center;
     background-color: lightgray;
-
 }
 
-.blogs{
 
+.container >*{
+    display: flex;
+    flex-direction: column;
 }
+
+.blogContainer{
+    display: flex;
+    flex-direction: row;
+}
+.blog{
+    margin: 10px;
+}
+
+
 body{
-    overflow: hidden;
+    overflow-x: hidden;
+}
+
+
+.trainerButtons{
+    display: flex;
+    justify-content: space-between;
+    margin-left: 400%;
+}
+
+.trainerButtons >*{
+    margin-left: 10px;
+    margin-right: 10px;
 }

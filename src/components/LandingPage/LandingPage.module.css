@@ -20,6 +20,7 @@ body{
 }
 
 .title{
+    padding-top: 20px;
     font-size: 50px;
     min-width: 100vw;
 }
@@ -32,6 +33,7 @@ body{
     text-align: center;
     min-height: 500px;
 }
+
 .cardsContainer{
     display: flex;
     flex-direction: row;
