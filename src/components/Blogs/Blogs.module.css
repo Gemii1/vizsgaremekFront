@@ -14,9 +14,10 @@
 .blogContainer{
     display: flex;
     flex-direction: row;
+    justify-content: center;
 }
 .blog{
-    margin: 10px;
+    margin: 50px;
 }
 
 
@@ -28,10 +29,25 @@ body{
 .trainerButtons{
     display: flex;
     justify-content: space-between;
-    margin-left: 400%;
 }
 
 .trainerButtons >*{
     margin-left: 10px;
     margin-right: 10px;
+}
+
+.card{
+    width: 800px;
+}
+
+@media (max-width: 500px){
+    .card{
+        width: 200px !important;
+    }
+}
+
+@media (max-width: 800px){
+    .card{
+        width: 400px;
+    }
 }

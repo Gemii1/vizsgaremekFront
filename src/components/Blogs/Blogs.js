@@ -34,7 +34,6 @@ function Blogs(){
             blogText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' +
                 ' Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' +
                 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-
         }
 
         ]);
@@ -61,11 +60,11 @@ function Blogs(){
             <div className={styles.blogs}>
                 <div className={styles.container}>
                     <div className={styles.blogContainer}>
-                        <Grid container spacing={2} sx={{flexGrow: 1}}>
+                        <Grid container style={{justifyContent:'center'}} spacing={2} sx={{flexGrow: 1}}>
                             {blogs.map((blog) => {
                                 return (
                                     <div className={styles.blog}>
-                                        <Card variant="outlined" sx={{width: 500}}>
+                                        <Card variant="outlined"  className={styles.card}>
                                             <CardOverflow>
                                                 <AspectRatio ratio="2">
                                                     <img

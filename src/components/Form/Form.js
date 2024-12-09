@@ -5,19 +5,36 @@ import * as React from 'react';
 import {useState, useEffect} from "react";
 import PhoneInput from "react-phone-input-2";
 import 'react-phone-input-2/lib/style.css'
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+
 
 
 function Form({sendImage,userType}) {
 
-    const [selectedValue, setSelectedValue] =useState('MALE')
+    const [selectedValues, setSelectedValues] =useState({
+       name:'',
+       email:'',
+       phoneNumber:'',
+       birthYear:'',
+       qualification:'',
+       password:'',
+       gender:''
+    })
     const mediaMatch = window.matchMedia('(min-width:500px)');
     const [matches, setMatches] = useState(mediaMatch.matches);
     const [image,setImage]=useState(null);
 
 
+
     const handleChange = (event) => {
-        setSelectedValue(event.target.value);
-    };
+        console.log(event)
+        setSelectedValues(values => ({
+            ...values,
+            [event.target.name]: event.target.value
+        }))
+
+    }
 
     //Ablakméret figyelő
     useEffect(() => {
@@ -33,48 +50,72 @@ function Form({sendImage,userType}) {
         sendImage(image);
     }
 
+    const trainerQualifications = ["Personal trainer", "Fitness Instructor","Pilates Instructor", "Crossfitt Coach", "TRX Trainer","Pound Trainer", "Other"]
+
+  /*  let var1 = trainerQualifications[0].toUpperCase().split(" ");
+    let var2 = var1[0]+"_"+var1[1];
+    console.log(var2);
+*/
 
 
-
-
+//FormControlra átírás
 
     function handleUserType(){
         if (userType){
             return (
                 <>
                     <div className={styles.form}>
-                        <Input placeholder="Teljes Név"/>
-                        <Input type='email' placeholder="Emailcím"/>
+                        <Input name="name" onChange={handleChange} placeholder="Teljes Név"/>
+                        <Input name="email"  onChange={handleChange} type='email' placeholder="Emailcím"/>
 
                         <PhoneInput
+                            name="phoneNumber"
                             country={"hu"}
                             className = {styles.phone}
                             inputStyle={mediaMatch.matches?{width:'90.5%'}:{width:'85%'}}
                         />
-                        <Input type='date' placeholder="Születési év"/>
+                        <Input name="birthYear" onChange={handleChange} type='date' placeholder="Születési év"/>
+                        <Select
+                            style={{width:'100%'}}
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            name="Qualification"
+                            value={selectedValues.qualification}
+                            label="Végzettség"
+                            onChange={handleChange}
+                        >
+                            {trainerQualifications.map((qualification)=>{
+                                return (
+                                    <MenuItem value={qualification} key={qualification}>
+                                        {qualification}
+                                    </MenuItem>
+                                )
+                            })}
+
+                        </Select>
+
                         {/* Select lesz a végezettség*/}
-                        <Input type='text' placeholder="Végzettség"></Input>
-                        <Input type='password' placeholder="Jelszó"/>
+                        <Input  onChange={handleChange} type='password' placeholder="Jelszó"/>
                         <div className={styles.formRadio}>
                             <Radio
-                                checked={selectedValue === 'MALE'}
+                                checked={selectedValues.gender === 'MALE'}
                                 onChange={handleChange}
                                 value="MALE"
-                                name="radio-buttons"
+                                name="gender"
                                 label="Férfi"
                             />
                             <Radio
-                                checked={selectedValue === 'FEMALE'}
+                                checked={selectedValues.gender === 'FEMALE'}
                                 onChange={handleChange}
                                 value="FEMALE"
-                                name="radio-buttons"
+                                name="gender"
                                 label="nő"
                             />
                             <Radio
-                                checked={selectedValue === 'OTHER'}
+                                checked={selectedValues.gender === 'OTHER'}
                                 onChange={handleChange}
                                 value="OTHER"
-                                name="radio-buttons"
+                                name="gender"
                                 label="egyéb"
                             />
                         </div>
@@ -86,38 +127,39 @@ function Form({sendImage,userType}) {
             return (
                 <>
                     <div className={styles.form}>
-                        <Input placeholder="Teljes Név"/>
-                        <Input type='email' placeholder="Emailcím"/>
+                        <Input onChange={handleChange} placeholder="Teljes Név"/>
+                        <Input onChange={handleChange} type='email' placeholder="Emailcím"/>
                         <PhoneInput
                             country={"hu"}
                             className = {styles.phone}
                             inputStyle={mediaMatch.matches?{width:'90.5%'}:{width:'85%'}}
+                            onChange={handleChange}
                         />
-                        <Input type='date' placeholder="Születési év"/>
+                        <Input onChange={handleChange} type='date' placeholder="Születési év"/>
                         <div className={styles.formRadio}>
                             <Radio
-                                checked={selectedValue === 'MALE'}
+                                checked={selectedValues === 'MALE'}
                                 onChange={handleChange}
                                 value="MALE"
                                 name="radio-buttons"
                                 label="Férfi"
                             />
                             <Radio
-                                checked={selectedValue === 'FEMALE'}
+                                checked={selectedValues === 'FEMALE'}
                                 onChange={handleChange}
                                 value="FEMALE"
                                 name="radio-buttons"
                                 label="nő"
                             />
                             <Radio
-                                checked={selectedValue === 'OTHER'}
+                                checked={selectedValues === 'OTHER'}
                                 onChange={handleChange}
                                 value="OTHER"
                                 name="radio-buttons"
                                 label="egyéb"
                             />
                         </div>
-                        <Input type='password' placeholder="Jelszó"/>
+                        <Input onChange={handleChange} type='password' placeholder="Jelszó"/>
                     </div>
 
                 </>
