@@ -7,6 +7,8 @@ import PhoneInput from "react-phone-input-2";
 import 'react-phone-input-2/lib/style.css'
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
 
 
 
@@ -56,14 +58,13 @@ function Form({sendImage,userType}) {
     let var2 = var1[0]+"_"+var1[1];
     console.log(var2);
 */
-
-
 //FormControlra átírás
 
     function handleUserType(){
         if (userType){
             return (
                 <>
+
                     <div className={styles.form}>
                         <Input name="name" onChange={handleChange} placeholder="Teljes Név"/>
                         <Input name="email"  onChange={handleChange} type='email' placeholder="Emailcím"/>
@@ -75,26 +76,25 @@ function Form({sendImage,userType}) {
                             inputStyle={mediaMatch.matches?{width:'90.5%'}:{width:'85%'}}
                         />
                         <Input name="birthYear" onChange={handleChange} type='date' placeholder="Születési év"/>
-                        <Select
-                            style={{width:'100%'}}
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            name="Qualification"
-                            value={selectedValues.qualification}
-                            label="Végzettség"
-                            onChange={handleChange}
-                        >
-                            {trainerQualifications.map((qualification)=>{
-                                return (
-                                    <MenuItem value={qualification} key={qualification}>
-                                        {qualification}
-                                    </MenuItem>
-                                )
-                            })}
+                        <FormControl className={styles.qualification} fullWidth>
+                        <InputLabel id="demo-simple-select-label">Végzettség</InputLabel>
+                            <Select
+                                style={mediaMatch.matches?{width:'90.5%'}:{width:'85%'}}
+                                name="Qualification"
+                                value={selectedValues.qualification}
+                                label="Végzettség"
+                                onChange={handleChange}
+                            >
+                                {trainerQualifications.map((qualification)=>{
+                                    return (
+                                        <MenuItem value={qualification} key={qualification}>
+                                            {qualification}
+                                        </MenuItem>
+                                    )
+                                })}
 
-                        </Select>
-
-                        {/* Select lesz a végezettség*/}
+                            </Select>
+                        </FormControl>
                         <Input  onChange={handleChange} type='password' placeholder="Jelszó"/>
                         <div className={styles.formRadio}>
                             <Radio
