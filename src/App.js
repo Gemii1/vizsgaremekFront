@@ -16,47 +16,12 @@ function App() {
 
     const [clients,setClients] = useState([])
     const [trainersTest,setTrainerTest] = useState([])
-    const [trainers,setTrainers] = useState([
-      {
-        name:"Joska",
-        birthYear:1991,
-        phoneNumber:"+3620 756 32 32",
-        imgURL:"Images/img1.jpg"
 
-      },
-        {
-            name:"Joska",
-            birthYear:1991,
-            phoneNumber:"+3620 756 32 32",
-            imgURL:"Images/img1.jpg"
-
-        },
-        {
-            name:"Joska",
-            birthYear:1991,
-            phoneNumber:"+3620 756 32 32",
-            imgURL:"Images/img1.jpg"
-
-        },{
-            name:"Joska",
-            birthYear:1991,
-            phoneNumber:"+3620 756 32 32",
-            imgURL:"Images/img1.jpg"
-
-        },{
-            name:"Joska",
-            birthYear:1991,
-            phoneNumber:"+3620 756 32 32",
-            imgURL:"Images/img1.jpg"
-
-        },
-
-    ])
 
 
       useEffect(()=>{
         //init
-          axios.get('http://localhost:8080/trainer/listAll').then(({data})=>{
+          axios.get('http://localhost:8080/trainer/').then(({data})=>{
             const trainer = data;
             setTrainerTest(trainer);
           }).catch((error)=>{
@@ -75,7 +40,7 @@ function App() {
    <div>
        <BrowserRouter>
            <Routes>
-               <Route index element={<LandingPage trainers={trainers}/>} />
+               <Route index element={<LandingPage trainers={trainersTest}/>} />
                <Route path="/landingPage" element={<LandingPage trainers={trainersTest}/>} />
                <Route path="/login" element={<LoginPage/>} />
                <Route path="/registration" element={<Registration />} />

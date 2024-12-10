@@ -51,9 +51,6 @@ function Blogs(){
         }
     }
 
-
-    //Blogokra nem ez a fajta kártya használat, vmilyen más
-
     return (
         <>
             <Navbar/>

@@ -15,7 +15,6 @@ import {useNavigate} from "react-router";
 
 function LandingPage({trainers, open}){
 
-
     let navigate = useNavigate();
 
     return(

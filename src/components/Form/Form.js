@@ -35,7 +35,7 @@ function Form({sendImage,userType}) {
             ...values,
             [event.target.name]: event.target.value
         }))
-
+        toEnum();
     }
 
     //Ablakméret figyelő
@@ -54,10 +54,13 @@ function Form({sendImage,userType}) {
 
     const trainerQualifications = ["Personal trainer", "Fitness Instructor","Pilates Instructor", "Crossfitt Coach", "TRX Trainer","Pound Trainer", "Other"]
 
-  /*  let var1 = trainerQualifications[0].toUpperCase().split(" ");
-    let var2 = var1[0]+"_"+var1[1];
-    console.log(var2);
-*/
+
+
+    function toEnum(){
+        let var1 = selectedValues.qualification.toUpperCase().split(" ");
+        let var2 = var1[0]+"_"+var1[1];
+        selectedValues.qualification = var2;
+    }
 //FormControlra átírás
 
     function handleUserType(){
@@ -73,14 +76,14 @@ function Form({sendImage,userType}) {
                             name="phoneNumber"
                             country={"hu"}
                             className = {styles.phone}
-                            inputStyle={mediaMatch.matches?{width:'90.5%'}:{width:'85%'}}
+                            inputStyle={mediaMatch.matches?{width:'90.5%', backgroundColor:'#fbfcfe'}:{width:'85%',backgroundColor:'#fbfcfe'}}
                         />
                         <Input name="birthYear" onChange={handleChange} type='date' placeholder="Születési év"/>
                         <FormControl className={styles.qualification} fullWidth>
                         <InputLabel id="demo-simple-select-label">Végzettség</InputLabel>
                             <Select
                                 style={mediaMatch.matches?{width:'90.5%'}:{width:'85%'}}
-                                name="Qualification"
+                                name="qualification"
                                 value={selectedValues.qualification}
                                 label="Végzettség"
                                 onChange={handleChange}
@@ -136,6 +139,7 @@ function Form({sendImage,userType}) {
                             onChange={handleChange}
                         />
                         <Input onChange={handleChange} type='date' placeholder="Születési év"/>
+                        <Input onChange={handleChange} type='password' placeholder="Jelszó"/>
                         <div className={styles.formRadio}>
                             <Radio
                                 checked={selectedValues === 'MALE'}
@@ -159,7 +163,6 @@ function Form({sendImage,userType}) {
                                 label="egyéb"
                             />
                         </div>
-                        <Input onChange={handleChange} type='password' placeholder="Jelszó"/>
                     </div>
 
                 </>

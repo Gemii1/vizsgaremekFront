@@ -30,7 +30,7 @@ function Registration() {
                 <Tabs >
                     <TabList tabFlex="auto">
                         <Tab className={styles.tab}>
-                            <div className={styles.tabText} style={{}}
+                            <div className={styles.tabText}
                             onClick={()=>{
                                 setUserType(true);
                             }}>
