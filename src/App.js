@@ -21,16 +21,13 @@ function App() {
 
       useEffect(()=>{
         //init
-          axios.get('http://localhost:8080/trainer/').then(({data})=>{
+          axios.get('/trainer/').then(({data})=>{
             const trainer = data;
             setTrainerTest(trainer);
           }).catch((error)=>{
               console.log(error)
           })
       },[])
-
-
-    console.log(trainersTest)
 
 
   const [isUserLoggedIn,setIsUserLoggedIn] = useState(false)

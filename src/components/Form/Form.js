@@ -12,17 +12,9 @@ import InputLabel from '@mui/material/InputLabel';
 
 
 
-function Form({sendImage,userType}) {
+function Form({sendImage,userType, selectedValues,setSelectedValues}) {
 
-    const [selectedValues, setSelectedValues] =useState({
-       name:'',
-       email:'',
-       phoneNumber:'',
-       birthYear:'',
-       qualification:'',
-       password:'',
-       gender:''
-    })
+
     const mediaMatch = window.matchMedia('(min-width:500px)');
     const [matches, setMatches] = useState(mediaMatch.matches);
     const [image,setImage]=useState(null);
@@ -30,7 +22,10 @@ function Form({sendImage,userType}) {
 
 
     const handleChange = (event) => {
-        console.log(event)
+
+        if (event.target.name === 'password') {
+
+        }
         setSelectedValues(values => ({
             ...values,
             [event.target.name]: event.target.value
@@ -98,7 +93,7 @@ function Form({sendImage,userType}) {
 
                             </Select>
                         </FormControl>
-                        <Input  onChange={handleChange} type='password' placeholder="Jelszó"/>
+                        <Input name="password" onChange={handleChange} type='password' placeholder="Jelszó"/>
                         <div className={styles.formRadio}>
                             <Radio
                                 checked={selectedValues.gender === 'MALE'}
@@ -130,36 +125,37 @@ function Form({sendImage,userType}) {
             return (
                 <>
                     <div className={styles.form}>
-                        <Input onChange={handleChange} placeholder="Teljes Név"/>
-                        <Input onChange={handleChange} type='email' placeholder="Emailcím"/>
+                        <Input name="name" onChange={handleChange} placeholder="Teljes Név"/>
+                        <Input name="email" onChange={handleChange} type='email' placeholder="Emailcím"/>
                         <PhoneInput
+                            name="phoneNumber"
                             country={"hu"}
                             className = {styles.phone}
                             inputStyle={mediaMatch.matches?{width:'90.5%'}:{width:'85%'}}
                             onChange={handleChange}
                         />
-                        <Input onChange={handleChange} type='date' placeholder="Születési év"/>
-                        <Input onChange={handleChange} type='password' placeholder="Jelszó"/>
+                        <Input name="birthYear" onChange={handleChange} type='date' placeholder="Születési év"/>
+                        <Input name="password" onChange={handleChange} type='password' placeholder="Jelszó"/>
                         <div className={styles.formRadio}>
                             <Radio
                                 checked={selectedValues === 'MALE'}
                                 onChange={handleChange}
                                 value="MALE"
-                                name="radio-buttons"
+                                name="gender"
                                 label="Férfi"
                             />
                             <Radio
                                 checked={selectedValues === 'FEMALE'}
                                 onChange={handleChange}
                                 value="FEMALE"
-                                name="radio-buttons"
+                                name="gender"
                                 label="nő"
                             />
                             <Radio
                                 checked={selectedValues === 'OTHER'}
                                 onChange={handleChange}
                                 value="OTHER"
-                                name="radio-buttons"
+                                name="gender"
                                 label="egyéb"
                             />
                         </div>
@@ -172,6 +168,7 @@ function Form({sendImage,userType}) {
     return (
         <>
             {handleUserType()}
+            {console.log(selectedValues.password)}
         </>
     )
 }
