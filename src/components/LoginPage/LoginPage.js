@@ -19,15 +19,6 @@ function LoginPage() {
 
 
 
-    const onSubmit = async () => {
-
-       const respone =  await axios.get('http://localhost:8080/trainer/listAll')
-
-        respone.data.map((user)=>{
-            console.log(user.contact.email);
-        })
-
-    }
 
     const handleChange = (event) => {
         setUser(values => ({...values,
@@ -50,7 +41,6 @@ function LoginPage() {
                                 }}>Vissza</Button>
                         <Button className={styles.closeButton} variant="contained" color="info"
                                 onClick={() => {
-                                    onSubmit()
                                 }}>Bejelentkezés</Button>
                     </div>
                 </div>

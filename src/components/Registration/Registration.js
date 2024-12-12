@@ -16,52 +16,81 @@ function Registration() {
     const [image, setImage]=useState(null);
     let navigate = useNavigate();
 
-    const [selectedValues, setSelectedValues] =useState({
+
+    let [trainerFormData, setTrainerFormData] =useState({
         name:'',
-        phoneNumber:'',
-        birthYear:'',
+        birthDate:'',
+        gender:'',
+        picture:'Images/img1.jpg',
         qualification:'',
-        picture:'',
-        rating:'',
-        loginId:'',
-        gender:''
+        phoneNumber:'',
+        rating:'3',
+        loginId:''
     })
 
-    const [login,setLoginData]=useState({
+    let [clientFormData, setClientFormData] =useState({
+        name:'',
+        birthDate:'',
+        gender:'',
+        phoneNumber:'',
+        loginId:''
+    })
+
+    let [login,setLoginData]=useState({
         email:'',
         password:''
     })
 
 
-    function setSelectedValuesFromReg(selectedValues){
-        setSelectedValues(selectedValues);
+    function setTrainerFormDataFromReg(selectedValues){
+        setTrainerFormData(selectedValues);
     }
 
-    function save(formData,loginData){
-        console.log(selectedValues.password+"jelszo");
-        let loginID = null;
-        axios.post('/login/',loginData).then(({data})=>{
-            loginID = data.loginId
-            console.log(data)
-        }).catch((error)=>{
-            console.log(error)
-        })
+    function setClientFormDataFromReg(selectedValues){
+        setClientFormData(selectedValues);
+    }
 
-        if (userType){
-            axios.post('/login/',loginData).then(({data})=>{
-
-                console.log(data)
-            }).catch((error)=>{
-                console.log(error)
-            })
+    function qualificationToEnum(){
+        let qualSplitted = trainerFormData.qualification.toUpperCase().split(" ");
+        if (qualSplitted.length > 1){
+            let upperCaseQual = qualSplitted[0]+"_"+qualSplitted[1];
+            trainerFormData.qualification = upperCaseQual;
+        }else{
+            trainerFormData.qualification = trainerFormData.qualification.toUpperCase();
         }
 
     }
+
+    function save(trainerFormData,loginData,clientFormData){
+        qualificationToEnum();
+        axios.post('/login/',loginData).then(({data})=>{
+            if (userType){
+                trainerFormData.loginId = data.loginId
+                axios.post('/trainer/',trainerFormData).then(({data})=>{
+                    navigate("/login")
+                }).catch((error)=>{
+                    alert("A regisztrálás nem volt sikeres!! Kérlek győződj meg róla, hogy minden mezőt kitöltöttél!")
+                    console.log(error)
+                })
+            }else if (!userType){
+                clientFormData.loginId = data.loginId
+                console.log(clientFormData)
+                axios.post('/client/',clientFormData).then(({data})=>{
+                    navigate("/login")
+                }).catch((error)=>{
+                    alert("A regisztrálás nem volt sikeres!! Kérlek győződj meg róla, hogy minden mezőt kitöltöttél!")
+                    console.log(error)
+                })
+            }
+
+        }).catch((error)=>{
+            console.log(error)
+        })
+    }
+
     const handleImage=(image)=>{
         setImage(image);
     }
-
-
 
     return (
         <>
@@ -86,15 +115,31 @@ function Registration() {
                         </Tab>
                     </TabList>
                     <TabPanel value={0}>
-                        <Form sendImage={handleImage} userType={userType} selectedValues={selectedValues} setSelectedValues={setSelectedValuesFromReg}/>
+                        <Form sendImage={handleImage}
+                              userType={userType}
+                              clientFormData={clientFormData}
+                              setClientFormData={setClientFormDataFromReg}
+                              trainerFormData={trainerFormData}
+                              setTrainerFormData={setTrainerFormDataFromReg}
+                              logindData={login}
+                        />
                     </TabPanel>
                     <TabPanel value={1}>
-                        <Form sendImage={handleImage} userType={userType}/>
+                        <Form sendImage={handleImage}
+                              userType={userType}
+                              clientFormData={clientFormData}
+                              setClientFormData={setClientFormDataFromReg}
+                              trainerFormData={trainerFormData}
+                              setTrainerFormData={setTrainerFormDataFromReg}
+                              logindData={login}
+                        />
                     </TabPanel>
                 </Tabs>
                 <div className={styles.buttons}>
                     <Button className={styles.closeButton} variant="contained" color="error" onClick={() => {navigate("/landingPage")}}>Bezárás</Button>
-                    <Button className={styles.closeButton} variant="contained" color="info" onClick={() => {save(selectedValues,login)}}>Regisztrálás</Button>
+                    <Button className={styles.closeButton} variant="contained" color="info" onClick={() => {
+                        save(trainerFormData,login, clientFormData)
+                    }}>Regisztrálás</Button>
                 </div>
             </div>
         </>
