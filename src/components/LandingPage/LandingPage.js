@@ -73,10 +73,6 @@ function LandingPage({trainers, open}){
                 </section>
             </div>
 
-
-
-
-
         </>
     )
 }

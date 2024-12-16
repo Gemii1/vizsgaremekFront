@@ -17,9 +17,6 @@ function LoginPage() {
         password: ''
     });
 
-
-
-
     const handleChange = (event) => {
         setUser(values => ({...values,
             [event.target.name]: event.target.value}))

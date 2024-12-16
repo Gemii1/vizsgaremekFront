@@ -15,10 +15,22 @@ function Navbar(){
 
     let navigate = useNavigate();
     const [isUserLoggedIn, setUserLoggedIn] = useState(true);
+
     const [user, setUser] = useState({
-        name:'rawr',
+        name:'Tar Sándor',
         email:'myemail@gmail.com'
     });
+
+    const [userType, setUserType] = useState(true)
+
+    function whichUser(userType){
+        if(userType){
+            return <>Edző</>;
+        }else{
+            return <>Kliens</>
+        }
+
+    }
 
 
     function handleLoginNavbarChange(){
@@ -59,14 +71,17 @@ function Navbar(){
                                         <MenuButton className={styles.menuButton}><AccountCircleIcon
                                             style={{fontSize: 'xxx-large'}}/></MenuButton>
                                         <Menu>
-                                            <MenuItem>{user.name}</MenuItem>
-                                            <MenuItem>{user.email}</MenuItem>
-                                            <MenuItem>
-                                                <div onClick={() => {
-                                                    setUserLoggedIn(false)
-                                                }}>Logout
+                                            <div>
+                                                <div className={styles.dropdownHead}>
+                                                    <div><AccountCircleIcon style={{fontSize: 'xxx-large'}}/></div>
+                                                    <div>{user.name}</div>
                                                 </div>
-                                            </MenuItem>
+                                                <div className={styles.userType}>
+                                                    {whichUser(userType)}
+                                                </div>
+                                                <MenuItem>Adataim</MenuItem>
+                                                <MenuItem>Kijelentkezés</MenuItem>
+                                            </div>
                                         </Menu>
                                     </Dropdown>
                                 </div>
