@@ -16,6 +16,8 @@ function Navbar(){
     let navigate = useNavigate();
     const [isUserLoggedIn, setUserLoggedIn] = useState(true);
 
+
+
     const [user, setUser] = useState({
         name:'Tar Sándor',
         email:'myemail@gmail.com'

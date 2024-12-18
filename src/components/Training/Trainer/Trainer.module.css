@@ -1,8 +1,14 @@
 .calendar{
-    display: flex;
-    flex-direction: row;
-    gap: 150px;
     justify-content: center;
     border: 1px solid black;
     border-radius: 5px;
 }
+
+
+.days {
+
+    display: grid;
+    grid-auto-flow: column;
+    gap: 150px;
+}
+
