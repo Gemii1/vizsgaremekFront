@@ -1,14 +1,46 @@
+
 .calendar{
     justify-content: center;
     border: 1px solid black;
     border-radius: 5px;
+    height: 85vh;
+    background-color: #F3F6F8;
 }
 
 
 .days {
 
-    display: grid;
-    grid-auto-flow: column;
-    gap: 150px;
+}
+.program {
+    text-align: center;
+    padding: 20px;
+    min-width: 200px;
+    min-height: 100px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    background-color: #fffcfc;
 }
 
+.buttons button {
+    width: 80%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+
+
+.programOnDay{
+    text-align: center;
+    margin-top: 20px;
+}
+.programOnDay p{
+    margin: 10px;
+}
+
+.dates{
+    margin: 20px;
+}
+
+.buttons{
+    display: flex;
+    justify-content: space-between;
+}

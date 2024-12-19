@@ -8,7 +8,7 @@ import Client from "./Client/Client";
 function Training(){
 
     //False == Cliens, True == Edző
-    const [userType, setUserType]=useState(true);
+    const [userType, setUserType]=useState(false);
     const [programsData, setProgramsData]=useState([
         {
             trainerId : 101,
@@ -30,6 +30,13 @@ function Training(){
             endDate: '2024-12-12 14:00',
             trainingType: 'TRX',
             price : 1500
+        },
+        {
+            trainerId : 102,
+            startDate: '2024-12-10 14:00',
+            endDate: '2024-12-10 16:00',
+            trainingType: 'POUND',
+            price : 1500
         }
     ]);
 
@@ -41,9 +48,11 @@ function Training(){
                 </div>
             );
         }else {
-            <div>
-                <Client/>
-            </div>
+            return (
+                <div>
+                    <Client programs={programsData}/>
+                </div>
+            )
         }
     }
 

@@ -1,5 +1,10 @@
 import styles from './Trainer.module.css';
 import Grid from '@mui/joy/Grid';
+import Divider, { dividerClasses } from '@mui/material/Divider';
+import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 function Trainer({ programs }) {
     const daysOfWeek = ['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek'];
@@ -21,26 +26,41 @@ function Trainer({ programs }) {
     }, {});
 
     return (
-        <Grid container spacing={2} sx={{ flexGrow: 1 }} className={styles.calendar}>
-            <div className={styles.days}>
-                {daysOfWeek.map((day) => (
-                    <div key={day}>
-                        <div>
-                            <h2>{day}</h2>
-                            <div className={styles.programOnDay}>
-                                {groupedPrograms[day] ? (
-                                    groupedPrograms[day].map((program, index) => (
-                                        <div key={index}>{program.trainingType}</div>
-                                    ))
-                                ) : (
-                                    <div>Nincs program</div>
-                                )}
+        <div className={styles.calendar}>
+            <Grid container rowSpacing ={1} spacing={2} columns={{ xs: 2, sm: 2, md: 12 }} >
+                    {daysOfWeek.map((day) => (
+                        <Grid item xs={2.4} key={day} className={styles.days}>
+                            <div className={styles.program}>
+                                <h2>{day}</h2>
+                                <Divider color='black' />
+                                <div className={styles.programOnDay}>
+                                    <p>Foglalt időpontok:</p>
+                                    {groupedPrograms[day] ?
+                                        ( groupedPrograms[day].map((program, index) => (
+                                                <>
+                                                    <Divider />
+                                                    <div key={index} className={styles.dates}>
+                                                        {program.startDate} - {program.endDate}
+                                                    </div>
+                                                </>
+                                            ))
+                                        ) : (
+                                            <>
+                                                <Divider />
+                                                <div className={styles.dates}>Nincs program</div>
+                                            </>
+                                        )}
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                ))}
-            </div>
-        </Grid>
+                            <div className={styles.buttons}>
+                                <Button variant="contained"><AddIcon /></Button>
+                                <Button variant="contained"><EditIcon /></Button>
+                                <Button variant="contained"><DeleteIcon /></Button>
+                            </div>
+                        </Grid>
+                    ))}
+            </Grid>
+        </div>
     );
 }
 

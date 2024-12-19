@@ -1,0 +1,35 @@
+
+.calendar{
+    justify-content: center;
+    border: 1px solid black;
+    border-radius: 5px;
+    height: 85vh;
+    background-color: #F3F6F8;
+}
+
+.program {
+    text-align: center;
+    padding: 20px;
+    min-width: 200px;
+    min-height: 100px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    background-color: #fffcfc;
+}
+
+.programOnDay{
+    text-align: center;
+    margin-top: 20px;
+}
+.programOnDay p{
+    margin: 10px;
+}
+
+.dates{
+    margin: 20px;
+}
+
+.signUpButton{
+    margin: 20px;
+}
+
