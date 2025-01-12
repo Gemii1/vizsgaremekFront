@@ -11,16 +11,17 @@ import useSignIn from "react-auth-kit/hooks/useSignIn";
 function LoginPage() {
 
     let navigate = useNavigate();
-    const [users,setUsers] = useState();
-    const [user, setUser] = React.useState({
+    const [userLoggedIn,setUserLoggedIn] = useState();
+    const [userLoggingIn, setUserLoggingIn] = React.useState({
         email: '',
-        password: ''
+        password: '',
     });
 
     const handleChange = (event) => {
-        setUser(values => ({...values,
+        setUserLoggingIn(values => ({...values,
             [event.target.name]: event.target.value}))
     }
+
 
     return (
         <>
@@ -38,6 +39,7 @@ function LoginPage() {
                                 }}>Vissza</Button>
                         <Button className={styles.closeButton} variant="contained" color="info"
                                 onClick={() => {
+
                                 }}>Bejelentkezés</Button>
                     </div>
                 </div>

@@ -5,34 +5,49 @@ import Trainer from "./Trainer/Trainer";
 import Client from "./Client/Client";
 
 
-function Training(){
+function Training({userType}){
 
-    //False == Cliens, True == Edző
-    const [userType, setUserType]=useState(false);
+
     const [programsData, setProgramsData]=useState([
         {
-            trainerId : 101,
+            trainer : {
+                trainerId : 101,
+                trainerName:"Sanyi",
+                profession:"Pimp"
+            },
             startDate: '2024-12-11 14:00',
             endDate: '2024-12-11 16:00',
             trainingType: 'PILATES',
             price : 1000
         },
         {
-            trainerId : 101,
+            trainer : {
+                trainerId : 101,
+                trainerName:"Sanyi",
+                profession:"Pimp"
+            },
             startDate: '2024-12-11 18:00',
             endDate: '2024-12-11 19:00',
             trainingType: 'SPINNING',
             price : 2000
         },
         {
-            trainerId : 101,
+            trainer : {
+                trainerId : 102,
+                trainerName:"Bela",
+                profession:"Cigány"
+            },
             startDate: '2024-12-12 12:00',
             endDate: '2024-12-12 14:00',
             trainingType: 'TRX',
             price : 1500
         },
         {
-            trainerId : 102,
+            trainer : {
+                trainerId : 102,
+                trainerName:"Bela",
+                profession:"Cigány"
+            },
             startDate: '2024-12-10 14:00',
             endDate: '2024-12-10 16:00',
             trainingType: 'POUND',

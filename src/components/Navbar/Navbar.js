@@ -14,16 +14,15 @@ import MenuItem from '@mui/joy/MenuItem';
 function Navbar(){
 
     let navigate = useNavigate();
-    const [isUserLoggedIn, setUserLoggedIn] = useState(true);
 
 
-
-    const [user, setUser] = useState({
-        name:'Tar Sándor',
-        email:'myemail@gmail.com'
-    });
-
+    const [isUserLoggedIn, setUserLoggedIn] = useState(false);
     const [userType, setUserType] = useState(true)
+
+
+
+
+
 
     function whichUser(userType){
         if(userType){
@@ -76,7 +75,7 @@ function Navbar(){
                                             <div>
                                                 <div className={styles.dropdownHead}>
                                                     <div><AccountCircleIcon style={{fontSize: 'xxx-large'}}/></div>
-                                                    <div>{user.name}</div>
+                                                    <div>userneve</div>
                                                 </div>
                                                 <div className={styles.userType}>
                                                     {whichUser(userType)}

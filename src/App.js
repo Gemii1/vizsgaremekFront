@@ -10,12 +10,29 @@ import Blogs from "./components/Blogs/Blogs";
 import Training from "./components/Training/Training";
 
 
+
+
 function App() {
 
+    /*
+    Feladatok:
+        UserAdatok useContext-el amit minden komponens public lát ne kelljen átadogatni
+        a userTypot(A userTypot az dönti majd el hogy bejelentkezéskor melyik adattáblában
+         találtuk meg)!!! legfontosabb
+         Programra való jelentkezésnél nem jelenik meg a trainer neve
+         Program ár
 
+        Ha nincs bejelentkezve akkor ne tudjon jelentkezni a trainingre, de tudja megtekinteni
+        A blogokat ugyan úgy tudja megtekinteni mint egy default user,
+     */
 
     const [clients,setClients] = useState([])
     const [trainersTest,setTrainerTest] = useState([])
+    const [isUserLoggedIn,setIsUserLoggedIn] = useState(false)
+
+    //False == Cliens, True == Edző
+    const [userType, setUserType]=useState(null);
+
 
 
 
@@ -30,7 +47,6 @@ function App() {
       },[])
 
 
-  const [isUserLoggedIn,setIsUserLoggedIn] = useState(false)
 
 
   return (
@@ -41,8 +57,8 @@ function App() {
                <Route path="/landingPage" element={<LandingPage trainers={trainersTest}/>} />
                <Route path="/login" element={<LoginPage/>} />
                <Route path="/registration" element={<Registration />} />
-               <Route path="/blogs" element={<Blogs />} />
-               <Route path="/training" element={<Training />} />
+               <Route path="/blogs" element={<Blogs userType={userType} />} />
+               <Route path="/training" element={<Training userType={userType} />} />
                <Route path="*" element={<PageNotFound />} />
            </Routes>
        </BrowserRouter>

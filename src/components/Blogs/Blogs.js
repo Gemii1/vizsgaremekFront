@@ -11,11 +11,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Grid from '@mui/joy/Grid';
 
-function Blogs(){
+function Blogs({userType}){
 
 
-    //False == Cliens, True == Edző
-    const [userType, setUserType]=useState(true);
 
 
     const [blogs, setBlogs]=useState([
@@ -50,6 +48,7 @@ function Blogs(){
             )
         }
     }
+
 
     return (
         <>

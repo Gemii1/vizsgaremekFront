@@ -27,19 +27,6 @@ function Client({programs}) {
         return acc;
     }, {});
 
-    function getTrainerName(trainerId){
-        axios.get(`/trainer/${trainerId}`).then(({ data }) => {
-            let trainerName = data.name;
-            return(
-                <>
-                    {trainerName}
-                </>
-            )
-
-        }).catch((error) => {
-            console.log(error)
-        });
-    }
 
 
     return (
@@ -58,9 +45,10 @@ function Client({programs}) {
                                                 <Divider/>
                                                 <div key={index} className={styles.dates}>
 
-                                                    <div>Edzés : {program.trainingType}</div>
-                                                    <div>Kezdés: {program.startDate}</div>
-                                                    <div>Vége: {program.endDate}</div>
+                                                    <div><h3>Edzés : </h3> {program.trainingType}</div>
+                                                    <div><h3>Edző : </h3>  {program.trainer.trainerName}</div>
+                                                    <div><h3>Kezdés : </h3>  {program.startDate}</div>
+                                                    <div><h3>Vége : </h3>  {program.endDate}</div>
                                                 </div>
                                                 <div className={styles.signUpButton}>
                                                     <Button variant='contained'>Jelentkezés</Button>
