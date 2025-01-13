@@ -8,7 +8,6 @@ import {useEffect, useState} from "react";
 function Client({programs}) {
 
     const daysOfWeek = ['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek'];
-    const [trainerId, setTrainerId] = useState(null );
 
 
     const formatDate = (dateString) => {
@@ -36,6 +35,7 @@ function Client({programs}) {
                     <Grid item xs={2.4} key={day} className={styles.days}>
                         <div className={styles.program}>
                             <h2>{day}</h2>
+                            <p></p>
                             <Divider color='black'/>
                             <div className={styles.programOnDay}>
                                 <p>Programok:</p>
@@ -47,8 +47,9 @@ function Client({programs}) {
 
                                                     <div><h3>Edzés : </h3> {program.trainingType}</div>
                                                     <div><h3>Edző : </h3>  {program.trainer.trainerName}</div>
-                                                    <div><h3>Kezdés : </h3>  {program.startDate}</div>
-                                                    <div><h3>Vége : </h3>  {program.endDate}</div>
+                                                    <div><h3>Kezdés : </h3>  {program.startDate.substring(program.startDate.length-5,program.startDate.length)}</div>
+                                                    <div><h3>Vége : </h3>  {program.endDate.substring(program.endDate.length-5,program.endDate.length)}</div>
+                                                    <div><h3>Ár : </h3>  {program.price} Ft</div>
                                                 </div>
                                                 <div className={styles.signUpButton}>
                                                     <Button variant='contained'>Jelentkezés</Button>

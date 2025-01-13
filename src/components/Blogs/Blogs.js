@@ -1,6 +1,6 @@
 import Navbar from "../Navbar/Navbar";
 import styles from "./Blogs.module.css";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
 import CardOverflow from '@mui/joy/CardOverflow';
@@ -10,11 +10,13 @@ import Divider from '@mui/joy/Divider';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Grid from '@mui/joy/Grid';
+import UserContext from "../Context/UserContext";
 
-function Blogs({userType}){
+function Blogs(){
 
 
 
+    const userType = useContext(UserContext)
 
     const [blogs, setBlogs]=useState([
         {

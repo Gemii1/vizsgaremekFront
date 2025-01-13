@@ -27,9 +27,11 @@
 
 .dates{
     margin: 20px;
+    text-align: initial;
 }
 .dates h3{
     display: inline;
+    margin-left: 70px;
 }
 
 .signUpButton{

@@ -1,6 +1,6 @@
 import styles from './Navbar.module.css';
 import FitnessCenterOutlinedIcon from '@mui/icons-material/FitnessCenterOutlined';
-import { useState } from 'react';
+import {useContext, useState} from 'react';
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import {useNavigate} from "react-router"
@@ -9,6 +9,7 @@ import Dropdown from '@mui/joy/Dropdown';
 import Menu from '@mui/joy/Menu';
 import MenuButton from '@mui/joy/MenuButton';
 import MenuItem from '@mui/joy/MenuItem';
+import UserContext from "../Context/UserContext";
 
 
 function Navbar(){
@@ -16,9 +17,8 @@ function Navbar(){
     let navigate = useNavigate();
 
 
-    const [isUserLoggedIn, setUserLoggedIn] = useState(false);
-    const [userType, setUserType] = useState(true)
-
+    const [isUserLoggedIn, setUserLoggedIn] = useState(true);
+    const userType = useContext(UserContext)
 
 
 
@@ -81,7 +81,9 @@ function Navbar(){
                                                     {whichUser(userType)}
                                                 </div>
                                                 <MenuItem>Adataim</MenuItem>
-                                                <MenuItem>Kijelentkezés</MenuItem>
+                                                <MenuItem onClick={()=>{
+                                                    setUserLoggedIn(false);
+                                                }}>Kijelentkezés</MenuItem>
                                             </div>
                                         </Menu>
                                     </Dropdown>

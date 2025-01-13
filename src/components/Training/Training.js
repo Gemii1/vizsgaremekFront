@@ -1,11 +1,12 @@
 import Navbar from "../Navbar/Navbar";
-import {useState} from "react";
+import {useContext, useState} from "react";
 import styles from "./Training.module.css"
 import Trainer from "./Trainer/Trainer";
 import Client from "./Client/Client";
+import UserContext from "../Context/UserContext";
 
 
-function Training({userType}){
+function Training(){
 
 
     const [programsData, setProgramsData]=useState([
@@ -54,6 +55,8 @@ function Training({userType}){
             price : 1500
         }
     ]);
+
+    const userType = useContext(UserContext)
 
     function handleUser(){
         if (userType){
