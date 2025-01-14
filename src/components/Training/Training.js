@@ -18,9 +18,9 @@ function Training(){
             },
             startDate: '2024-12-11 14:00',
             endDate: '2024-12-11 16:00',
-            trainingType: 'PILATES',
-            price : 1000
-        },
+        trainingType: 'PILATES',
+        price : 1000
+},
         {
             trainer : {
                 trainerId : 101,

@@ -3,7 +3,7 @@ import UserContext from './UserContext';
 
 const UserProvider = ({ children }) => {
     return (
-        <UserContext.Provider value={false}>
+        <UserContext.Provider value={null}>
             {children}
         </UserContext.Provider>
     );

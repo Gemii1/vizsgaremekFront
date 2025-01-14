@@ -30,7 +30,11 @@ function Navbar(){
         }else{
             return <>Kliens</>
         }
+    }
 
+    function handleLogout(){
+        navigate('/landingPage');
+        setUserLoggedIn(false);
     }
 
 
@@ -82,7 +86,7 @@ function Navbar(){
                                                 </div>
                                                 <MenuItem>Adataim</MenuItem>
                                                 <MenuItem onClick={()=>{
-                                                    setUserLoggedIn(false);
+                                                    handleLogout();
                                                 }}>Kijelentkezés</MenuItem>
                                             </div>
                                         </Menu>

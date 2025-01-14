@@ -17,7 +17,8 @@ function App() {
     /*
     Feladatok:
          Program ár
-
+         UserLoggedIn Contextbe helyezése
+          Kijelentkezéskor dobja vissza a felhasználót a fő oldalra
         Ha nincs bejelentkezve akkor ne tudjon jelentkezni a trainingre, de tudja megtekinteni
         A blogokat ugyan úgy tudja megtekinteni mint egy default user,
      */

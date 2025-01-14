@@ -3,12 +3,14 @@ import Grid from '@mui/joy/Grid';
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import axios from 'axios';
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
+import UserContext from "../../Context/UserContext";
 
 function Client({programs}) {
 
     const daysOfWeek = ['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek'];
 
+    const userContext = useContext(UserContext);
 
     const formatDate = (dateString) => {
         const date = new Date(dateString.replace(' ', 'T'));
@@ -25,6 +27,14 @@ function Client({programs}) {
         acc[day].push(program);
         return acc;
     }, {});
+
+    function handleApplication(userType){
+        if (userType!= null){
+            return (
+                <Button variant='contained'>Jelentkezés</Button>
+            )
+        }
+    }
 
 
 
@@ -52,7 +62,7 @@ function Client({programs}) {
                                                     <div><h3>Ár : </h3>  {program.price} Ft</div>
                                                 </div>
                                                 <div className={styles.signUpButton}>
-                                                    <Button variant='contained'>Jelentkezés</Button>
+                                                    {handleApplication(userContext)}
                                                 </div>
                                             </>
                                         ))
