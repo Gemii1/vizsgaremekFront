@@ -22,7 +22,6 @@ function LoginPage() {
             [event.target.name]: event.target.value}))
     }
 
-
     return (
         <>
             <div  className={styles.login}>

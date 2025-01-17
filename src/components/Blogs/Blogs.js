@@ -16,7 +16,7 @@ function Blogs(){
 
 
 
-    const userType = useContext(UserContext)
+    const {userType,isUserLoggedIn} = useContext(UserContext)
 
     const [blogs, setBlogs]=useState([
         {
@@ -53,60 +53,66 @@ function Blogs(){
 
 
     return (
-        <>
+        <div className={styles.blogs}>
             <Navbar/>
-            <div className={styles.blogs}>
+            <div >
                 <div className={styles.container}>
                     <div className={styles.blogContainer}>
                         <Grid container style={{justifyContent:'center'}} spacing={2} sx={{flexGrow: 1}}>
-                            {blogs.map((blog) => {
-                                return (
-                                    <div className={styles.blog}>
-                                        <Card variant="outlined"  className={styles.card}>
-                                            <CardOverflow>
-                                                <AspectRatio ratio="2">
-                                                    <img
-                                                        src="https://images.unsplash.com/photo-1532614338840-ab30cf10ed36?auto=format&fit=crop&w=318"
-                                                        srcSet="https://images.unsplash.com/photo-1532614338840-ab30cf10ed36?auto=format&fit=crop&w=318&dpr=2 2x"
-                                                        loading="lazy"
-                                                        alt=""
-                                                    />
-                                                </AspectRatio>
-                                            </CardOverflow>
-                                            <CardContent>
-                                                <Typography level="title-md">{blog.title}</Typography>
-                                                <Typography level="body-sm">{blog.writer}</Typography>
-                                            </CardContent>
-                                            <CardOverflow variant="soft" sx={{bgcolor: 'background.level1'}}>
-                                                <Divider inset="context"/>
-                                                <CardContent orientation="horizontal">
-                                                    <Typography
-                                                        level="body-xs"
-                                                        textColor="text.secondary"
-                                                        sx={{fontWeight: 'md'}}
-                                                    >
-                                                        {blog.blogType}
-                                                    </Typography>
-                                                    <Divider orientation="vertical"/>
-                                                    <Typography
-                                                        level="body-xs"
-                                                        textColor="text.secondary"
-                                                        sx={{fontWeight: 'md'}}
-                                                    >
-                                                        {isUserTypeTrainer(userType)}
-                                                    </Typography>
+                            {blogs.length>0?(
+                                blogs.map((blog) => {
+                                    return (
+                                        <div className={styles.blog}>
+                                            <Card variant="outlined"  className={styles.card}>
+                                                <CardOverflow>
+                                                    <AspectRatio ratio="2">
+                                                        <img
+                                                            src="https://images.unsplash.com/photo-1532614338840-ab30cf10ed36?auto=format&fit=crop&w=318"
+                                                            srcSet="https://images.unsplash.com/photo-1532614338840-ab30cf10ed36?auto=format&fit=crop&w=318&dpr=2 2x"
+                                                            loading="lazy"
+                                                            alt=""
+                                                        />
+                                                    </AspectRatio>
+                                                </CardOverflow>
+                                                <CardContent>
+                                                    <Typography level="title-xl" sx={{fontWeight:'xl',fontSize:'1.3rem'}}>{blog.title}</Typography>
+                                                    <Typography level="body-sm">{blog.writer}</Typography>
                                                 </CardContent>
-                                            </CardOverflow>
-                                        </Card>
-                                    </div>
+                                                <CardOverflow variant="soft" sx={{bgcolor: 'background.level1'}}>
+                                                    <Divider inset="context"/>
+                                                    <CardContent orientation="horizontal">
+                                                        <Typography
+                                                            level="body-xs"
+                                                            textColor="text.secondary"
+                                                            sx={{fontWeight: 'md',fontSize: '1rem'}}
+                                                        >
+                                                            {blog.blogType}
+                                                        </Typography>
+                                                        <Divider orientation="vertical"/>
+                                                        <Typography
+                                                            level="body-xs"
+                                                            textColor="text.secondary"
+                                                            sx={{fontWeight: 'md'}}
+                                                        >
+                                                            {isUserTypeTrainer(userType)}
+                                                        </Typography>
+                                                    </CardContent>
+                                                </CardOverflow>
+                                            </Card>
+                                        </div>
 
-                                )
-                            })}
+                                    )
+                                })
+                            ) : (
+                                <>
+                                    <h1 className={styles.blogError}>Jelenleg egy blog sem elérhető</h1>
+                                </>
+                            )}
                         </Grid>
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 

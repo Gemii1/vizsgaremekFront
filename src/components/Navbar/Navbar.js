@@ -17,8 +17,7 @@ function Navbar(){
     let navigate = useNavigate();
 
 
-    const [isUserLoggedIn, setUserLoggedIn] = useState(true);
-    const userType = useContext(UserContext)
+    const {userType,isUserLoggedIn, setIsUserLoggedIn} = useContext(UserContext);
 
 
 
@@ -34,7 +33,7 @@ function Navbar(){
 
     function handleLogout(){
         navigate('/landingPage');
-        setUserLoggedIn(false);
+        setIsUserLoggedIn(false);
     }
 
 

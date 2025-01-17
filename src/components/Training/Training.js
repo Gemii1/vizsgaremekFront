@@ -56,7 +56,7 @@ function Training(){
         }
     ]);
 
-    const userType = useContext(UserContext)
+    const {userType,isUserLoggedIn} = useContext(UserContext)
 
     function handleUser(){
         if (userType){

@@ -44,28 +44,34 @@ function LandingPage({trainers, open}){
                         <div className={styles.cardsContainer}>
                             <Grid container spacing={2} sx={{flexGrow: 1}}>
                                 {
-                                    trainers.map((trainer) => {
-                                        return (
-                                            <>
-                                                <div className={styles.cards}>
-                                                    <Card variant="outlined" sx={{width: 320}}
-                                                    >
-                                                        <CardOverflow>
-                                                            <AspectRatio minHeight="675px">
-                                                                <div className={styles.trainerImage}
-                                                                     style={{backgroundImage: `url(${trainer.picture})`}}></div>
-                                                            </AspectRatio>
-                                                        </CardOverflow>
-                                                        <CardContent>
-                                                            <Typography level="title-md">{trainer.name}</Typography>
-                                                            <Typography
-                                                                level="body-sm">{trainer.phoneNumber}</Typography>
-                                                        </CardContent>
-                                                    </Card>
-                                                </div>
-                                            </>
-                                        )
-                                    })
+                                    trainers.length > 0 ?(
+                                        trainers.map((trainer) => {
+                                            return (
+                                                <>
+                                                    <div className={styles.cards}>
+                                                        <Card variant="outlined" sx={{width: 320}}
+                                                        >
+                                                            <CardOverflow>
+                                                                <AspectRatio minHeight="675px">
+                                                                    <div className={styles.trainerImage}
+                                                                         style={{backgroundImage: `url(${trainer.picture})`}}></div>
+                                                                </AspectRatio>
+                                                            </CardOverflow>
+                                                            <CardContent>
+                                                                <Typography level="title-md">{trainer.name}</Typography>
+                                                                <Typography
+                                                                    level="body-sm">{trainer.phoneNumber}</Typography>
+                                                            </CardContent>
+                                                        </Card>
+                                                    </div>
+                                                </>
+                                            )
+                                        })
+                                    ) : (
+                                        <>
+                                            <h1 className={styles.trainerError}>Jelenleg egy edző se dolgozik nálunk!</h1>
+                                        </>
+                                    )
                                 }
                             </Grid>
                         </div>

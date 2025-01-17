@@ -9,6 +9,7 @@ import PageNotFound from "./components/PageNotFound/PageNotFound";
 import Blogs from "./components/Blogs/Blogs";
 import Training from "./components/Training/Training";
 import UserProvider from "./components/Context/UserProvider";
+import UserContext from "./components/Context/UserContext";
 
 
 
@@ -16,18 +17,11 @@ function App() {
 
     /*
     Feladatok:
-         Program ár
-         UserLoggedIn Contextbe helyezése
-          Kijelentkezéskor dobja vissza a felhasználót a fő oldalra
-        Ha nincs bejelentkezve akkor ne tudjon jelentkezni a trainingre, de tudja megtekinteni
-        A blogokat ugyan úgy tudja megtekinteni mint egy default user,
+        OverFlow problémák
      */
 
     const [clients,setClients] = useState([])
     const [trainersTest,setTrainerTest] = useState([])
-    const [isUserLoggedIn,setIsUserLoggedIn] = useState(false)
-
-    //False == Cliens, True == Edző
 
 
 

@@ -1,7 +1,6 @@
 
 .calendar{
     justify-content: center;
-    border: 1px solid black;
     border-radius: 5px;
     height: 85vh;
     background-color: #F3F6F8;
@@ -36,5 +35,12 @@
 
 .signUpButton{
     margin: 20px;
+}
+@media (max-width: 800px){
+    .calendar{
+        font-size: 25px;
+        margin: 55px;
+    }
+
 }
 

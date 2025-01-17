@@ -2,9 +2,11 @@
     margin: 100px;
     min-height: 90vh;
     text-align: center;
-    background-color: lightgray;
 }
 
+body{
+    overflow-x: hidden;
+}
 
 .container >*{
     display: flex;
@@ -21,10 +23,6 @@
 }
 
 
-body{
-    overflow-x: hidden;
-}
-
 
 .trainerButtons{
     display: flex;
@@ -37,7 +35,11 @@ body{
 }
 
 .card{
-    width: 800px;
+    width: 500px;
+}
+
+.blogError{
+    margin-top: 5vh;
 }
 
 @media (max-width: 500px){
@@ -49,5 +51,7 @@ body{
 @media (max-width: 800px){
     .card{
         width: 400px;
+        font-size: 25px !important;
     }
+
 }

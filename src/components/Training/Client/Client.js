@@ -10,7 +10,7 @@ function Client({programs}) {
 
     const daysOfWeek = ['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek'];
 
-    const userContext = useContext(UserContext);
+    const {userType,isUserLoggedIn} = useContext(UserContext);
 
     const formatDate = (dateString) => {
         const date = new Date(dateString.replace(' ', 'T'));
@@ -28,10 +28,10 @@ function Client({programs}) {
         return acc;
     }, {});
 
-    function handleApplication(userType){
-        if (userType!= null){
+    function handleApplication(handler){
+        if (handler) {
             return (
-                <Button variant='contained'>Jelentkezés</Button>
+                <Button variant='contained' sx={{fontSize:'1.3rem'}}>Jelentkezés</Button>
             )
         }
     }
@@ -62,14 +62,15 @@ function Client({programs}) {
                                                     <div><h3>Ár : </h3>  {program.price} Ft</div>
                                                 </div>
                                                 <div className={styles.signUpButton}>
-                                                    {handleApplication(userContext)}
+                                                    {handleApplication(isUserLoggedIn)}
                                                 </div>
                                             </>
                                         ))
                                     ) : (
                                         <>
                                             <Divider/>
-                                            <div className={styles.dates}>Nincs program</div>
+                                            <div >Nincs program</div>
+                                            {handleApplication(false)}
                                         </>
                                     )}
                             </div>
