@@ -6,12 +6,29 @@
     background-color: whitesmoke;
 }
 
+.userName, .password{
+    padding-inline: 10px;
+    padding: 18px;
+    border-radius: 7px;
+    width: 95%;
+    border: 1px solid lightgray;
+    background-color: #FBFCFE;
+    box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.2);
+    font-size: large;
+}
+.error{
+    color: red;
+    text-align: right;
+    opacity: 0.8;
+}
+
 
 .buttons{
     overflow: hidden;
     display: flex;
     justify-content: space-between;
-    padding: 20px;
+    padding-top: 10px;
+    width: 100%;
 }
 .container{
     background: white;
@@ -19,7 +36,7 @@
     border-radius: 10px;
     min-width: 450px;
 }
-.container h3{
+.container h2{
     text-align: center;
 }
 
@@ -29,11 +46,22 @@
 }
 .inputs > *{
     margin: 10px;
-    padding: 10px;
 }
-@media (max-width: 500px) {
-    .container{
-        min-width: 100px;
+
+.closeButton{
+    background-color: rgba(237, 49, 49, 0.96) !important;
+}
+@media (max-width: 800px) {
+    .closeButton, .sendButton{
+        font-size: large;
     }
+
+    .userName, .password{
+        font-size: x-large;
+    }
+    .container h2{
+        font-size: xx-large;
+    }
+
 }
 

@@ -1,6 +1,6 @@
 import styles from './App.module.css';
 import axios from 'axios';
-import {createContext, useContext, useEffect, useState} from 'react';
+import { useEffect, useState} from 'react';
 import Registration from './components/Registration/Registration';
 import LandingPage from './components/LandingPage/LandingPage';
 import { BrowserRouter, Routes, Route } from "react-router";
@@ -9,7 +9,7 @@ import PageNotFound from "./components/PageNotFound/PageNotFound";
 import Blogs from "./components/Blogs/Blogs";
 import Training from "./components/Training/Training";
 import UserProvider from "./components/Context/UserProvider";
-import UserContext from "./components/Context/UserContext";
+import OpenedBlog from "./components/Blogs/OpenedBlog/OpenedBlog";
 
 
 
@@ -17,10 +17,9 @@ function App() {
 
     /*
     Feladatok:
-        OverFlow problémák
+        Formok átkírása React Hook Formra
      */
 
-    const [clients,setClients] = useState([])
     const [trainersTest,setTrainerTest] = useState([])
 
 
@@ -48,6 +47,7 @@ function App() {
                    <Route path="/login" element={<LoginPage/>} />
                    <Route path="/registration" element={<Registration />} />
                    <Route path="/blogs" element={<Blogs  />} />
+                   <Route path="/openedBlog" element={<OpenedBlog  />} />
                    <Route path="/training" element={<Training  />} />
                    <Route path="*" element={<PageNotFound />} />
                </Routes>

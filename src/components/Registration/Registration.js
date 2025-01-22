@@ -4,16 +4,21 @@ import Tabs from '@mui/joy/Tabs';
 import TabList from '@mui/joy/TabList';
 import Tab from '@mui/joy/Tab';
 import TabPanel from '@mui/joy/TabPanel';
-import Form from '../Form/Form'
+import Form from './Form/Form'
 import {useState} from "react";
 import {useNavigate} from "react-router";
 import axios from "axios";
+import TrainerForm from "./TrainerForm/TrainerForm";
+import {useForm} from "react-hook-form";
+
+function ClientForm() {
+    return null;
+}
 
 function Registration() {
 
     //False == Cliens, True == Edző
     const [userType, setUserType]=useState(true);
-    const [image, setImage]=useState(null);
     let navigate = useNavigate();
 
 
@@ -61,36 +66,54 @@ function Registration() {
 
     }
 
-    function save(trainerFormData,loginData,clientFormData){
-        qualificationToEnum();
-        axios.post('/login/',loginData).then(({data})=>{
-            if (userType){
-                trainerFormData.loginId = data.loginId
-                axios.post('/trainer/',trainerFormData).then(({data})=>{
-                    navigate("/login")
-                }).catch((error)=>{
-                    alert("A regisztrálás nem volt sikeres!! Kérlek győződj meg róla, hogy minden mezőt kitöltöttél!")
-                    console.log(error)
-                })
-            }else if (!userType){
-                clientFormData.loginId = data.loginId
-                console.log(clientFormData)
-                axios.post('/client/',clientFormData).then(({data})=>{
-                    navigate("/login")
-                }).catch((error)=>{
-                    alert("A regisztrálás nem volt sikeres!! Kérlek győződj meg róla, hogy minden mezőt kitöltöttél!")
-                    console.log(error)
-                })
+    async function save(trainerFormData, loginData, clientFormData, userType) {
+        try {
+            qualificationToEnum();
+
+            const loginResponse = await axios.post('/login/', loginData);
+            const loginId = loginResponse.data.loginId;
+
+            if (userType) {
+                await saveTrainerData(trainerFormData, loginId);
+            } else {
+                await saveClientData(clientFormData, loginId);
             }
 
-        }).catch((error)=>{
-            console.log(error)
-        })
+            navigate('/login');
+
+        } catch (error) {
+            console.error(error);
+            alert('A regisztrálás nem volt sikeres!! Kérlek győződj meg róla, hogy minden mezőt kitöltöttél!');
+        }
     }
 
-    const handleImage=(image)=>{
-        setImage(image);
+    async function saveTrainerData(trainerFormData, loginId) {
+        try {
+            trainerFormData.loginId = loginId;
+            await axios.post('/trainer/', trainerFormData);
+        } catch (error) {
+            throw new Error('Trainer registration failed.');
+        }
     }
+
+    async function saveClientData(clientFormData, loginId) {
+        try {
+            clientFormData.loginId = loginId;
+            await axios.post('/client/', clientFormData);
+        } catch (error) {
+            throw new Error('Client registration failed.');
+        }
+    }
+    /*
+     <Form
+          userType={userType}
+          clientFormData={clientFormData}
+          setClientFormData={setClientFormDataFromReg}
+          trainerFormData={trainerFormData}
+          setTrainerFormData={setTrainerFormDataFromReg}
+          logindData={login}
+            />
+     */
 
     return (
         <>
@@ -115,31 +138,15 @@ function Registration() {
                         </Tab>
                     </TabList>
                     <TabPanel value={0}>
-                        <Form sendImage={handleImage}
-                              userType={userType}
-                              clientFormData={clientFormData}
-                              setClientFormData={setClientFormDataFromReg}
-                              trainerFormData={trainerFormData}
-                              setTrainerFormData={setTrainerFormDataFromReg}
-                              logindData={login}
-                        />
+                        <TrainerForm />
                     </TabPanel>
                     <TabPanel value={1}>
-                        <Form sendImage={handleImage}
-                              userType={userType}
-                              clientFormData={clientFormData}
-                              setClientFormData={setClientFormDataFromReg}
-                              trainerFormData={trainerFormData}
-                              setTrainerFormData={setTrainerFormDataFromReg}
-                              logindData={login}
-                        />
+                        <ClientForm/>
                     </TabPanel>
                 </Tabs>
                 <div className={styles.buttons}>
                     <Button className={styles.closeButton} variant="contained" color="error" onClick={() => {navigate("/landingPage")}}>Bezárás</Button>
-                    <Button className={styles.closeButton} variant="contained" color="info" onClick={() => {
-                        save(trainerFormData,login, clientFormData)
-                    }}>Regisztrálás</Button>
+                    <Button className={styles.closeButton} variant="contained" color="info" >Regisztrálás</Button>
                 </div>
             </div>
         </>

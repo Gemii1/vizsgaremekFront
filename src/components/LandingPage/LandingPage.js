@@ -7,15 +7,31 @@ import CardContent from '@mui/joy/CardContent';
 import CardOverflow from '@mui/joy/CardOverflow';
 import Typography from '@mui/joy/Typography';
 import Grid from '@mui/joy/Grid';
-import {useState} from "react";
+import {useContext, useState} from "react";
 import Button from "@mui/material/Button";
 import {useNavigate} from "react-router";
+import UserContext from "../Context/UserContext";
 
 
 
 function LandingPage({trainers, open}){
 
     let navigate = useNavigate();
+    const {userType,isUserLoggedIn} = useContext(UserContext);
+
+
+    function handleRegButton(){
+        if (!isUserLoggedIn){
+            return(
+                <>
+                    <Button style={{fontSize: '200%'}} variant="contained" className={styles.registrationButton}
+                            color="info" onClick={() => {
+                        navigate("/registration")
+                    }}>Regisztrálás</Button>
+                </>
+            )
+        }
+    }
 
     return(
         <>
@@ -31,10 +47,9 @@ function LandingPage({trainers, open}){
                             <h3 style={{margin: '10px'}}>Eddz velünk</h3>
                             <p className={styles.quote}>„Nem a kő súlya az, ami számít. Hanem az ok, amiért felemeled.”
                                 --Hugo Girard</p>
-                            <Button style={{fontSize: '200%'}} variant="contained" className={styles.registrationButton}
-                                    color="info" onClick={() => {
-                                    navigate("/registration")
-                            }}>Regisztrálás</Button>
+
+                            {handleRegButton()}
+
                         </div>
                     </div>
                 </section>
@@ -48,7 +63,7 @@ function LandingPage({trainers, open}){
                                         trainers.map((trainer) => {
                                             return (
                                                 <>
-                                                    <div className={styles.cards}>
+                                                    <div className={styles.cards} >
                                                         <Card variant="outlined" sx={{width: 320}}
                                                         >
                                                             <CardOverflow>

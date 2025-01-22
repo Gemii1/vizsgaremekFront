@@ -11,11 +11,12 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Grid from '@mui/joy/Grid';
 import UserContext from "../Context/UserContext";
+import {useNavigate} from "react-router";
 
 function Blogs(){
 
 
-
+    const navigate = useNavigate();
     const {userType,isUserLoggedIn} = useContext(UserContext)
 
     const [blogs, setBlogs]=useState([
@@ -60,9 +61,11 @@ function Blogs(){
                     <div className={styles.blogContainer}>
                         <Grid container style={{justifyContent:'center'}} spacing={2} sx={{flexGrow: 1}}>
                             {blogs.length>0?(
-                                blogs.map((blog) => {
+                                blogs.map((blog,index) => {
                                     return (
-                                        <div className={styles.blog}>
+                                        <div key={index} className={styles.blog} onClick={()=>{
+                                            navigate("/openedBlog",{state:blog});
+                                        }}>
                                             <Card variant="outlined"  className={styles.card}>
                                                 <CardOverflow>
                                                     <AspectRatio ratio="2">

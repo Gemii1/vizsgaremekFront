@@ -1,49 +1,58 @@
 import styles from './LoginPage.module.css'
 import * as React from 'react';
 import Button from "@mui/material/Button";
-import Input from '@mui/joy/Input';
 import {useNavigate} from "react-router";
-import {useState} from "react";
-import axios from "axios";
-import useSignIn from "react-auth-kit/hooks/useSignIn";
+import {useForm} from "react-hook-form";
 
 
 function LoginPage() {
 
     let navigate = useNavigate();
-    const [userLoggedIn,setUserLoggedIn] = useState();
-    const [userLoggingIn, setUserLoggingIn] = React.useState({
-        email: '',
-        password: '',
-    });
 
-    const handleChange = (event) => {
-        setUserLoggingIn(values => ({...values,
-            [event.target.name]: event.target.value}))
-    }
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState:{errors},
+    }= useForm();
+    const onSubmit = (data) => console.log(data);
 
     return (
-        <>
-            <div  className={styles.login}>
-                <div className={styles.container}>
-                    <h3>Bejelentkezés</h3>
+        <div className={styles.login}>
+            <div className={styles.container}>
+                <h2>Bejelentkezés</h2>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <div className={styles.inputs}>
-                        <Input onChange={handleChange} name='email' type='email' placeholder="Emailcím"/>
-                        <Input onChange={handleChange} name='password' type='password' placeholder="Jelszó"/>
+                        <div>
+                            <input placeholder="Felhasználó név" className={styles.userName} {...register("userName", {
+                                required: true,
+                                minLength: 2,
+                            })} />
+                            <div className={styles.error}>
+                                {errors.userName && <span>Hibás felhasználó név</span>}
+                            </div>
+                        </div>
+                        <div>
+                            <input placeholder="Jelszó" type={"password"} className={styles.password} {...register("password", {
+                                required: true,
+                                minLength: 2,
+                            })} />
+                            <div className={styles.error}>
+                                {errors.password && <span>Hibás jelszó!</span>}
+                            </div>
+                        </div>
+                        <div className={styles.buttons}>
+                            <Button className={styles.closeButton} variant="contained"
+                                    onClick={() => {
+                                        navigate("/landingPage")
+                                    }}>Bezárás</Button>
+                            <Button className={styles.sendButton} variant="contained" color="info"
+                                    onClick={handleSubmit(onSubmit)} >Bejelentkezés</Button>
+                        </div>
                     </div>
-                    <div className={styles.buttons}>
-                        <Button className={styles.closeButton} variant="contained" color="error"
-                                onClick={() => {
-                                    navigate("/landingPage")
-                                }}>Vissza</Button>
-                        <Button className={styles.closeButton} variant="contained" color="info"
-                                onClick={() => {
-
-                                }}>Bejelentkezés</Button>
-                    </div>
-                </div>
+                </form>
             </div>
-        </>
+        </div>
 
     )
 }

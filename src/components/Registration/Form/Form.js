@@ -10,13 +10,12 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 
-function Form({sendImage,userType,clientFormData, setClientFormData, trainerFormData,setTrainerFormData, logindData}) {
+function Form({userType,clientFormData, setClientFormData, trainerFormData,setTrainerFormData, logindData}) {
 
     const mediaMatch = window.matchMedia('(min-width:500px)');
-    const [matches, setMatches] = useState(mediaMatch.matches);
-    const [image,setImage]=useState(null);
     const trainerQualifications = ["Personal trainer", "Fitness Instructor","Pilates Instructor", "Crossfit Coach", "TRX Trainer","Pound Trainer", "Other"]
 
+    /*
     const handleChange = (event) => {
         if (userType){
             handleClientOrTrainerForm(event,trainerFormData,setTrainerFormData);
@@ -43,21 +42,12 @@ function Form({sendImage,userType,clientFormData, setClientFormData, trainerForm
 
     }
 
-    //Ablakméret figyelő
-    useEffect(() => {
-        const handler = e => setMatches(e.matches);
-        mediaMatch.addListener(handler);
-        return () => mediaMatch.removeListener(handler);
-    });
-    //Image kezelő
-    const onImageChange = (event) => {
-        if (event.target.files && event.target.files[0]) {
-            setImage(URL.createObjectURL(event.target.files[0]));
-        }
-        sendImage(image);
-    }
+     */
+
+
 
     function handleUserType(){
+        /*
         if (userType){
             return (
                 <div className={styles.form}>
@@ -117,7 +107,6 @@ function Form({sendImage,userType,clientFormData, setClientFormData, trainerForm
                             key="other"
                         />
                     </div>
-                    {/*<Input type='file' onChange={onImageChange} placeholder="File"/>*/}
                 </div>
             );
         } else if (!userType) {
@@ -163,7 +152,11 @@ function Form({sendImage,userType,clientFormData, setClientFormData, trainerForm
                 </div>
             );
         }
+
+         */
+
     }
+
     return (
         <>
             {handleUserType()}
