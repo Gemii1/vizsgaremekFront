@@ -36,10 +36,11 @@ body{
 }
 
 
-@media (max-width: 500px) {
+@media (max-width: 800px) {
     .container{
-        max-width: 300px;
+        font-size: xx-large !important;
     }
+
 }
 
 

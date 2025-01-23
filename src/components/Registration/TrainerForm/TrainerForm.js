@@ -34,7 +34,7 @@ function TrainerForm() {
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className={styles.inputs}>
                     <div>
-                        <input
+                        <input className={styles.input}
                             placeholder="Teljes név"
                             {...register("userName", {
                                 required: true,
@@ -45,7 +45,7 @@ function TrainerForm() {
                         {errors.userName && <span className={styles.error}>Hibás név!</span>}
                     </div>
                     <div>
-                        <input
+                        <input className={styles.input}
                             placeholder="Email"
                             type="email"
                             {...register("email", {
@@ -66,13 +66,14 @@ function TrainerForm() {
                                     onChange={onChange}
                                     country="hu"
                                     className={styles.phone}
+                                    inputStyle={{width:'110%', padding: '18px', height: 'auto', paddingInline: '50px'}}
                                 />
                             )}
                         />
                         {errors.phone && <span className={styles.error}>{errors.phone.message+"!"}</span>}
                     </div>
                     <div>
-                        <input
+                        <input className={styles.input}
                             placeholder="Születési év"
                             type="date"
                             {...register("birthDay", {
@@ -81,8 +82,8 @@ function TrainerForm() {
                         />
                         {errors.birthDay && <span className={styles.error}>Hibás születési év!</span>}
                     </div>
-                    <div>
-                        <select {...register("qualification",{required:true})}>
+                    <div className={styles.select}>
+                        <select className={styles.input} {...register("qualification",{required:true})}>
                             {trainerQualifications.map((qualification,index) => (
                                 <option value={qualification} key={index}> {qualification}</option>
                             ))}
@@ -90,7 +91,7 @@ function TrainerForm() {
                         {errors.qualification && <span className={styles.error}>Hibás foglalkozás!</span>}
                     </div>
                     <div>
-                        <input
+                        <input className={styles.input}
                             placeholder="Jelszó"
                             type="password"
                             {...register("password", {

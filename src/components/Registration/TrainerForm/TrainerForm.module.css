@@ -15,12 +15,26 @@
     margin-left: 20px !important;
 }
 
-
-.phone{
-    margin: 20px;
-
+.input{
+    padding-inline: 10px;
+    padding: 18px;
+    border-radius: 7px;
+    width: 100%;
+    border: 1px solid lightgray;
+    background-color: #FBFCFE;
+    box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.2);
+    font-size: large;
+}
+.inputs > *{
+    margin-top: 10px;
 }
 
+.error{
+    color: red;
+}
+.select{
+    width: 110% !important;
+}
 
 
 
