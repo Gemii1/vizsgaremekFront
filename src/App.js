@@ -1,4 +1,3 @@
-import styles from './App.module.css';
 import axios from 'axios';
 import { useEffect, useState} from 'react';
 import Registration from './components/Registration/Registration';

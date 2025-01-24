@@ -1,8 +1,11 @@
 import styles from './TrainerForm.module.css';
 import {useForm,Controller} from "react-hook-form";
 import PhoneInput from "react-phone-input-2";
+import Button from "@mui/material/Button";
+import {useNavigate} from "react-router";
 
 function TrainerForm() {
+    let navigate = useNavigate();
 
     const {
         register,
@@ -34,80 +37,88 @@ function TrainerForm() {
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className={styles.inputs}>
                     <div>
+                        <label>Teljes név:</label>
                         <input className={styles.input}
-                            placeholder="Teljes név"
-                            {...register("userName", {
-                                required: true,
-                                minLength: 2,
-                                pattern: /^[A-Za-z]+$/i,
-                            })}
+                               placeholder="Jhon Do"
+                               {...register("userName", {
+                                   required: true,
+                                   minLength: 2,
+                                   pattern: /^[A-Za-z]+$/i,
+                               })}
                         />
                         {errors.userName && <span className={styles.error}>Hibás név!</span>}
                     </div>
                     <div>
+                        <label>Email:</label>
                         <input className={styles.input}
-                            placeholder="Email"
-                            type="email"
-                            {...register("email", {
-                                required: true,
-                                pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                            })}
+                               placeholder="pelda@gmail.com"
+                               type="email"
+                               {...register("email", {
+                                   required: true,
+                                   pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                               })}
                         />
                         {errors.email && <span className={styles.error}>Hibás email!</span>}
                     </div>
                     <div>
+                        <label>Telefonszám:</label>
                         <Controller
                             name="phone"
                             control={control}
-                            rules={{ required: 'A telefonszám megadása kötelező!' }}
-                            render={({ field: { onChange, value } }) => (
+                            rules={{required: 'A telefonszám megadása kötelező!'}}
+                            render={({field: {onChange, value}}) => (
                                 <PhoneInput
                                     value={value}
                                     onChange={onChange}
                                     country="hu"
                                     className={styles.phone}
-                                    inputStyle={{width:'110%', padding: '18px', height: 'auto', paddingInline: '50px'}}
+                                    inputStyle={{width: '110%', padding: '18px', height: 'auto', paddingInline: '50px'}}
                                 />
                             )}
                         />
-                        {errors.phone && <span className={styles.error}>{errors.phone.message+"!"}</span>}
+                        {errors.phone && <span className={styles.error}>{errors.phone.message + "!"}</span>}
                     </div>
                     <div>
+                        <label>Születési év:</label>
                         <input className={styles.input}
-                            placeholder="Születési év"
-                            type="date"
-                            {...register("birthDay", {
-                                required: true,
-                            })}
+                               placeholder="Születési év"
+                               type="date"
+                               {...register("birthDay", {
+                                   required: true,
+                               })}
                         />
                         {errors.birthDay && <span className={styles.error}>Hibás születési év!</span>}
                     </div>
                     <div className={styles.select}>
-                        <select className={styles.input} {...register("qualification",{required:true})}>
-                            {trainerQualifications.map((qualification,index) => (
+                        <label>Foglalkozás:</label>
+                        <select className={styles.input} {...register("qualification", {required: true})}>
+                            {trainerQualifications.map((qualification, index) => (
                                 <option value={qualification} key={index}> {qualification}</option>
                             ))}
                         </select>
                         {errors.qualification && <span className={styles.error}>Hibás foglalkozás!</span>}
                     </div>
                     <div>
+                        <label>Jelszó:</label>
                         <input className={styles.input}
-                            placeholder="Jelszó"
-                            type="password"
-                            {...register("password", {
-                                required: true,
-                            })}
+                               placeholder="Jelszó"
+                               type="password"
+                               {...register("password", {
+                                   required: true,
+                               })}
                         />
                         {errors.password && <span className={styles.error}>Hibás jelszó!</span>}
                     </div>
-                    <div>
+                    <div className={styles.formRadio}>
+                        <label>Nem:</label>
+                        <br/>
                         <label>
                             <input
                                 type="radio"
                                 value="MALE"
                                 {...register("gender", {required: true})}
                             />
-                            Male
+                            <label>Férfi</label>
                         </label>
                         <label>
                             <input
@@ -115,7 +126,7 @@ function TrainerForm() {
                                 value="FEMALE"
                                 {...register("gender", {required: true})}
                             />
-                            Female
+                            <label>Nő</label>
                         </label>
                         <label>
                             <input
@@ -123,12 +134,17 @@ function TrainerForm() {
                                 value="OTHER"
                                 {...register("gender", {required: true})}
                             />
-                            Other
+                            <label>Egyéb</label>
                         </label>
                         {errors.gender && <span className={styles.error}>Hibás nem!</span>}
                     </div>
                 </div>
-                <button type="submit">Küldés</button>
+                <div className={styles.buttons}>
+                    <Button className={styles.closeButton} variant="contained" color="error" onClick={() => {
+                        navigate("/landingPage")
+                    }}>Bezárás</Button>
+                    <Button className={styles.closeButton} variant="contained" color="info" onClick={handleSubmit(onSubmit)}>Regisztrálás</Button>
+                </div>
             </form>
         </div>
     );

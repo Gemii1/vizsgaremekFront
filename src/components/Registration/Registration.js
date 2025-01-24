@@ -1,19 +1,14 @@
 import styles from './Registration.module.css';
-import Button from '@mui/material/Button';
 import Tabs from '@mui/joy/Tabs';
 import TabList from '@mui/joy/TabList';
 import Tab from '@mui/joy/Tab';
 import TabPanel from '@mui/joy/TabPanel';
-import Form from './Form/Form'
 import {useState} from "react";
 import {useNavigate} from "react-router";
 import axios from "axios";
 import TrainerForm from "./TrainerForm/TrainerForm";
-import {useForm} from "react-hook-form";
+import ClientForm from "./ClientForm/ClientForm";
 
-function ClientForm() {
-    return null;
-}
 
 function Registration() {
 
@@ -22,40 +17,9 @@ function Registration() {
     let navigate = useNavigate();
 
 
-    let [trainerFormData, setTrainerFormData] =useState({
-        name:'',
-        birthDate:'',
-        gender:'',
-        picture:'Images/img1.jpg',
-        qualification:'',
-        phoneNumber:'',
-        rating:'3',
-        loginId:''
-    })
-
-    let [clientFormData, setClientFormData] =useState({
-        name:'',
-        birthDate:'',
-        gender:'',
-        phoneNumber:'',
-        loginId:''
-    })
-
-    let [login,setLoginData]=useState({
-        email:'',
-        password:''
-    })
 
 
-    function setTrainerFormDataFromReg(selectedValues){
-        setTrainerFormData(selectedValues);
-    }
-
-    function setClientFormDataFromReg(selectedValues){
-        setClientFormData(selectedValues);
-    }
-
-    function qualificationToEnum(){
+    function qualificationToEnum(trainerFormData){
         let qualSplitted = trainerFormData.qualification.toUpperCase().split(" ");
         if (qualSplitted.length > 1){
             let upperCaseQual = qualSplitted[0]+"_"+qualSplitted[1];
@@ -104,16 +68,7 @@ function Registration() {
             throw new Error('Client registration failed.');
         }
     }
-    /*
-     <Form
-          userType={userType}
-          clientFormData={clientFormData}
-          setClientFormData={setClientFormDataFromReg}
-          trainerFormData={trainerFormData}
-          setTrainerFormData={setTrainerFormDataFromReg}
-          logindData={login}
-            />
-     */
+
 
     return (
         <>
@@ -144,10 +99,7 @@ function Registration() {
                         <ClientForm/>
                     </TabPanel>
                 </Tabs>
-                <div className={styles.buttons}>
-                    <Button className={styles.closeButton} variant="contained" color="error" onClick={() => {navigate("/landingPage")}}>Bezárás</Button>
-                    <Button className={styles.closeButton} variant="contained" color="info" >Regisztrálás</Button>
-                </div>
+
             </div>
         </>
     )

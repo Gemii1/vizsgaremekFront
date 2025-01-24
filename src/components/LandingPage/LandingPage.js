@@ -11,8 +11,8 @@ import {useContext, useState} from "react";
 import Button from "@mui/material/Button";
 import {useNavigate} from "react-router";
 import UserContext from "../Context/UserContext";
-
-
+import StarRateIcon from '@mui/icons-material/StarRate';
+import StarBorderTwoToneIcon from '@mui/icons-material/StarBorderTwoTone';
 
 function LandingPage({trainers, open}){
 
@@ -31,6 +31,18 @@ function LandingPage({trainers, open}){
                 </>
             )
         }
+    }
+    function formatQualification(text) {
+        return text
+            .toLowerCase()
+            .replace(/_/g, ' ')
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+
+    }
+    function formatPhoneNumber(phoneNumber) {
+        return phoneNumber.replace(/(\d{2})(\d{2})(\d{3})(\d{3})/, '+$1 ($2) $3-$4');
     }
 
     return(
@@ -69,13 +81,20 @@ function LandingPage({trainers, open}){
                                                             <CardOverflow>
                                                                 <AspectRatio minHeight="675px">
                                                                     <div className={styles.trainerImage}
-                                                                         style={{backgroundImage: `url(${trainer.picture})`}}></div>
+                                                                          style={{backgroundImage: `url(${trainer.picture})`}}></div>
                                                                 </AspectRatio>
                                                             </CardOverflow>
-                                                            <CardContent>
-                                                                <Typography level="title-md">{trainer.name}</Typography>
-                                                                <Typography
-                                                                    level="body-sm">{trainer.phoneNumber}</Typography>
+                                                            <CardContent className={styles.cardContent}>
+                                                                <div>
+                                                                    <Typography level="title-md">{trainer.name}</Typography>
+                                                                    <Typography level="body-sm">{formatPhoneNumber(trainer.phoneNumber)}</Typography>
+                                                                    <Typography level="body-sm">{formatQualification(trainer.qualification)}</Typography>
+                                                                </div>
+                                                                <div className={styles.rating}>
+                                                                    <StarRateIcon className={styles.star} color="primary" />
+                                                                    <label >{trainer.rating}</label>
+
+                                                                </div>
                                                             </CardContent>
                                                         </Card>
                                                     </div>
