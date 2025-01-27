@@ -91,8 +91,10 @@ function LandingPage({trainers, open}){
                                                                     <Typography level="body-sm">{formatQualification(trainer.qualification)}</Typography>
                                                                 </div>
                                                                 <div className={styles.rating}>
-                                                                    <StarRateIcon className={styles.star} color="primary" />
-                                                                    <label >{trainer.rating}</label>
+                                                                    <label>{trainer.rating}</label>
+                                                                    <StarRateIcon className={styles.star}
+                                                                                  color="primary"/>
+
 
                                                                 </div>
                                                             </CardContent>

@@ -1,5 +1,7 @@
 import styles from './TrainerForm.module.css';
 import {useForm,Controller} from "react-hook-form";
+import 'react-phone-input-2/lib/style.css'
+
 import PhoneInput from "react-phone-input-2";
 import Button from "@mui/material/Button";
 import {useNavigate} from "react-router";

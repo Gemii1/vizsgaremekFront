@@ -19,10 +19,6 @@ function Navbar(){
 
     const {userType,isUserLoggedIn, setIsUserLoggedIn} = useContext(UserContext);
 
-
-
-
-
     function whichUser(userType){
         if(userType){
             return <>Edző</>;

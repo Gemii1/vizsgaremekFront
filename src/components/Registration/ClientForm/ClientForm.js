@@ -2,6 +2,8 @@ import {useNavigate} from "react-router";
 import {Controller, useForm} from "react-hook-form";
 import styles from "../TrainerForm/TrainerForm.module.css";
 import PhoneInput from "react-phone-input-2";
+import 'react-phone-input-2/lib/style.css'
+
 import Button from "@mui/material/Button";
 
 function ClientForm() {

@@ -49,23 +49,20 @@ body{
     margin: 10px;
 }
 .cardContent{
-    display: flex;
-    flex-direction: row;
+    display: flex !important;
+    flex-direction: row !important;
     justify-content: space-between;
 
 }
 
 .rating > svg{
-    font-size: 60px;
-    color: yellow;
-    stroke: black ;
-    stroke-width: 0.2px;
+    font-size: 35px;
+    color: #ffde16;
 }
 .rating{
     display: flex;
-    font-size: 40px;
+    font-size: 24px;
     align-items: center;
-    justify-content: center;
 }
 
 .trainerImage{
