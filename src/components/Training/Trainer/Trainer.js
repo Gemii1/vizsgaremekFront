@@ -25,13 +25,23 @@ function Trainer({ programs }) {
         return acc;
     }, {});
 
+
+    //Nincs backend hozzá, nincs kész a függvény
+    function getDate(dayName) {
+        if (groupedPrograms[dayName]) {
+            return groupedPrograms[dayName][0].startDate;
+        }
+
+    }
+
+
     return (
         <div className={styles.calendar}>
             <Grid container rowSpacing ={1} spacing={2} columns={{ xs: 2, sm: 2, md: 12 }} >
                     {daysOfWeek.map((day) => (
                         <Grid item xs={2.4} key={day} className={styles.days}>
                             <div className={styles.program}>
-                                <h2>{day}</h2>
+                                <h2>{day}, {getDate(day)}</h2>
                                 <Divider color='black' />
                                 <div className={styles.programOnDay}>
                                     <p>Foglalt időpontok:</p>
