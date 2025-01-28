@@ -57,6 +57,7 @@ function Blogs(){
     }
 
 
+
     return (
         <div className={styles.blogs}>
             <Navbar/>
@@ -67,11 +68,11 @@ function Blogs(){
                             {blogs.length>0?(
                                 blogs.map((blog,index) => {
                                     return (
-                                        <div key={index} className={styles.blog} onClick={()=>{
-                                            navigate("/openedBlog",{state:blog});
-                                        }}>
+                                        <div key={index} className={styles.blog} >
                                             <Card variant="outlined"  className={styles.card}>
-                                                <CardOverflow>
+                                                <CardOverflow onClick={()=>{
+                                                    navigate("/openedBlog",{state:blog});
+                                                }}>
                                                     <AspectRatio ratio="2">
                                                         <img
                                                             src="https://images.unsplash.com/photo-1532614338840-ab30cf10ed36?auto=format&fit=crop&w=318"
@@ -81,7 +82,9 @@ function Blogs(){
                                                         />
                                                     </AspectRatio>
                                                 </CardOverflow>
-                                                <CardContent>
+                                                <CardContent onClick={()=>{
+                                                    navigate("/openedBlog",{state:blog});
+                                                }}>
                                                     <Typography level="title-xl" sx={{fontWeight:'xl',fontSize:'1.3rem'}}>{blog.title}</Typography>
                                                     <Typography level="body-sm">{blog.writer}</Typography>
                                                 </CardContent>

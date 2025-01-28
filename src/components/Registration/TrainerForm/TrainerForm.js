@@ -3,6 +3,7 @@ import {useForm,Controller} from "react-hook-form";
 import 'react-phone-input-2/lib/style.css'
 
 import PhoneInput from "react-phone-input-2";
+import 'react-phone-input-2/lib/style.css';
 import Button from "@mui/material/Button";
 import {useNavigate} from "react-router";
 
@@ -65,7 +66,7 @@ function TrainerForm() {
                     <div>
                         <label>Telefonszám:</label>
                         <Controller
-                            name="phone"
+                            name="telefon"
                             control={control}
                             rules={{required: 'A telefonszám megadása kötelező!'}}
                             render={({field: {onChange, value}}) => (
@@ -73,7 +74,6 @@ function TrainerForm() {
                                     value={value}
                                     onChange={onChange}
                                     country="hu"
-                                    className={styles.phone}
                                     inputStyle={{width: '110%', padding: '18px', height: 'auto', paddingInline: '50px'}}
                                 />
                             )}

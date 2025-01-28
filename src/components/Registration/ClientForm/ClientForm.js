@@ -27,6 +27,8 @@ function ClientForm() {
     };
 
 
+
+
     const setLoginData = (data) => {
         loginData.userName = data.userName;
         loginData.password  = data.password;
@@ -76,6 +78,7 @@ function ClientForm() {
                                 />
                             )}
                         />
+
                         {errors.phone && <span className={styles.error}>{errors.phone.message + "!"}</span>}
                     </div>
                     <div>
@@ -137,6 +140,7 @@ function ClientForm() {
                     <Button className={styles.closeButton} variant="contained" color="info" onClick={handleSubmit(onSubmit)}>Regisztrálás</Button>
                 </div>
             </form>
+
         </div>
     );
 

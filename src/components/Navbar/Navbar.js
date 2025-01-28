@@ -10,14 +10,17 @@ import Menu from '@mui/joy/Menu';
 import MenuButton from '@mui/joy/MenuButton';
 import MenuItem from '@mui/joy/MenuItem';
 import UserContext from "../Context/UserContext";
-
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
 
 function Navbar(){
 
     let navigate = useNavigate();
-
-
     const {userType,isUserLoggedIn, setIsUserLoggedIn} = useContext(UserContext);
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
     function whichUser(userType){
         if(userType){
@@ -79,7 +82,7 @@ function Navbar(){
                                                 <div className={styles.userType}>
                                                     {whichUser(userType)}
                                                 </div>
-                                                <MenuItem>Adataim</MenuItem>
+                                                <MenuItem onClick={handleOpen}>Adataim</MenuItem>
                                                 <MenuItem onClick={()=>{
                                                     handleLogout();
                                                 }}>Kijelentkezés</MenuItem>
@@ -87,10 +90,14 @@ function Navbar(){
                                         </Menu>
                                     </Dropdown>
                                 </div>
-
                             </div>
                         </div>
                     </div>
+                        <Modal open={open} onClose={handleClose}>
+                           <div className={styles.modalContainer}>
+                               sas
+                           </div>
+                        </Modal>
                 </>
             )
         }

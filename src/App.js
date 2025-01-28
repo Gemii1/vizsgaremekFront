@@ -16,7 +16,16 @@ function App() {
 
     /*
     Feladatok:
-        Formok átkírása React Hook Formra
+        -Blogok befejezése
+        -Blogok CRUD műveletek
+        -Színek kiválasztása
+        -Időpontok az edzés fülön és a CRUD műveletek a trainernek, a jelentkezés a kliensnek
+        -Login
+        -Adataim Modal
+        -NavBar függvényátírás
+        -UserData userContextbe
+        -Navbarba Adataim fül
+
      */
 
     const [trainersTest,setTrainerTest] = useState([])

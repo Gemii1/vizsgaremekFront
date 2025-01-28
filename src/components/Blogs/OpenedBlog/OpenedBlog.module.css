@@ -1,4 +1,3 @@
-/* OpenedBlog.module.css */
 .container {
     margin-top: 100px;
     padding: 10px;
@@ -9,20 +8,19 @@
 }
 
 .blogText {
-
+    display: flex;
     padding: 30px 50px 50px 50px;
     font-size: 1.2em;
     line-height: 1.6;
 }
 
-.blogText img {
-    float: right; /* vagy left, ha a bal oldalra szeretnéd helyezni a képet */
-    margin: 0 20px 20px 0; /* Igazítsd a margókat az igényeid szerint */
-    max-width: 50%; /* Állítsd be a kép maximális szélességét */
+.textContent{
 }
 
-.clearfix::after {
-    content: "";
-    display: table;
-    clear: both;
+.blogText .kep {
+    position: sticky;
+    float: right;
+    margin: 0 0 20px 20px;
 }
+
+

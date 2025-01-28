@@ -1,0 +1,47 @@
+.form > *{
+    margin: 20px;
+}
+
+.formRadio{
+    display: flex;
+    gap: 10px;
+}
+.formRadio label{
+    padding-left: 3px;
+}
+
+
+.qualification{
+    margin-left: 20px !important;
+}
+
+.input{
+    padding-inline: 10px;
+    padding: 18px;
+    border-radius: 7px;
+    width: 100%;
+    border: 1px solid lightgray;
+    background-color: #FBFCFE;
+    box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.2);
+    font-size: large;
+
+}
+.inputs > *{
+    margin-top: 10px;
+}
+.buttons{
+    margin-top: 15px;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+}
+
+.error{
+    color: red;
+}
+.select{
+    width: 110% !important;
+}
+
+
+
