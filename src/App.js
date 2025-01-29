@@ -25,6 +25,7 @@ function App() {
         -NavBar függvényátírás
         -UserData userContextbe
         -Navbarba Adataim fül
+        -Adataim fülön adatok módosítása, mint Telefonszám, nem, brithDate, Trainernek még qualification
 
      */
 

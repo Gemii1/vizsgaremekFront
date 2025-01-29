@@ -94,9 +94,19 @@ function Navbar(){
                         </div>
                     </div>
                         <Modal open={open} onClose={handleClose}>
-                           <div className={styles.modalContainer}>
-                               sas
-                           </div>
+                            <div className={styles.modalContainer}>
+                                <div className={styles.modalHeadder}>
+                                    <div><AccountCircleIcon className={styles.icon}/></div>
+                                    <h2>userneve</h2>
+                                </div>
+                                <div className={styles.information}>
+                                    <div className={styles.email}>
+                                        <div>Email:</div>
+                                        <div> rawrwar</div>
+                                    </div>
+
+                                </div>
+                            </div>
                         </Modal>
                 </>
             )
