@@ -17,7 +17,8 @@ import StarBorderTwoToneIcon from '@mui/icons-material/StarBorderTwoTone';
 function LandingPage({trainers, open}){
 
     let navigate = useNavigate();
-    const {userType,isUserLoggedIn} = useContext(UserContext);
+    const {userType,isUserLoggedIn, setUser} = useContext(UserContext);
+
 
 
     function handleRegButton(){

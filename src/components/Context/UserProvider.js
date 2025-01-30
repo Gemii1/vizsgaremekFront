@@ -4,8 +4,9 @@ import UserContext from './UserContext';
 const UserProvider = ({ children }) => {
     const [userType, setUserType] = useState(true);
     const [isUserLoggedIn, setIsUserLoggedIn] = useState(true);
+    const [user, setUser] = useState([]);
     return (
-        <UserContext.Provider value={{userType,isUserLoggedIn, setIsUserLoggedIn}}>
+        <UserContext.Provider value={{userType,isUserLoggedIn, setIsUserLoggedIn, user, setUser}}>
             {children}
         </UserContext.Provider>
     );

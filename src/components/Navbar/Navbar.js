@@ -10,14 +10,13 @@ import Menu from '@mui/joy/Menu';
 import MenuButton from '@mui/joy/MenuButton';
 import MenuItem from '@mui/joy/MenuItem';
 import UserContext from "../Context/UserContext";
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
 
+import Modal from '@mui/material/Modal';
+import EditIcon from '@mui/icons-material/Edit';
 function Navbar(){
 
     let navigate = useNavigate();
-    const {userType,isUserLoggedIn, setIsUserLoggedIn} = useContext(UserContext);
+    const {userType,isUserLoggedIn, setIsUserLoggedIn, user} = useContext(UserContext);
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -77,7 +76,7 @@ function Navbar(){
                                             <div>
                                                 <div className={styles.dropdownHead}>
                                                     <div><AccountCircleIcon style={{fontSize: 'xxx-large'}}/></div>
-                                                    <div>userneve</div>
+                                                    <div>{user.name}</div>
                                                 </div>
                                                 <div className={styles.userType}>
                                                     {whichUser(userType)}
@@ -97,14 +96,29 @@ function Navbar(){
                             <div className={styles.modalContainer}>
                                 <div className={styles.modalHeadder}>
                                     <div><AccountCircleIcon className={styles.icon}/></div>
-                                    <h2>userneve</h2>
+                                    <h2>{user.name}</h2>
                                 </div>
-                                <div className={styles.information}>
-                                    <div className={styles.email}>
+                                <div className={styles.informations}>
+                                    <div className={styles.info}>
                                         <div>Email:</div>
-                                        <div> rawrwar</div>
+                                        <div>{user.login.email}</div>
+                                        <div></div>
                                     </div>
-
+                                    <div className={styles.info}>
+                                        <div>Születési év:</div>
+                                        <div>{user.birthDate}</div>
+                                        <div><EditIcon/></div>
+                                    </div>
+                                    <div className={styles.info}>
+                                        <div>Végzettség:</div>
+                                        <div>{user.qualification}</div>
+                                        <div><EditIcon/></div>
+                                    </div>
+                                    <div className={styles.info}>
+                                        <div>Telefonszám:</div>
+                                        <div>{user.phoneNumber}</div>
+                                        <div><EditIcon/></div>
+                                    </div>
                                 </div>
                             </div>
                         </Modal>

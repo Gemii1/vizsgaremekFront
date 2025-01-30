@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import Registration from './components/Registration/Registration';
 import LandingPage from './components/LandingPage/LandingPage';
 import { BrowserRouter, Routes, Route } from "react-router";
@@ -7,8 +7,8 @@ import LoginPage from "./components/LoginPage/LoginPage";
 import PageNotFound from "./components/PageNotFound/PageNotFound";
 import Blogs from "./components/Blogs/Blogs";
 import Training from "./components/Training/Training";
-import UserProvider from "./components/Context/UserProvider";
 import OpenedBlog from "./components/Blogs/OpenedBlog/OpenedBlog";
+import UserContext from "./components/Context/UserContext";
 
 
 
@@ -30,7 +30,12 @@ function App() {
      */
 
     const [trainersTest,setTrainerTest] = useState([])
+    const {setUser} = useContext(UserContext);
+    const getUserData =async ()=>{
+        const response = await axios.get(`/trainer/${101}`);
+        setUser(response.data);
 
+    }
 
 
       useEffect(()=>{
@@ -40,7 +45,10 @@ function App() {
             setTrainerTest(trainer);
           }).catch((error)=>{
               console.log(error)
-          })
+          });
+          getUserData();
+
+
       },[])
 
 
@@ -48,7 +56,6 @@ function App() {
 
   return (
    <div>
-       <UserProvider>
            <BrowserRouter>
                <Routes>
                    <Route index element={<LandingPage trainers={trainersTest}/>} />
@@ -61,7 +68,6 @@ function App() {
                    <Route path="*" element={<PageNotFound />} />
                </Routes>
            </BrowserRouter>
-       </UserProvider>
    </div>
   );
 }
