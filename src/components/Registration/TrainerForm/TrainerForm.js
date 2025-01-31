@@ -21,9 +21,20 @@ function TrainerForm() {
         userName :'',
         password : ''
     }
+    function qualificationToEnum(data){
+        let qualSplitted = data.qualification.toUpperCase().split(" ");
+        if (qualSplitted.length > 1){
+            let upperCaseQual = qualSplitted[0]+"_"+qualSplitted[1];
+            data.qualification = upperCaseQual;
+        }else{
+            data.qualification = data.qualification.toUpperCase();
+        }
+
+    }
 
     const onSubmit = (data) => {
         setLoginData(data)
+        qualificationToEnum(data)
         console.log(data);
     };
 

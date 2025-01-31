@@ -46,23 +46,19 @@ function LandingPage({trainers, open}){
         return phoneNumber.replace(/(\d{2})(\d{2})(\d{3})(\d{3})/, '+$1 ($2) $3-$4');
     }
 
-    return(
+    return (
         <>
             {/* Font import */}
-            <link href="https://fonts.googleapis.com/css?family=Kalam" rel="stylesheet"/>
-            <meta name="viewport" content="width=720"/>
-            <div style={{fontFamily: "Kalam"}}>
-
-                <Navbar/>
+            <link href="https://fonts.googleapis.com/css?family=Kalam" rel="stylesheet" />
+            <meta name="viewport" content="width=720" />
+            <div style={{ fontFamily: "Kalam" }}>
+                <Navbar />
                 <section className={styles.banner}>
                     <div>
                         <div className={styles.registration}>
-                            <h3 style={{margin: '10px'}}>Eddz velünk</h3>
-                            <p className={styles.quote}>„Nem a kő súlya az, ami számít. Hanem az ok, amiért felemeled.”
-                                --Hugo Girard</p>
-
+                            <h3 style={{ margin: '10px' }}>Eddz velünk</h3>
+                            <p className={styles.quote}>„Nem a kő súlya az, ami számít. Hanem az ok, amiért felemeled.” --Hugo Girard</p>
                             {handleRegButton()}
-
                         </div>
                     </div>
                 </section>
@@ -70,54 +66,41 @@ function LandingPage({trainers, open}){
                     <div className={styles.container}>
                         <div className={styles.title}>Edzőink</div>
                         <div className={styles.cardsContainer}>
-                            <Grid container spacing={2} sx={{flexGrow: 1}}>
-                                {
-                                    trainers.length > 0 ?(
-                                        trainers.map((trainer) => {
-                                            return (
-                                                <>
-                                                    <div className={styles.cards} >
-                                                        <Card variant="outlined" sx={{width: 320}}
-                                                        >
-                                                            <CardOverflow>
-                                                                <AspectRatio minHeight="675px">
-                                                                    <div className={styles.trainerImage}
-                                                                          style={{backgroundImage: `url(${trainer.picture})`}}></div>
-                                                                </AspectRatio>
-                                                            </CardOverflow>
-                                                            <CardContent className={styles.cardContent}>
-                                                                <div>
-                                                                    <Typography level="title-md">{trainer.name}</Typography>
-                                                                    <Typography level="body-sm">{formatPhoneNumber(trainer.phoneNumber)}</Typography>
-                                                                    <Typography level="body-sm">{formatQualification(trainer.qualification)}</Typography>
-                                                                </div>
-                                                                <div className={styles.rating}>
-                                                                    <label>{trainer.rating}</label>
-                                                                    <StarRateIcon className={styles.star}
-                                                                                  color="primary"/>
-
-
-                                                                </div>
-                                                            </CardContent>
-                                                        </Card>
+                            <Grid container spacing={2} sx={{ flexGrow: 1 }}>
+                                {trainers.length > 0 ? (
+                                    trainers.map((trainer) => (
+                                        <div className={styles.cards} key={trainer.id}>
+                                            <Card variant="outlined" sx={{ width: 320 }}>
+                                                <CardOverflow>
+                                                    <AspectRatio minHeight="675px">
+                                                        <div className={styles.trainerImage}
+                                                             style={{ backgroundImage: `url(${trainer.picture})` }}></div>
+                                                    </AspectRatio>
+                                                </CardOverflow>
+                                                <CardContent className={styles.cardContent}>
+                                                    <div>
+                                                        <Typography level="title-md">{trainer.name}</Typography>
+                                                        <Typography level="body-sm">{formatPhoneNumber(trainer.phoneNumber)}</Typography>
+                                                        <Typography level="body-sm">{formatQualification(trainer.qualification)}</Typography>
                                                     </div>
-                                                </>
-                                            )
-                                        })
-                                    ) : (
-                                        <>
-                                            <h1 className={styles.trainerError}>Jelenleg egy edző se dolgozik nálunk!</h1>
-                                        </>
-                                    )
-                                }
+                                                    <div className={styles.rating}>
+                                                        <label>{trainer.rating}</label>
+                                                        <StarRateIcon className={styles.star} color="primary" />
+                                                    </div>
+                                                </CardContent>
+                                            </Card>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <h1 className={styles.trainerError}>Jelenleg egy edző se dolgozik nálunk!</h1>
+                                )}
                             </Grid>
                         </div>
                     </div>
                 </section>
             </div>
-
         </>
-    )
+    );
 }
 
 export default LandingPage;
