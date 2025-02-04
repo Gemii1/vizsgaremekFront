@@ -3,26 +3,21 @@ import {useContext, useEffect, useState} from "react";
 import styles from "./Training.module.css"
 import Trainer from "./Trainer/Trainer";
 import Client from "./Client/Client";
-import UserContext from "../Context/UserContext";
+import UserContext from "../Context/User/UserContext";
 import axios from "axios";
+import ProgramContext from "../Context/Program/ProgramContext";
 
 
 function Training(){
 
 
+
+    const  {programs,fetchPrograms} = useContext(ProgramContext);
     const [programsData, setProgramsData]=useState([]);
     useEffect(() => {
-        fetchProgramsData();
+        fetchPrograms();
     },[]);
 
-    const fetchProgramsData = async () => {
-        try {
-            const response = await axios.get("/program/");
-            setProgramsData(response.data);
-        }catch(err){
-            console.log("Error fetching programs"+err);
-        }
-    }
 
 
 
@@ -34,13 +29,13 @@ function Training(){
         if (userType){
             return(
                 <div>
-                    <Trainer programs={programsData}/>
+                    <Trainer/>
                 </div>
             );
         }else {
             return (
                 <div>
-                    <Client programs={programsData}/>
+                    <Client/>
                 </div>
             )
         }

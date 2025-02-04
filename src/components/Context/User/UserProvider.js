@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import UserContext from './UserContext';
 
 const UserProvider = ({ children }) => {
-    const [userType, setUserType] = useState(false);
+    const [userType, setUserType] = useState(true);
     const [isUserLoggedIn, setIsUserLoggedIn] = useState(true);
     const [user, setUser] = useState([
         {email: ''},

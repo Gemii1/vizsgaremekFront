@@ -10,7 +10,7 @@ import Grid from '@mui/joy/Grid';
 import {useContext, useState} from "react";
 import Button from "@mui/material/Button";
 import {useNavigate} from "react-router";
-import UserContext from "../Context/UserContext";
+import UserContext from "../Context/User/UserContext";
 import StarRateIcon from '@mui/icons-material/StarRate';
 import StarBorderTwoToneIcon from '@mui/icons-material/StarBorderTwoTone';
 

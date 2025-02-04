@@ -9,7 +9,7 @@ import Dropdown from '@mui/joy/Dropdown';
 import Menu from '@mui/joy/Menu';
 import MenuButton from '@mui/joy/MenuButton';
 import MenuItem from '@mui/joy/MenuItem';
-import UserContext from "../Context/UserContext";
+import UserContext from "../Context/User/UserContext";
 
 import Modal from '@mui/material/Modal';
 import EditIcon from '@mui/icons-material/Edit';

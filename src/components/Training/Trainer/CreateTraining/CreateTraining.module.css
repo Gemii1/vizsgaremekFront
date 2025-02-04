@@ -1,0 +1,24 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    background-color: whitesmoke;
+    width: 500px;
+    height: 500px;
+    margin: 20vh auto auto;
+    border-radius: 15px;
+}
+.form{
+
+}
+.inputs{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    margin: 2.5vh auto auto;
+}
+.inputs >div{
+    margin: 5px 0 5px 0;
+}
+.textFields{
+    width: 100%;
+}

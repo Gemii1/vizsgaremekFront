@@ -25,7 +25,7 @@
 }
 
 .dates{
-    margin: 20px;
+    margin: 1px;
     text-align: initial;
 }
 .dates h3{
@@ -36,7 +36,7 @@
 .status{
     display: flex;
     text-align: left;
-    margin-bottom: 10px;
+    margin: 10px;
 }
 .signUpButton{
     margin: 20px;
@@ -45,6 +45,12 @@
     .calendar{
         font-size: 25px;
         margin: 55px;
+    }
+    .dates{
+        margin: 15px;
+    }
+    .status svg{
+        font-size: 35px;
     }
 
 }

@@ -7,9 +7,7 @@
 }
 
 
-.days {
 
-}
 .program {
     text-align: center;
     padding: 20px;
@@ -37,9 +35,14 @@
 
 .dates{
     margin: 20px;
+    display: flex;
+    justify-content: center;
+}
+.dates div{
+    margin-right: 10px;
 }
 
 .buttons{
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
 }

@@ -3,14 +3,16 @@ import Grid from '@mui/joy/Grid';
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import {useContext, useEffect, useState} from "react";
-import UserContext from "../../Context/UserContext";
+import UserContext from "../../Context/User/UserContext";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import ProgramContext from "../../Context/Program/ProgramContext";
 
-function Client({programs}) {
+function Client() {
 
     const daysOfWeek = ['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek'];
 
     const {userType,isUserLoggedIn} = useContext(UserContext);
+    const {programs} = useContext(ProgramContext);
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -41,13 +43,28 @@ function Client({programs}) {
             )
         }
     }
-    const handleStyle = (status)=>{
-        if (status == "UPCOMING") {
-            return {color: 'darkgreen'};
-        }else if(status == "IN_PROGRESS") {
-            return {color: 'orange'};
-        }else if(status == "COMPLETED") {
-            return {color: 'red'};
+    const handleStatus = (status)=>{
+        if (status === "UPCOMING") {
+            return (
+                <>
+                    <MoreVertIcon style={{color:'green'}}/>
+                    <div>Közelgő</div>
+                </>
+            );
+        }else if(status === "IN_PROGRESS") {
+            return (
+                <>
+                    <MoreVertIcon style={{color:'orange'}}/>
+                    <div>Folyamatban lévő</div>
+                </>
+            );
+        } else if(status === "COMPLETED") {
+            return (
+                <>
+                    <MoreVertIcon style={{color:'red'}}/>
+                    <div>Befejezett</div>
+                </>
+            );
         }
     }
 
@@ -68,6 +85,9 @@ function Client({programs}) {
                                     (groupedPrograms[day].map((program, index) => (
                                             <>
                                                 <Divider/>
+                                                <div className={styles.status}>
+                                                    {handleStatus(program.status)}
+                                                </div>
                                                 <div key={index} className={styles.dates}>
 
                                                     <div><h3>Edzés : </h3> {program.programType}</div>
@@ -77,12 +97,9 @@ function Client({programs}) {
                                                     <div><h3>Ár : </h3>  {program.price} Ft</div>
                                                 </div>
                                                 <div className={styles.signUpButton}>
-                                                    {handleApplication(isUserLoggedIn,program)}
+                                                    {handleApplication(isUserLoggedIn, program)}
                                                 </div>
-                                                <div className={styles.status}>
-                                                    <MoreVertIcon style={handleStyle(program.status)}/>
-                                                    {program.status.charAt(0).toUpperCase() + program.status.slice(1).toLowerCase()}
-                                                </div>
+
                                             </>
                                         ))
                                     ) : (

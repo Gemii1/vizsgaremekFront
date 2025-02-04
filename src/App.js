@@ -8,7 +8,8 @@ import PageNotFound from "./components/PageNotFound/PageNotFound";
 import Blogs from "./components/Blogs/Blogs";
 import Training from "./components/Training/Training";
 import OpenedBlog from "./components/Blogs/OpenedBlog/OpenedBlog";
-import UserContext from "./components/Context/UserContext";
+import UserContext from "./components/Context/User/UserContext";
+import ProgramProvider from "./components/Context/Program/ProgramProvider";
 
 
 
@@ -32,7 +33,6 @@ function App() {
     const getUserData =async ()=>{
         const response = await axios.get(`/trainer/${101}`);
         setUser(response.data);
-
     }
 
 
@@ -46,7 +46,6 @@ function App() {
           });
           getUserData();
 
-
       },[])
 
 
@@ -54,6 +53,7 @@ function App() {
 
   return (
    <div>
+       <ProgramProvider>
            <BrowserRouter>
                <Routes>
                    <Route index element={<LandingPage trainers={trainersTest}/>} />
@@ -66,6 +66,8 @@ function App() {
                    <Route path="*" element={<PageNotFound />} />
                </Routes>
            </BrowserRouter>
+       </ProgramProvider>
+
    </div>
   );
 }

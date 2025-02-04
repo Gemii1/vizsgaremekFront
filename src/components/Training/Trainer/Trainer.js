@@ -5,17 +5,24 @@ import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Modal from "@mui/material/Modal";
+import {useContext, useState} from "react";
+import CreateTraining from "./CreateTraining/CreatTraining";
+import EditTraining from "./EditTraining/EditTraining";
+import ProgramContext from "../../Context/Program/ProgramContext";
+import axios from "axios";
 
-function Trainer({ programs }) {
+function Trainer() {
     const daysOfWeek = ['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek'];
-
+    const [createModal,setCreateModal] = useState(false);
+    const [editModal,setEditModal] = useState(false);
+    const {programs,fetchPrograms} = useContext(ProgramContext);
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const options = { weekday: 'long' };
         const dayName = new Intl.DateTimeFormat('hu-HU', options).format(date);
         return dayName.charAt(0).toUpperCase() + dayName.slice(1);
     };
-
 
     const groupedPrograms = programs.reduce((acc, program) => {
         const day = formatDate(program.startTime);
@@ -25,22 +32,36 @@ function Trainer({ programs }) {
         acc[day].push(program);
         return acc;
     }, {});
-    const getTime = (dateString) => {
+
+    const getProgramTime = (dateString) => {
         const date = new Date(dateString);
         const hours = date.getHours().toString().padStart(2, '0');
         const minutes = date.getMinutes().toString().padStart(2, '0');
         return `${hours}:${minutes}`;
     };
 
-
-    //Nincs backend hozzá, nincs kész a függvény
-    function getDate(dayName) {
-        if (groupedPrograms[dayName]) {
-            return groupedPrograms[dayName][0].startTime;
-        }
-
+    const openCreateModal=()=>{
+        setCreateModal(true);
     }
+    const closeCreateModal=()=>{
+        setCreateModal(false);
+    }
+    const openEditModal=()=>{
+        setEditModal(true);
+    }
+    const closeEditModal=()=>{
+        setEditModal(false);
+    }
+    const [openedProgram, setOpenedProgram] = useState([]);
 
+    const deleteProgram = async (id) => {
+        try {
+            await axios.delete(`/program/${id}`);
+            await fetchPrograms();
+        } catch (error) {
+            console.error('Error deleting Programs:', error);
+        }
+    };
 
     return (
         <div className={styles.calendar}>
@@ -48,7 +69,7 @@ function Trainer({ programs }) {
                     {daysOfWeek.map((day) => (
                         <Grid item xs={2.4} key={day} className={styles.days}>
                             <div className={styles.program}>
-                                <h2>{day}, {getDate(day)}</h2>
+                                <h2>{day}</h2>
                                 <Divider color='black' />
                                 <div className={styles.programOnDay}>
                                     <p>Foglalt időpontok:</p>
@@ -57,7 +78,19 @@ function Trainer({ programs }) {
                                                 <>
                                                     <Divider />
                                                     <div key={index} className={styles.dates}>
-                                                        {getTime(program.startTime)} - {getTime(program.endTime)}
+                                                        <div>
+                                                            {getProgramTime(program.startTime)} - {getProgramTime(program.endTime)}
+                                                        </div>
+                                                        <div style={styles.programIcons}>
+                                                            <EditIcon onClick={()=>{
+                                                                setOpenedProgram(program)
+                                                                openEditModal()
+                                                                console.log(openedProgram)
+                                                            }}/>
+                                                            <DeleteIcon onClick={()=>{
+                                                                deleteProgram(program.id)
+                                                            }} />
+                                                        </div>
                                                     </div>
                                                 </>
                                             ))
@@ -70,13 +103,18 @@ function Trainer({ programs }) {
                                 </div>
                             </div>
                             <div className={styles.buttons}>
-                                <Button variant="contained"><AddIcon /></Button>
-                                <Button variant="contained"><EditIcon /></Button>
-                                <Button variant="contained"><DeleteIcon /></Button>
+                                <Button variant="contained" onClick={openCreateModal}><AddIcon/></Button>
                             </div>
                         </Grid>
+
                     ))}
             </Grid>
+            <Modal open={createModal} onClose={closeCreateModal}>
+                <CreateTraining/>
+            </Modal>
+            <Modal open={editModal} onClose={closeEditModal} >
+                <EditTraining program={openedProgram}/>
+            </Modal>
         </div>
     );
 }

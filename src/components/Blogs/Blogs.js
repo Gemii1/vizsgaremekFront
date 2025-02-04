@@ -10,7 +10,7 @@ import Divider from '@mui/joy/Divider';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Grid from '@mui/joy/Grid';
-import UserContext from "../Context/UserContext";
+import UserContext from "../Context/User/UserContext";
 import {useNavigate} from "react-router";
 
 function Blogs(){
