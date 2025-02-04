@@ -2,9 +2,9 @@ import styles from './Client.module.css';
 import Grid from '@mui/joy/Grid';
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
-import axios from 'axios';
 import {useContext, useEffect, useState} from "react";
 import UserContext from "../../Context/UserContext";
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 function Client({programs}) {
 
@@ -13,26 +13,41 @@ function Client({programs}) {
     const {userType,isUserLoggedIn} = useContext(UserContext);
 
     const formatDate = (dateString) => {
-        const date = new Date(dateString.replace(' ', 'T'));
+        const date = new Date(dateString);
         const options = { weekday: 'long' };
         const dayName = new Intl.DateTimeFormat('hu-HU', options).format(date);
         return dayName.charAt(0).toUpperCase() + dayName.slice(1);
     };
 
     const groupedPrograms = programs.reduce((acc, program) => {
-        const day = formatDate(program.startDate);
+        const day = formatDate(program.startTime);
         if (!acc[day]) {
             acc[day] = [];
         }
         acc[day].push(program);
         return acc;
     }, {});
+    const getTime = (dateString) => {
+        const date = new Date(dateString);
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        return `${hours}:${minutes}`;
+    };
 
-    function handleApplication(handler){
-        if (handler) {
+    function handleApplication(handler,program){
+        if (handler && program.status ==="UPCOMING") {
             return (
                 <Button variant='contained' sx={{fontSize:'1.3rem'}}>Jelentkezés</Button>
             )
+        }
+    }
+    const handleStyle = (status)=>{
+        if (status == "UPCOMING") {
+            return {color: 'darkgreen'};
+        }else if(status == "IN_PROGRESS") {
+            return {color: 'orange'};
+        }else if(status == "COMPLETED") {
+            return {color: 'red'};
         }
     }
 
@@ -55,14 +70,18 @@ function Client({programs}) {
                                                 <Divider/>
                                                 <div key={index} className={styles.dates}>
 
-                                                    <div><h3>Edzés : </h3> {program.trainingType}</div>
-                                                    <div><h3>Edző : </h3>  {program.trainer.trainerName}</div>
-                                                    <div><h3>Kezdés : </h3>  {program.startDate.substring(program.startDate.length-5,program.startDate.length)}</div>
-                                                    <div><h3>Vége : </h3>  {program.endDate.substring(program.endDate.length-5,program.endDate.length)}</div>
+                                                    <div><h3>Edzés : </h3> {program.programType}</div>
+                                                    <div><h3>Edző : </h3>  {program.trainer.name}</div>
+                                                    <div><h3>Kezdés : </h3>  {getTime(program.startTime)}</div>
+                                                    <div><h3>Vége : </h3>  {getTime(program.endTime)}</div>
                                                     <div><h3>Ár : </h3>  {program.price} Ft</div>
                                                 </div>
                                                 <div className={styles.signUpButton}>
-                                                    {handleApplication(isUserLoggedIn)}
+                                                    {handleApplication(isUserLoggedIn,program)}
+                                                </div>
+                                                <div className={styles.status}>
+                                                    <MoreVertIcon style={handleStyle(program.status)}/>
+                                                    {program.status.charAt(0).toUpperCase() + program.status.slice(1).toLowerCase()}
                                                 </div>
                                             </>
                                         ))

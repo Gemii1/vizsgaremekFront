@@ -141,11 +141,7 @@ function Navbar(){
 
                         </div>
                     </div>
-                    <Modal open={isEditOpen} onClose={handleCloseEdit}>
-                        <div>
-                            <ModifyUserData data={}/>
-                        </div>
-                    </Modal>
+
                 </Modal>
 
             </div>

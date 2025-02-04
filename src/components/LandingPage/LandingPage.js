@@ -72,7 +72,7 @@ function LandingPage({trainers, open}){
                                         <div className={styles.cards} key={trainer.id}>
                                             <Card variant="outlined" sx={{ width: 320 }}>
                                                 <CardOverflow>
-                                                    <AspectRatio minHeight="675px">
+                                                    <AspectRatio minHeight="575px">
                                                         <div className={styles.trainerImage}
                                                              style={{ backgroundImage: `url(${trainer.picture})` }}></div>
                                                     </AspectRatio>

@@ -19,13 +19,11 @@ function App() {
         -Blogok befejezése
         -Blogok CRUD műveletek
         -Színek kiválasztása
-        -Időpontok az edzés fülön és a CRUD műveletek a trainernek, a jelentkezés a kliensnek
+        -Időpontok az edzés fülön és a CRUD műveletek a trainernek
         -Login
-        -Adataim Modal
-        -NavBar függvényátírás
-        -UserData userContextbe
-        -Navbarba Adataim fül
         -Adataim fülön adatok módosítása, mint Telefonszám, nem, brithDate, Trainernek még qualification
+        -Disabled input használata a Navbar-nál, Edit gombra kattintáskor pedig enable
+        -User lekérdezés függvény ami meghatározza, hogy milyen típusú user vagy(Ez a bejelentkezéshez kapcsolódik)
 
      */
 

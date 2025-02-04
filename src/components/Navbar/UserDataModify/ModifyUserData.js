@@ -1,6 +1,6 @@
 
 
-function ModifyUserData({data}) {
+function ModifyUserData() {
 
 }
 export default ModifyUserData;

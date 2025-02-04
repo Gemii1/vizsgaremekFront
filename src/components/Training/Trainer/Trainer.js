@@ -10,26 +10,33 @@ function Trainer({ programs }) {
     const daysOfWeek = ['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek'];
 
     const formatDate = (dateString) => {
-        const date = new Date(dateString.replace(' ', 'T'));
+        const date = new Date(dateString);
         const options = { weekday: 'long' };
         const dayName = new Intl.DateTimeFormat('hu-HU', options).format(date);
         return dayName.charAt(0).toUpperCase() + dayName.slice(1);
     };
 
+
     const groupedPrograms = programs.reduce((acc, program) => {
-        const day = formatDate(program.startDate);
+        const day = formatDate(program.startTime);
         if (!acc[day]) {
             acc[day] = [];
         }
         acc[day].push(program);
         return acc;
     }, {});
+    const getTime = (dateString) => {
+        const date = new Date(dateString);
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        return `${hours}:${minutes}`;
+    };
 
 
     //Nincs backend hozzá, nincs kész a függvény
     function getDate(dayName) {
         if (groupedPrograms[dayName]) {
-            return groupedPrograms[dayName][0].startDate;
+            return groupedPrograms[dayName][0].startTime;
         }
 
     }
@@ -50,7 +57,7 @@ function Trainer({ programs }) {
                                                 <>
                                                     <Divider />
                                                     <div key={index} className={styles.dates}>
-                                                        {program.startDate} - {program.endDate}
+                                                        {getTime(program.startTime)} - {getTime(program.endTime)}
                                                     </div>
                                                 </>
                                             ))
