@@ -11,6 +11,7 @@ import CreateTraining from "./CreateTraining/CreatTraining";
 import EditTraining from "./EditTraining/EditTraining";
 import ProgramContext from "../../Context/Program/ProgramContext";
 import axios from "axios";
+import Fab from '@mui/material/Fab';
 
 function Trainer() {
     const daysOfWeek = ['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek'];
@@ -65,54 +66,57 @@ function Trainer() {
 
     return (
         <div className={styles.calendar}>
-            <Grid container rowSpacing ={1} spacing={2} columns={{ xs: 2, sm: 2, md: 12 }} >
-                    {daysOfWeek.map((day) => (
-                        <Grid item xs={2.4} key={day} className={styles.days}>
-                            <div className={styles.program}>
-                                <h2>{day}</h2>
-                                <Divider color='black' />
-                                <div className={styles.programOnDay}>
-                                    <p>Foglalt időpontok:</p>
-                                    {groupedPrograms[day] ?
-                                        ( groupedPrograms[day].map((program, index) => (
-                                                <>
-                                                    <Divider />
-                                                    <div key={index} className={styles.dates}>
-                                                        <div>
-                                                            {getProgramTime(program.startTime)} - {getProgramTime(program.endTime)}
-                                                        </div>
-                                                        <div style={styles.programIcons}>
-                                                            <EditIcon onClick={()=>{
-                                                                setOpenedProgram(program)
-                                                                openEditModal()
-                                                                console.log(openedProgram)
-                                                            }}/>
-                                                            <DeleteIcon onClick={()=>{
-                                                                deleteProgram(program.id)
-                                                            }} />
-                                                        </div>
-                                                    </div>
-                                                </>
-                                            ))
-                                        ) : (
+            <Grid container rowSpacing={1} spacing={2} columns={{xs: 2, sm: 2, md: 12}}>
+                {daysOfWeek.map((day) => (
+                    <Grid item xs={2.4} key={day} className={styles.days}>
+                        <div className={styles.program}>
+                            <h2>{day}</h2>
+                            <Divider color='black'/>
+                            <div className={styles.programOnDay}>
+                                <p>Foglalt időpontok:</p>
+                                {groupedPrograms[day] ?
+                                    (groupedPrograms[day].map((program, index) => (
                                             <>
-                                                <Divider />
-                                                <div className={styles.dates}>Nincs program</div>
+                                                <Divider/>
+                                                <div key={index} className={styles.dates}>
+                                                    <div>
+                                                        {getProgramTime(program.startTime)} - {getProgramTime(program.endTime)}
+                                                    </div>
+                                                    <div style={styles.programIcons}>
+                                                        <EditIcon onClick={() => {
+                                                            setOpenedProgram(program)
+                                                            openEditModal()
+                                                            console.log(openedProgram)
+                                                        }}/>
+                                                        <DeleteIcon onClick={() => {
+                                                            deleteProgram(program.id)
+                                                        }}/>
+                                                    </div>
+                                                </div>
                                             </>
-                                        )}
-                                </div>
+                                        ))
+                                    ) : (
+                                        <>
+                                            <Divider/>
+                                            <div className={styles.dates}>Nincs program</div>
+                                        </>
+                                    )}
                             </div>
-                            <div className={styles.buttons}>
-                                <Button variant="contained" onClick={openCreateModal}><AddIcon/></Button>
-                            </div>
-                        </Grid>
+                        </div>
 
-                    ))}
+                    </Grid>
+
+                ))}
             </Grid>
+            <div className={styles.buttons}>
+                <Fab size="small" color="info" aria-label="add" onClick={openCreateModal}>
+                    <AddIcon />
+                </Fab>
+            </div>
             <Modal open={createModal} onClose={closeCreateModal}>
-                <CreateTraining/>
+                <CreateTraining close={closeCreateModal} />
             </Modal>
-            <Modal open={editModal} onClose={closeEditModal} >
+            <Modal open={editModal} onClose={closeEditModal}>
                 <EditTraining program={openedProgram}/>
             </Modal>
         </div>

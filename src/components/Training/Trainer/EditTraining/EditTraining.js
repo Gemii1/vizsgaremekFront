@@ -2,10 +2,10 @@ import styles from "../CreateTraining/CreateTraining.module.css";
 import {DatePicker, LocalizationProvider, TimePicker} from "@mui/x-date-pickers";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {Controller, useForm} from "react-hook-form";
-import {Select, TextField} from "@mui/material";
+import {Select, Snackbar, TextField} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
-import {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 
 function EditTraining({program}) {
 
@@ -22,7 +22,13 @@ function EditTraining({program}) {
         console.log(data);
     }
     const programTypes = ["Personal", "Fitness","PILATES", "Crossfit", "TRX","Pound", "Other"]
-
+    const [snackBar, setSnackBar] = useState(false);
+    const closeSnackBar = () => {
+        setSnackBar(false);
+    }
+    const openSnackBar = () => {
+        setSnackBar(true);
+    }
 
     return(
         <div className={styles.container}>
@@ -128,6 +134,12 @@ function EditTraining({program}) {
                             Létrehozás
                         </Button>
                     </div>
+                    <Snackbar
+                        open={snackBar}
+                        autoHideDuration={6000}
+                        onClose={closeSnackBar}
+                        message="Sikeresen módosítás!"
+                    />
                 </form>
             </LocalizationProvider>
         </div>

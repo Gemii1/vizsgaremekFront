@@ -4,7 +4,6 @@ import styles from "./Training.module.css"
 import Trainer from "./Trainer/Trainer";
 import Client from "./Client/Client";
 import UserContext from "../Context/User/UserContext";
-import axios from "axios";
 import ProgramContext from "../Context/Program/ProgramContext";
 
 
@@ -13,17 +12,11 @@ function Training(){
 
 
     const  {programs,fetchPrograms} = useContext(ProgramContext);
-    const [programsData, setProgramsData]=useState([]);
     useEffect(() => {
         fetchPrograms();
     },[]);
 
-
-
-
-
-
-    const {userType,isUserLoggedIn} = useContext(UserContext)
+    const {userType} = useContext(UserContext)
 
     function handleUser(){
         if (userType){

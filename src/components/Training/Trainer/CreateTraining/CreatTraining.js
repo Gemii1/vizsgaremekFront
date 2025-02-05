@@ -3,19 +3,26 @@ import {Controller, useForm} from "react-hook-form";
 import {DatePicker, LocalizationProvider, TimePicker} from "@mui/x-date-pickers";
 import Button from "@mui/material/Button";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import {Select, TextField} from "@mui/material";
+import {Select, Snackbar, TextField} from "@mui/material";
 import MenuItem from '@mui/material/MenuItem';
-import {useContext, useState} from "react";
+import React, {useContext, useState} from "react";
 import UserContext from "../../../Context/User/UserContext";
 import axios from "axios";
 import ProgramContext from "../../../Context/Program/ProgramContext";
 
 
 
-function CreateTraining() {
+function CreateTraining({close}) {
 
     const {user}= useContext(UserContext);
     const {fetchPrograms} = useContext(ProgramContext);
+    const [snackBar, setSnackBar] = useState(false);
+    const closeSnackBar = () => {
+        setSnackBar(false);
+    }
+    const openSnackBar = () => {
+        setSnackBar(true);
+    }
 
     const {
         reset,
@@ -31,14 +38,17 @@ function CreateTraining() {
             endTime: formatDateTime(data.date.$d, data.endTime.$d),
             price: data.price,
             capacity: data.capacity,
-            programType: data.programType
+            programType: data.programType.toUpperCase()
         };
 
         await axios.post('/program/', formattedData);
         reset();
         await fetchPrograms();
+        await openSnackBar();
+        setTimeout(() =>{
+            close();
+        },[2000])
     }
-
 
 
     const formatDateTime = (dateString, timeString) => {
@@ -56,25 +66,29 @@ function CreateTraining() {
 
     }
 
-    const programTypes = ["Pe", "Fitness","Pilates", "Crossfit", "TRX","Pound", "Other"]
+    const programTypes = ["Strength_Training", "B_Fit","Pilates", "Crossfit", "TRX","Functional_Training", "Spinning"]
 
 
     return(
         <div className={styles.container}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+                <form  onSubmit={handleSubmit(onSubmit)} className={styles.form}>
                     <div className={styles.inputs}>
                         <div>
                             <Controller
                                 name="date"
                                 control={control}
                                 defaultValue={null}
-                                render={({field}) => (
-                                    <DatePicker
-                                        label="Nap"
-                                        {...field}
-                                        onChange={(newValue) => field.onChange(newValue)}
-                                    />
+                                rules={{ required: "A dátum megadása kötelező" }}
+                                render={({ field, fieldState: { error } }) => (
+                                    <>
+                                        <DatePicker
+                                            label="Nap"
+                                            {...field}
+                                            onChange={(newValue) => field.onChange(newValue)}
+                                        />
+                                        {error && <span style={{ color: 'red' }}>{error.message}</span>}
+                                    </>
                                 )}
                             />
                         </div>
@@ -83,6 +97,7 @@ function CreateTraining() {
                                 name="startTime"
                                 control={control}
                                 defaultValue={null}
+                                rules={{required: true}}
                                 render={({field}) => (
                                     <TimePicker
                                         label="Kezdete"
@@ -91,12 +106,14 @@ function CreateTraining() {
                                     />
                                 )}
                             />
+
                         </div>
                         <div>
                             <Controller
                                 name="endTime"
                                 control={control}
                                 defaultValue={null}
+                                rules={{required: true}}
                                 render={({field}) => (
                                     <TimePicker
                                         label="Vége"
@@ -111,6 +128,7 @@ function CreateTraining() {
                                 name="price"
                                 control={control}
                                 defaultValue={null}
+                                rules={{required: true}}
                                 render={({field}) => (
                                     <TextField className={styles.textFields}
                                        label="Ár"
@@ -120,12 +138,14 @@ function CreateTraining() {
                                     />
                                 )}
                             />
+
                         </div>
                         <div>
                             <Controller
                                 name="capacity"
                                 control={control}
                                 defaultValue={null}
+                                rules={{required: true}}
                                 render={({field}) => (
                                     <TextField className={styles.textFields}
                                        label="Max létszám"
@@ -135,12 +155,15 @@ function CreateTraining() {
                                     />
                                 )}
                             />
+
                         </div>
                         <div>
                             <Controller
                                 name="programType"
                                 control={control}
                                 defaultValue={"TRX"}
+                                rules={{required: true}}
+
                                 render={({ field }) => (
                                     <Select
                                         className={styles.textFields}
@@ -163,6 +186,12 @@ function CreateTraining() {
                     </div>
                 </form>
             </LocalizationProvider>
+            <Snackbar
+                open={snackBar}
+                autoHideDuration={6000}
+                onClose={closeSnackBar}
+                message="Sikeresen létrehozás!"
+            />
         </div>
     )
 }

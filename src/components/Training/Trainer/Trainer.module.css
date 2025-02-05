@@ -4,6 +4,7 @@
     border-radius: 5px;
     height: 85vh;
     background-color: #F3F6F8;
+    margin: auto;
 }
 
 
@@ -18,11 +19,7 @@
     background-color: #fffcfc;
 }
 
-.buttons button {
-    width: 80%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-}
+
 
 
 .programOnDay{
@@ -43,6 +40,17 @@
 }
 
 .buttons{
-    display: flex;
-    justify-content: center;
+    width: 50px;
+    float: right;
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
+
+}
+.buttons Button Svg{
+    font-size: 30px;
+}
+.buttons button{
+    width: 60px;
+    height: 60px;
 }
