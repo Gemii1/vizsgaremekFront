@@ -19,13 +19,11 @@ function App() {
     Feladatok:
         -Blogok befejezése
         -Blogok CRUD műveletek
-        -Színek kiválasztása
-        -Időpontok az edzés fülön és a CRUD műveletek a trainernek
+        -Training Edit is kész, test nélkül, mert nincs hozzá meg a backend
         -Login
-        -Adataim fülön adatok módosítása, mint Telefonszám, nem, brithDate, Trainernek még qualification
-        -Disabled input használata a Navbar-nál, Edit gombra kattintáskor pedig enable
         -User lekérdezés függvény ami meghatározza, hogy milyen típusú user vagy(Ez a bejelentkezéshez kapcsolódik)
-
+        -Adataim Patch végpont(nincs backendhozzá),(Ehhez még userFetch metódus)
+        -CRUD hiba esetén error snackbar, nem pedig sikeres
      */
 
     const [trainersTest,setTrainerTest] = useState([])

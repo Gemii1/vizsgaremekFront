@@ -117,8 +117,9 @@ function Trainer() {
                 <CreateTraining close={closeCreateModal} />
             </Modal>
             <Modal open={editModal} onClose={closeEditModal}>
-                <EditTraining program={openedProgram}/>
+                <EditTraining program={openedProgram} close={closeEditModal} />
             </Modal>
+
         </div>
     );
 }

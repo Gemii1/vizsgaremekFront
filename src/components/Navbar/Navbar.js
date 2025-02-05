@@ -8,12 +8,15 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Dropdown from '@mui/joy/Dropdown';
 import Menu from '@mui/joy/Menu';
 import MenuButton from '@mui/joy/MenuButton';
-import MenuItem from '@mui/joy/MenuItem';
+import MenuItem from '@mui/material/MenuItem';
 import UserContext from "../Context/User/UserContext";
 
 import Modal from '@mui/material/Modal';
 import EditIcon from '@mui/icons-material/Edit';
-import ModifyUserData from "./UserDataModify/ModifyUserData";
+import {Select, Snackbar, TextField} from "@mui/material";
+import dayjs from "dayjs";
+import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 function Navbar(){
 
     let navigate = useNavigate();
@@ -21,12 +24,18 @@ function Navbar(){
     const [openInfoModal, setOpenInfoModal] = useState(false);
     const handleOpenInfo = () => setOpenInfoModal(true);
     const handleCloseInfo = () => setOpenInfoModal(false);
-    const [isEditOpen, setEditOpen] = useState(false);
     const [email, setEmail] = useState('');
-    const handleOpenEdit = () => setEditOpen(true);
-    const handleCloseEdit = () => setEditOpen(false);
-
-
+    const trainerQualifications = ["Personal Trainer", "Fitness Instructor","Pilates Instructor", "Crossfit Coach", "TRX Trainer","Pound Trainer", "Other"]
+    const [isSelectEdited, setIsSelectEdited] = useState(true);
+    const [isBirthYearEdited, setIsBirthYearEdited] = useState(true);
+    const [isPhoneEdited, setIsPhoneEdited] = useState(true);
+    const [snackBar, setSnackBar] = useState(false);
+    const closeSnackBar = () => {
+        setSnackBar(false);
+    }
+    const openSnackBar = () => {
+        setSnackBar(true);
+    }
     useEffect(() => {
         if (user && user.login && user.login.email) {
             setEmail(user.login.email);
@@ -52,19 +61,35 @@ function Navbar(){
             return (
                 <div className={styles.info}>
                     <h4>Végzettség:</h4>
-                    <div>{user.qualification}</div>
-                    <div onClick={handleOpenEdit}><EditIcon/></div>
+                    <Select
+                        className={styles.textFields}
+                        aria-label="Program Típus"
+                        disabled={isSelectEdited}
+                        defaultValue={user.qualification}
+                        className={styles.editInputs}
+                    >
+                        {trainerQualifications.map((qualification, key) => (
+                            <MenuItem key={key} value={qualification.toUpperCase().replace(" ","_")}>
+                                {qualification}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                    <div onClick={() => {
+                        setIsSelectEdited(false);
+                    }}><EditIcon/>{
+                        isSelectEdited ? (<></>) : (<Button onClick={(e) => {
+                            e.stopPropagation();
+                            setIsSelectEdited(true);
+                            openSnackBar()
+                        }}>Ok</Button>)}
+                    </div>
                 </div>
             )
         }
     }
 
-    function handleEdit(data){
 
-    }
-
-
-    function handleLoginNavbar(){
+    function handleLoginNavbar() {
         if (isUserLoggedIn) {
             return (
                 <>
@@ -73,7 +98,7 @@ function Navbar(){
                             style={{fontSize: 'xxx-large'}}/></MenuButton>
                         <Menu>
                             <div>
-                                <div className={styles.dropdownHead}>
+                            <div className={styles.dropdownHead}>
                                     <div><AccountCircleIcon style={{fontSize: 'xxx-large'}}/></div>
                                     <div>{user.name}</div>
                                 </div>
@@ -101,7 +126,7 @@ function Navbar(){
     }
 
     return (
-        <>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
             <div className={styles.body}>
                 <div className={styles.container}>
                     <div className={styles.nav}>
@@ -129,23 +154,54 @@ function Navbar(){
                             </div>
                             <div className={styles.info}>
                                 <h4>Születési év:</h4>
-                                <div>{user.birthDate}</div>
-                                <div onClick={handleOpenEdit}><EditIcon/></div>
+                                <DatePicker
+                                    disabled={isBirthYearEdited}
+                                    defaultValue={dayjs(user.birthDate)}
+                                    className={styles.editInputs}
+                                />
+                                <div onClick={() => {
+                                    setIsBirthYearEdited(false);
+                                }}><EditIcon/>{
+                                    isBirthYearEdited ? (<></>) : (<Button onClick={(e) => {
+                                        e.stopPropagation();
+                                        setIsBirthYearEdited(true);
+                                        openSnackBar()
+                                    }}>Ok</Button>)}
+                                </div>
                             </div>
                             {isThereQualification()}
                             <div className={styles.info}>
                                 <h4>Telefonszám:</h4>
-                                <div>{user.phoneNumber}</div>
-                                <div onClick={handleOpenEdit}><EditIcon/></div>
+                                <TextField className={styles.editInputs}
+                                           label="Ár"
+                                           type="number"
+                                           disabled={isPhoneEdited}
+                                           defaultValue={user.phoneNumber}
+
+                                />
+                                <div onClick={()=>{
+                                    setIsPhoneEdited(false);
+                                }}><EditIcon/>{
+                                isPhoneEdited?(<></>):(<Button onClick={(e)=>{
+                                    e.stopPropagation();
+                                    setIsPhoneEdited(true);
+                                    openSnackBar()
+                                }} >Ok</Button>)}
+                                </div>
                             </div>
 
                         </div>
                     </div>
 
                 </Modal>
-
+                <Snackbar
+                    open={snackBar}
+                    autoHideDuration={6000}
+                    onClose={closeSnackBar}
+                    message="Sikeres módosítás!"
+                />
             </div>
-        </>
+        </LocalizationProvider>
     )
 }
 

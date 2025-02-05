@@ -5,23 +5,53 @@ import {Controller, useForm} from "react-hook-form";
 import {Select, Snackbar, TextField} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
+import dayjs from "dayjs";
+import axios from "axios";
+import ProgramContext from "../../../Context/Program/ProgramContext";
 
-function EditTraining({program}) {
-
+function EditTraining({program, close}) {
+    const {fetchPrograms} = useContext(ProgramContext);
     const {
         register,
+        reset,
         handleSubmit,
         control,
         formState:{errors},
     }= useForm();
 
-    const onSubmit = (data) => {
-        console.log(program);
-
-        console.log(data);
+    const onSubmit = async (data) => {
+        const editedData = {
+            trainerId: program.trainer.id,
+            startTime: formatDateTime(data.date.$d, data.startTime.$d),
+            endTime: formatDateTime(data.date.$d, data.endTime.$d),
+            price: data.price,
+            capacity: data.capacity,
+            programType: data.programType.toUpperCase()
+        };
+        await axios.put(`/program/${program.id}`, editedData);
+        reset();
+        await fetchPrograms();
+        await openSnackBar();
+        setTimeout(() =>{
+            close();
+        },[2000])
     }
-    const programTypes = ["Personal", "Fitness","PILATES", "Crossfit", "TRX","Pound", "Other"]
+    const formatDateTime = (dateString, timeString) => {
+        const date = new Date(dateString);
+        const time = new Date(timeString);
+
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
+
+        const hours = time.getHours().toString().padStart(2, '0');
+        const minutes = time.getMinutes().toString().padStart(2, '0');
+
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
+
+    }
+    const programTypes = ["Strength_Training", "B_Fit","Pilates", "Crossfit", "TRX","Functional_Training", "Spinning"]
     const [snackBar, setSnackBar] = useState(false);
     const closeSnackBar = () => {
         setSnackBar(false);
@@ -39,7 +69,7 @@ function EditTraining({program}) {
                             <Controller
                                 name="date"
                                 control={control}
-                                defaultValue={null}
+                                defaultValue={dayjs(program.endTime)}
                                 render={({field}) => (
                                     <DatePicker
                                         label="Nap"
@@ -53,7 +83,7 @@ function EditTraining({program}) {
                             <Controller
                                 name="startTime"
                                 control={control}
-                                defaultValue={null}
+                                defaultValue={dayjs(program.startTime)}
                                 render={({field}) => (
                                     <TimePicker
                                         label="Kezdete"
@@ -67,7 +97,7 @@ function EditTraining({program}) {
                             <Controller
                                 name="endTime"
                                 control={control}
-                                defaultValue={null}
+                                defaultValue={dayjs(program.endTime)}
                                 render={({field}) => (
                                     <TimePicker
                                         label="Vége"
@@ -122,7 +152,7 @@ function EditTraining({program}) {
                                         onChange={(newValue) => field.onChange(newValue)}
                                     >
                                         {programTypes.map((type, key) => (
-                                            <MenuItem key={key} value={type}>
+                                            <MenuItem key={key} value={type.toUpperCase()}>
                                                 {type}
                                             </MenuItem>
                                         ))}

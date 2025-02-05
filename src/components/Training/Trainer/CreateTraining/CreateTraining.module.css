@@ -3,7 +3,7 @@
     flex-direction: column;
     background-color: whitesmoke;
     width: 500px;
-    height: 500px;
+    min-height: 500px;
     margin: 20vh auto auto;
     border-radius: 15px;
 }
@@ -21,4 +21,7 @@
 }
 .textFields{
     width: 100%;
+}
+.submitButton{
+    margin-bottom: 20px;
 }

@@ -11,7 +11,7 @@ function Training(){
 
 
 
-    const  {programs,fetchPrograms} = useContext(ProgramContext);
+    const  {fetchPrograms} = useContext(ProgramContext);
     useEffect(() => {
         fetchPrograms();
     },[]);

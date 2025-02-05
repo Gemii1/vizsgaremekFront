@@ -79,7 +79,7 @@ function CreateTraining({close}) {
                                 name="date"
                                 control={control}
                                 defaultValue={null}
-                                rules={{ required: "A dátum megadása kötelező" }}
+                                rules={{ required: "A dátum megadása kötelező!" }}
                                 render={({ field, fieldState: { error } }) => (
                                     <>
                                         <DatePicker
@@ -97,14 +97,17 @@ function CreateTraining({close}) {
                                 name="startTime"
                                 control={control}
                                 defaultValue={null}
-                                rules={{required: true}}
-                                render={({field}) => (
-                                    <TimePicker
-                                        label="Kezdete"
-                                        {...field}
-                                        onChange={(newValue) => field.onChange(newValue)}
-                                    />
-                                )}
+                                rules={{required: "A kezdés idő megadása kötelező!"}}
+                                render={({field,fieldState:{error}}) => (
+                                    <>
+                                        <TimePicker
+                                            label="Kezdete"
+                                            {...field}
+                                            onChange={(newValue) => field.onChange(newValue)}
+                                        />
+                                        {error && <span style={{ color: 'red' }}>{error.message}</span>}
+                                    </>
+                            )}
                             />
 
                         </div>
@@ -113,14 +116,17 @@ function CreateTraining({close}) {
                                 name="endTime"
                                 control={control}
                                 defaultValue={null}
-                                rules={{required: true}}
-                                render={({field}) => (
-                                    <TimePicker
-                                        label="Vége"
-                                        {...field}
-                                        onChange={(newValue) => field.onChange(newValue)}
-                                    />
-                                )}
+                                rules={{required: "A program végének ideje megadása kötelező!"}}
+                                render={({field,fieldState:{error}}) => (
+                                   <>
+                                       <TimePicker
+                                           label="Vége"
+                                           {...field}
+                                           onChange={(newValue) => field.onChange(newValue)}
+                                       />
+                                       {error && <span style={{ color: 'red' }}>{error.message}</span>}
+                                   </>
+                            )}
                             />
                         </div>
                         <div>
@@ -128,15 +134,18 @@ function CreateTraining({close}) {
                                 name="price"
                                 control={control}
                                 defaultValue={null}
-                                rules={{required: true}}
-                                render={({field}) => (
-                                    <TextField className={styles.textFields}
-                                       label="Ár"
-                                       type="number"
-                                       {...field}
-                                       onChange={(newValue) => field.onChange(newValue)}
-                                    />
-                                )}
+                                rules={{required: "Az ár megadása kötelező!"}}
+                                render={({field,fieldState:{error}}) => (
+                                    <>
+                                        <TextField className={styles.textFields}
+                                                   label="Ár"
+                                                   type="number"
+                                                   {...field}
+                                                   onChange={(newValue) => field.onChange(newValue)}
+                                        />
+                                        {error && <span style={{ color: 'red' }}>{error.message}</span>}
+                                    </>
+                            )}
                             />
 
                         </div>
@@ -145,14 +154,17 @@ function CreateTraining({close}) {
                                 name="capacity"
                                 control={control}
                                 defaultValue={null}
-                                rules={{required: true}}
-                                render={({field}) => (
-                                    <TextField className={styles.textFields}
-                                       label="Max létszám"
-                                       type="number"
-                                       {...field}
-                                       onChange={(newValue) => field.onChange(newValue)}
-                                    />
+                                rules={{required: "A létszám megadása kötelező"}}
+                                render={({field,fieldState:{error}}) => (
+                                    <>
+                                        <TextField className={styles.textFields}
+                                                   label="Max létszám"
+                                                   type="number"
+                                                   {...field}
+                                                   onChange={(newValue) => field.onChange(newValue)}
+                                        />
+                                        {error && <span style={{ color: 'red' }}>{error.message}</span>}
+                                    </>
                                 )}
                             />
 
@@ -162,25 +174,28 @@ function CreateTraining({close}) {
                                 name="programType"
                                 control={control}
                                 defaultValue={"TRX"}
-                                rules={{required: true}}
+                                rules={{required: "A program típus megadása kötelező!"}}
 
-                                render={({ field }) => (
-                                    <Select
-                                        className={styles.textFields}
-                                        aria-label="Program Típus"
-                                        {...field}
-                                        onChange={(newValue) => field.onChange(newValue)}
-                                    >
-                                        {programTypes.map((type, key) => (
-                                            <MenuItem key={key} value={type}>
-                                                {type}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                )}
+                                render={({ field,fieldState:{error} }) => (
+                                    <>
+                                        <Select
+                                            className={styles.textFields}
+                                            aria-label="Program Típus"
+                                            {...field}
+                                            onChange={(newValue) => field.onChange(newValue)}
+                                        >
+                                            {programTypes.map((type, key) => (
+                                                <MenuItem key={key} value={type}>
+                                                    {type}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                        {error && <span style={{ color: 'red' }}>{error.message}</span>}
+                                    </>
+                            )}
                             />
                         </div>
-                        <Button type="submit" variant="contained">
+                        <Button type="submit" variant="contained" className={styles.submitButton}>
                             Létrehozás
                         </Button>
                     </div>

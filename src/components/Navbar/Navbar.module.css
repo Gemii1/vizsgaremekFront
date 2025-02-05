@@ -101,15 +101,27 @@
 .icon{
     font-size: 60px !important;
 }
-.modalHeadder h2{
-
+.modalContainer h4{
+    display: flex;
+    margin-right: 10px;
+    width:100px
 }
 
 .info{
     display: flex;
     justify-content: space-between;
-    margin: 10px 80px;
+    margin: 10px 60px;
+}
+.info >*{
+    display: flex;
+    align-items: center;
+}
 
+
+
+.editInputs{
+    max-width: 100%;
+    width: 200px;
 }
 
 @media only screen and (max-width: 720px) {
