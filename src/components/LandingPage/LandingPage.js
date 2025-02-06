@@ -7,12 +7,12 @@ import CardContent from '@mui/joy/CardContent';
 import CardOverflow from '@mui/joy/CardOverflow';
 import Typography from '@mui/joy/Typography';
 import Grid from '@mui/joy/Grid';
-import {useContext, useState} from "react";
+import {useContext} from "react";
 import Button from "@mui/material/Button";
 import {useNavigate} from "react-router";
 import UserContext from "../Context/User/UserContext";
 import StarRateIcon from '@mui/icons-material/StarRate';
-import StarBorderTwoToneIcon from '@mui/icons-material/StarBorderTwoTone';
+import Divider from "@mui/joy/Divider";
 
 function LandingPage({trainers, open}){
 
@@ -62,6 +62,7 @@ function LandingPage({trainers, open}){
                         </div>
                     </div>
                 </section>
+                <Divider/>
                 <section>
                     <div className={styles.container}>
                         <div className={styles.title}>Edzőink</div>

@@ -23,4 +23,10 @@
     margin: 0 0 20px 20px;
 }
 
-
+.blog{
+    margin: 50px;
+    overflow-y: hidden !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+    min-width: 200px;
+}

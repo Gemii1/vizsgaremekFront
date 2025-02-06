@@ -25,3 +25,11 @@
 .submitButton{
     margin-bottom: 20px;
 }
+
+.errorSnackBar{
+    background-color: red !important;
+}
+
+.successSnackBar{
+    background-color: green !important;
+}

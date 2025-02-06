@@ -16,12 +16,21 @@ function CreateTraining({close}) {
 
     const {user}= useContext(UserContext);
     const {fetchPrograms} = useContext(ProgramContext);
-    const [snackBar, setSnackBar] = useState(false);
-    const closeSnackBar = () => {
-        setSnackBar(false);
+    const [successSnackBar, setSuccessSnackBar] = useState(false);
+    const [errorSnackBar, setErrorSnackBar] = useState(false);
+
+    const closeSuccessSnackBar = () => {
+        setSuccessSnackBar(false);
     }
-    const openSnackBar = () => {
-        setSnackBar(true);
+    const openSuccessSnackBar = () => {
+        setSuccessSnackBar(true);
+    }
+
+    const closeErrorSnackBar = () => {
+        setErrorSnackBar(false);
+    }
+    const openErrorSnackBar = () => {
+        setErrorSnackBar(true);
     }
 
     const {
@@ -44,7 +53,7 @@ function CreateTraining({close}) {
         await axios.post('/program/', formattedData);
         reset();
         await fetchPrograms();
-        await openSnackBar();
+        await openSuccessSnackBar();
         setTimeout(() =>{
             close();
         },[2000])
@@ -202,10 +211,27 @@ function CreateTraining({close}) {
                 </form>
             </LocalizationProvider>
             <Snackbar
-                open={snackBar}
+                open={successSnackBar}
                 autoHideDuration={6000}
-                onClose={closeSnackBar}
+                onClose={closeSuccessSnackBar}
                 message="Sikeresen létrehozás!"
+                sx={{
+                    '& .MuiSnackbarContent-root': {
+                        backgroundColor: 'green',
+                    }
+                }}
+
+            />
+            <Snackbar
+                open={errorSnackBar}
+                autoHideDuration={6000}
+                onClose={closeErrorSnackBar}
+                message="Sikertelen létrehozás!"
+                sx={{
+                    '& .MuiSnackbarContent-root': {
+                        backgroundColor: 'red', 
+                    }
+                }}
             />
         </div>
     )

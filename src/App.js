@@ -10,6 +10,7 @@ import Training from "./components/Training/Training";
 import OpenedBlog from "./components/Blogs/OpenedBlog/OpenedBlog";
 import UserContext from "./components/Context/User/UserContext";
 import ProgramProvider from "./components/Context/Program/ProgramProvider";
+import BlogProvider from "./components/Context/Blog/BlogProvider";
 
 
 
@@ -19,11 +20,9 @@ function App() {
     Feladatok:
         -Blogok befejezése
         -Blogok CRUD műveletek
-        -Training Edit is kész, test nélkül, mert nincs hozzá meg a backend
         -Login
         -User lekérdezés függvény ami meghatározza, hogy milyen típusú user vagy(Ez a bejelentkezéshez kapcsolódik)
         -Adataim Patch végpont(nincs backendhozzá),(Ehhez még userFetch metódus)
-        -CRUD hiba esetén error snackbar, nem pedig sikeres
      */
 
     const [trainersTest,setTrainerTest] = useState([])
@@ -52,18 +51,20 @@ function App() {
   return (
    <div>
        <ProgramProvider>
-           <BrowserRouter>
-               <Routes>
-                   <Route index element={<LandingPage trainers={trainersTest}/>} />
-                   <Route path="/landingPage" element={<LandingPage trainers={trainersTest}/>} />
-                   <Route path="/login" element={<LoginPage/>} />
-                   <Route path="/registration" element={<Registration />} />
-                   <Route path="/blogs" element={<Blogs  />} />
-                   <Route path="/openedBlog" element={<OpenedBlog  />} />
-                   <Route path="/training" element={<Training  />} />
-                   <Route path="*" element={<PageNotFound />} />
-               </Routes>
-           </BrowserRouter>
+           <BlogProvider>
+               <BrowserRouter>
+                   <Routes>
+                       <Route index element={<LandingPage trainers={trainersTest}/>} />
+                       <Route path="/landingPage" element={<LandingPage trainers={trainersTest}/>} />
+                       <Route path="/login" element={<LoginPage/>} />
+                       <Route path="/registration" element={<Registration />} />
+                       <Route path="/blogs" element={<Blogs  />} />
+                       <Route path="/openedBlog" element={<OpenedBlog  />} />
+                       <Route path="/training" element={<Training  />} />
+                       <Route path="*" element={<PageNotFound />} />
+                   </Routes>
+               </BrowserRouter>
+           </BlogProvider>
        </ProgramProvider>
 
    </div>

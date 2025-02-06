@@ -1,6 +1,6 @@
 import Navbar from "../Navbar/Navbar";
 import styles from "./Blogs.module.css";
-import {useContext, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
 import CardOverflow from '@mui/joy/CardOverflow';
@@ -12,6 +12,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Grid from '@mui/joy/Grid';
 import UserContext from "../Context/User/UserContext";
 import {useNavigate} from "react-router";
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
+import BlogContext from "../Context/Blog/BlogContext";
 
 function Blogs(){
 
@@ -19,8 +22,15 @@ function Blogs(){
     const navigate = useNavigate();
     const {userType,isUserLoggedIn} = useContext(UserContext)
 
-    const [blogs, setBlogs]=useState([
+    const {blogs,setBlogs} = useContext(BlogContext);
+    useEffect(()=>{
+        setBlogs(blogsDummy);
+        console.log(blogs)
+    },[])
+
+    const [blogsDummy, setBlogsDummy]=useState([
         {
+        id:1,
         title: 'EdzésTervteszt',
         blogType: 'Training',
         blogWriter: 'rawr',
@@ -33,6 +43,7 @@ function Blogs(){
             'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
 
         },{
+            id:2,
             title: 'Kajateszt',
             blogType: 'food',
             blogWriter: 'raw2',
@@ -56,22 +67,33 @@ function Blogs(){
         }
     }
 
+    const handleCreateButton = (userType)=>{
+        if(userType) {
+            return (
+                <div className={styles.buttons}>
+                    <Fab size="small" color="info" aria-label="add" >
+                        <AddIcon />
+                    </Fab>
+                </div>
+            )
+        }
+    }
 
 
     return (
         <div className={styles.blogs}>
             <Navbar/>
-            <div >
+            <div>
                 <div className={styles.container}>
-                    <div className={styles.blogContainer}>
-                        <Grid container style={{justifyContent:'center'}} spacing={2} sx={{flexGrow: 1}}>
-                            {blogs.length>0?(
-                                blogs.map((blog,index) => {
+                <div className={styles.blogContainer}>
+                    <Grid container style={{justifyContent: 'center'}} spacing={2} sx={{flexGrow: 1}}>
+                            {blogs.length > 0 ? (
+                                blogs.map((blog, index) => {
                                     return (
-                                        <div key={index} className={styles.blog} >
-                                            <Card variant="outlined"  className={styles.card}>
-                                                <CardOverflow onClick={()=>{
-                                                    navigate("/openedBlog",{state:blog});
+                                        <div key={index} className={styles.blog}>
+                                            <Card variant="outlined" className={styles.card}>
+                                                <CardOverflow onClick={() => {
+                                                    navigate("/openedBlog", {state: blog});
                                                 }}>
                                                     <AspectRatio ratio="2">
                                                         <img
@@ -82,10 +104,13 @@ function Blogs(){
                                                         />
                                                     </AspectRatio>
                                                 </CardOverflow>
-                                                <CardContent onClick={()=>{
-                                                    navigate("/openedBlog",{state:blog});
+                                                <CardContent onClick={() => {
+                                                    navigate("/openedBlog", {state: blog});
                                                 }}>
-                                                    <Typography level="title-xl" sx={{fontWeight:'xl',fontSize:'1.3rem'}}>{blog.title}</Typography>
+                                                    <Typography level="title-xl" sx={{
+                                                        fontWeight: 'xl',
+                                                        fontSize: '1.3rem'
+                                                    }}>{blog.title}</Typography>
                                                     <Typography level="body-sm">{blog.writer}</Typography>
                                                 </CardContent>
                                                 <CardOverflow variant="soft" sx={{bgcolor: 'background.level1'}}>
@@ -94,7 +119,7 @@ function Blogs(){
                                                         <Typography
                                                             level="body-xs"
                                                             textColor="text.secondary"
-                                                            sx={{fontWeight: 'md',fontSize: '1rem'}}
+                                                            sx={{fontWeight: 'md', fontSize: '1rem'}}
                                                         >
                                                             {blog.blogType}
                                                         </Typography>
@@ -119,6 +144,7 @@ function Blogs(){
                                 </>
                             )}
                         </Grid>
+                        {handleCreateButton(userType)}
                     </div>
                 </div>
             </div>

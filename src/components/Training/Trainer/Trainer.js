@@ -75,10 +75,10 @@ function Trainer() {
                             <div className={styles.programOnDay}>
                                 <p>Foglalt időpontok:</p>
                                 {groupedPrograms[day] ?
-                                    (groupedPrograms[day].map((program, index) => (
+                                    (groupedPrograms[day].map((program) => (
                                             <>
                                                 <Divider/>
-                                                <div key={index} className={styles.dates}>
+                                                <div key={program.id} className={styles.dates}>
                                                     <div>
                                                         {getProgramTime(program.startTime)} - {getProgramTime(program.endTime)}
                                                     </div>
@@ -114,10 +114,14 @@ function Trainer() {
                 </Fab>
             </div>
             <Modal open={createModal} onClose={closeCreateModal}>
-                <CreateTraining close={closeCreateModal} />
+                <div>
+                    <CreateTraining close={closeCreateModal} />
+                </div>
             </Modal>
             <Modal open={editModal} onClose={closeEditModal}>
-                <EditTraining program={openedProgram} close={closeEditModal} />
+                <div>
+                    <EditTraining program={openedProgram} close={closeEditModal} />
+                </div>
             </Modal>
 
         </div>

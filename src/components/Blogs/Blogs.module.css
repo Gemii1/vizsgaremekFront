@@ -1,60 +1,72 @@
-    .container{
-        margin: 80px;
-        min-height: 90vh;
-        text-align: center;
-    }
+.container{
+    margin: 80px;
+    min-height: 90vh;
+    text-align: center;
+}
 
 
 
-    .container >*{
-        display: flex;
-        flex-direction: column;
-    }
+.container >*{
+    display: flex;
+    flex-direction: column;
+}
 
-    .blogContainer{
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
+.blogContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 
-    }
-    .blog{
-        margin: 50px;
-        overflow-y: hidden !important;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
-        transition: box-shadow 0.3s ease-in-out;
+}
+.blog{
+    margin: 50px;
+    overflow-y: hidden !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+}
+.buttons{
+    width: 50px;
+    float: right;
+    position: fixed;
+    bottom: 40px;
+    right: 40px;
 
-    }
+}
+
+.buttons button{
+    width: 60px;
+    height: 60px;
+}
 
 
 
-    .trainerButtons{
-        display: flex;
-        justify-content: space-between;
-    }
+.trainerButtons{
+    display: flex;
+    justify-content: space-between;
+}
 
-    .trainerButtons >*{
-        margin-left: 10px;
-        margin-right: 10px;
-    }
+.trainerButtons >*{
+    margin-left: 10px;
+    margin-right: 10px;
+}
 
+.card{
+    width: 500px;
+}
+
+.blogError{
+    margin-top: 5vh;
+}
+
+@media (max-width: 500px){
     .card{
-        width: 500px;
+        width: 200px !important;
+    }
+}
+
+@media (max-width: 800px){
+    .card{
+        width: 400px;
+        font-size: 25px !important;
     }
 
-    .blogError{
-        margin-top: 5vh;
-    }
-
-    @media (max-width: 500px){
-        .card{
-            width: 200px !important;
-        }
-    }
-
-    @media (max-width: 800px){
-        .card{
-            width: 400px;
-            font-size: 25px !important;
-        }
-
-    }
+}

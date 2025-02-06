@@ -29,10 +29,14 @@ function EditTraining({program, close}) {
             capacity: data.capacity,
             programType: data.programType.toUpperCase()
         };
-        await axios.put(`/program/${program.id}`, editedData);
+        try {
+            await axios.put(`/program/${program.id}`, editedData);
+            await openSuccessSnackBar();
+        }catch (error) {
+            await openErrorSnackBar();
+        }
         reset();
         await fetchPrograms();
-        await openSnackBar();
         setTimeout(() =>{
             close();
         },[2000])
@@ -52,14 +56,22 @@ function EditTraining({program, close}) {
 
     }
     const programTypes = ["Strength_Training", "B_Fit","Pilates", "Crossfit", "TRX","Functional_Training", "Spinning"]
-    const [snackBar, setSnackBar] = useState(false);
-    const closeSnackBar = () => {
-        setSnackBar(false);
+    const [successSnackBar, setSuccessSnackBar] = useState(false);
+    const [errorSnackBar, setErrorSnackBar] = useState(false);
+
+    const closeSuccessSnackBar = () => {
+        setSuccessSnackBar(false);
     }
-    const openSnackBar = () => {
-        setSnackBar(true);
+    const openSuccessSnackBar = () => {
+        setSuccessSnackBar(true);
     }
 
+    const closeErrorSnackBar = () => {
+        setErrorSnackBar(false);
+    }
+    const openErrorSnackBar = () => {
+        setErrorSnackBar(true);
+    }
     return(
         <div className={styles.container}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -165,10 +177,27 @@ function EditTraining({program, close}) {
                         </Button>
                     </div>
                     <Snackbar
-                        open={snackBar}
+                        open={successSnackBar}
                         autoHideDuration={6000}
-                        onClose={closeSnackBar}
-                        message="Sikeresen módosítás!"
+                        onClose={closeSuccessSnackBar}
+                        message="Sikeresen létrehozás!"
+                        sx={{
+                            '& .MuiSnackbarContent-root': {
+                                backgroundColor: 'green',
+                            }
+                        }}
+
+                    />
+                    <Snackbar
+                        open={errorSnackBar}
+                        autoHideDuration={6000}
+                        onClose={closeErrorSnackBar}
+                        message="Sikertelen létrehozás!"
+                        sx={{
+                            '& .MuiSnackbarContent-root': {
+                                backgroundColor: 'red',
+                            }
+                        }}
                     />
                 </form>
             </LocalizationProvider>
