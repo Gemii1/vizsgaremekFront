@@ -10,17 +10,16 @@
 .blogText {
     display: flex;
     padding: 30px 50px 50px 50px;
-    font-size: 1.2em;
+    font-size: 1.2rem;
     line-height: 1.6;
 }
 
-.textContent{
-}
 
 .blogText .kep {
     position: sticky;
     float: right;
     margin: 0 0 20px 20px;
+    max-width: 500px;
 }
 
 .blog{
@@ -28,5 +27,33 @@
     overflow-y: hidden !important;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s ease-in-out;
-    min-width: 200px;
+    min-width: 400px;
+}
+.moreBlogs h1{
+    text-align: center;
+    margin: 20px;
+}
+
+@media (max-width: 800px){
+    .container {
+        min-width: 100%;
+        justify-content: center;
+        overflow-x: hidden;
+    }
+    .textContent {
+        width: 400px;
+        font-size: 25px !important;
+    }
+    .kep{
+        width: 300px;
+        overflow-x: hidden;
+    }
+    .kep img{
+        width: 100%;
+        height: auto;
+    }
+    .test{
+        width: 100%;
+    }
+
 }

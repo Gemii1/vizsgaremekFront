@@ -15,6 +15,8 @@ import {useNavigate} from "react-router";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import BlogContext from "../Context/Blog/BlogContext";
+import Modal from "@mui/material/Modal";
+import CreateBlog from "./CreateBlog/CreateBlog";
 
 function Blogs(){
 
@@ -41,7 +43,7 @@ function Blogs(){
             ' Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' +
             ' Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' +
             'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-
+        blogImage:'Images/edzesTervKep1.jpg'
         },{
             id:2,
             title: 'Kajateszt',
@@ -50,6 +52,30 @@ function Blogs(){
             blogText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' +
                 ' Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' +
                 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+            blogImage:'Images/edzesTervKep1.jpg'
+
+        },
+        {
+            id:3,
+            title: 'Kajateszt2',
+            blogType: 'food',
+            blogWriter: 'raw2',
+            blogText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' +
+                ' Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' +
+                'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+            blogImage:'Images/edzesTervKep1.jpg'
+
+        },
+        {
+            id:4,
+            title: 'EdzésTervteszt2',
+            blogType: 'food',
+            blogWriter: 'raw2',
+            blogText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' +
+                ' Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' +
+                'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+            blogImage:'Images/edzesTervKep1.jpg'
+
         }
 
         ]);
@@ -85,8 +111,8 @@ function Blogs(){
             <Navbar/>
             <div>
                 <div className={styles.container}>
-                <div className={styles.blogContainer}>
-                    <Grid container style={{justifyContent: 'center'}} spacing={2} sx={{flexGrow: 1}}>
+                    <div className={styles.blogContainer}>
+                        <Grid container style={{justifyContent: 'center'}} spacing={2} sx={{flexGrow: 1}}>
                             {blogs.length > 0 ? (
                                 blogs.map((blog, index) => {
                                     return (
@@ -95,10 +121,9 @@ function Blogs(){
                                                 <CardOverflow onClick={() => {
                                                     navigate("/openedBlog", {state: blog});
                                                 }}>
-                                                    <AspectRatio ratio="2">
+                                                    <AspectRatio ratio="1.6">
                                                         <img
-                                                            src="https://images.unsplash.com/photo-1532614338840-ab30cf10ed36?auto=format&fit=crop&w=318"
-                                                            srcSet="https://images.unsplash.com/photo-1532614338840-ab30cf10ed36?auto=format&fit=crop&w=318&dpr=2 2x"
+                                                            src={blog.blogImage}
                                                             loading="lazy"
                                                             alt=""
                                                         />
@@ -145,6 +170,13 @@ function Blogs(){
                             )}
                         </Grid>
                         {handleCreateButton(userType)}
+                    </div>
+                    <div className={style.createModal}>
+                        <Modal>
+                            <div>
+                                <CreateBlog/>
+                            </div>
+                        </Modal>
                     </div>
                 </div>
             </div>
