@@ -55,7 +55,7 @@ function CreateTraining({close}) {
         await fetchPrograms();
         await openSuccessSnackBar();
         setTimeout(() =>{
-            close();
+            close()
         },[2000])
     }
 

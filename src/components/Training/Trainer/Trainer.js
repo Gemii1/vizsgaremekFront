@@ -12,12 +12,15 @@ import EditTraining from "./EditTraining/EditTraining";
 import ProgramContext from "../../Context/Program/ProgramContext";
 import axios from "axios";
 import Fab from '@mui/material/Fab';
+import UserContext from "../../Context/User/UserContext";
 
 function Trainer() {
     const daysOfWeek = ['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek'];
     const [createModal,setCreateModal] = useState(false);
     const [editModal,setEditModal] = useState(false);
     const {programs,fetchPrograms} = useContext(ProgramContext);
+    const {isUserLoggedIn} = useContext(UserContext);
+
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const options = { weekday: 'long' };
@@ -64,6 +67,37 @@ function Trainer() {
         }
     };
 
+    const handleUserLoggedInEditAndDelete=(program)=>{
+        if (isUserLoggedIn){
+            return (
+                <>
+                    <div style={styles.programIcons}>
+                        <EditIcon onClick={() => {
+                            setOpenedProgram(program)
+                            openEditModal()
+                            console.log(openedProgram)
+                        }}/>
+                        <DeleteIcon onClick={() => {
+                            deleteProgram(program.id)
+                        }}/>
+                    </div>
+                </>
+            )
+        }
+    }
+
+    const handleCreatButton=()=>{
+        if(isUserLoggedIn){
+            return (
+                <>
+                    <Fab size="small" color="info" aria-label="add" onClick={openCreateModal}>
+                        <AddIcon />
+                    </Fab>
+                </>
+            )
+        }
+    }
+
     return (
         <div className={styles.calendar}>
             <Grid container rowSpacing={1} spacing={2} columns={{xs: 2, sm: 2, md: 12}}>
@@ -82,16 +116,7 @@ function Trainer() {
                                                     <div>
                                                         {getProgramTime(program.startTime)} - {getProgramTime(program.endTime)}
                                                     </div>
-                                                    <div style={styles.programIcons}>
-                                                        <EditIcon onClick={() => {
-                                                            setOpenedProgram(program)
-                                                            openEditModal()
-                                                            console.log(openedProgram)
-                                                        }}/>
-                                                        <DeleteIcon onClick={() => {
-                                                            deleteProgram(program.id)
-                                                        }}/>
-                                                    </div>
+                                                    {handleUserLoggedInEditAndDelete(program)}
                                                 </div>
                                             </>
                                         ))
@@ -109,9 +134,7 @@ function Trainer() {
                 ))}
             </Grid>
             <div className={styles.buttons}>
-                <Fab size="small" color="info" aria-label="add" onClick={openCreateModal}>
-                    <AddIcon />
-                </Fab>
+                {handleCreatButton()}
             </div>
             <Modal open={createModal} onClose={closeCreateModal}>
                 <div>

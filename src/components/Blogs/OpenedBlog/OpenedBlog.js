@@ -24,7 +24,7 @@ function OpenedBlog(){
             <div className={styles.container}>
                 <h1 className={styles.blogTitle}>{blog.title}</h1>
                 <div className={styles.blogText}>
-                    <div className={styles.textContent}>{blog.blogText}</div>
+                    <div className={styles.textContent}>{blog.text}</div>
                     <div className={styles.kep}>
                         <img
                             src="https://www.helpinhearing.co.uk/wp-content/uploads/2019/01/image-placeholder-500x500.jpg"
@@ -49,7 +49,6 @@ function OpenedBlog(){
                 <Grid container style={{justifyContent: 'center'}} spacing={2} sx={{flexGrow: 1}}>
                     {blogs.length > 0 ? (
                         blogs.map((moreBlog, index) => {
-                            if (blog.title !== moreBlog.title) {
                                 return (
                                     <div key={index} className={styles.blog}>
                                         <Card variant="outlined" className={styles.card}>
@@ -58,8 +57,7 @@ function OpenedBlog(){
                                             }}>
                                                 <AspectRatio ratio="2">
                                                     <img
-                                                        src="https://images.unsplash.com/photo-1532614338840-ab30cf10ed36?auto=format&fit=crop&w=318"
-                                                        srcSet="https://images.unsplash.com/photo-1532614338840-ab30cf10ed36?auto=format&fit=crop&w=318&dpr=2 2x"
+                                                        src={blog.image}
                                                         loading="lazy"
                                                         alt=""
                                                     />
@@ -77,7 +75,7 @@ function OpenedBlog(){
                                         </Card>
                                     </div>
                                 )
-                            }
+
                         })
                     ) : (
                         <>

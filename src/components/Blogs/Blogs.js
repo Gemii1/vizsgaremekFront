@@ -17,68 +17,32 @@ import AddIcon from "@mui/icons-material/Add";
 import BlogContext from "../Context/Blog/BlogContext";
 import Modal from "@mui/material/Modal";
 import CreateBlog from "./CreateBlog/CreateBlog";
+import {type} from "@testing-library/user-event/dist/type";
 
 function Blogs(){
 
 
     const navigate = useNavigate();
     const {userType,isUserLoggedIn} = useContext(UserContext)
+    const [createBlog, setCreateBlog] = useState(false);
+    const closeCreateBlog = () => {
+        setCreateBlog(false);
+    }
+    const openCreateBlog = () => {
+        setCreateBlog(true);
+    }
 
-    const {blogs,setBlogs} = useContext(BlogContext);
+    const {blogs,fetchBlogs} = useContext(BlogContext);
     useEffect(()=>{
-        setBlogs(blogsDummy);
+        fetchBlogs()
         console.log(blogs)
-    },[])
+    },[]);
 
-    const [blogsDummy, setBlogsDummy]=useState([
-        {
-        id:1,
-        title: 'EdzésTervteszt',
-        blogType: 'Training',
-        blogWriter: 'rawr',
-        blogText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' +
-            ' Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' +
-            ' Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' +
-            ' Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' +
-            ' Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' +
-            ' Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' +
-            'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-        blogImage:'Images/edzesTervKep1.jpg'
-        },{
-            id:2,
-            title: 'Kajateszt',
-            blogType: 'food',
-            blogWriter: 'raw2',
-            blogText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' +
-                ' Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' +
-                'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-            blogImage:'Images/edzesTervKep1.jpg'
 
-        },
-        {
-            id:3,
-            title: 'Kajateszt2',
-            blogType: 'food',
-            blogWriter: 'raw2',
-            blogText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' +
-                ' Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' +
-                'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-            blogImage:'Images/edzesTervKep1.jpg'
 
-        },
-        {
-            id:4,
-            title: 'EdzésTervteszt2',
-            blogType: 'food',
-            blogWriter: 'raw2',
-            blogText: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' +
-                ' Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ' +
-                'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-            blogImage:'Images/edzesTervKep1.jpg'
 
-        }
 
-        ]);
+
 
     function isUserTypeTrainer(userType){
         if (userType){
@@ -97,11 +61,19 @@ function Blogs(){
         if(userType) {
             return (
                 <div className={styles.buttons}>
-                    <Fab size="small" color="info" aria-label="add" >
+                    <Fab size="small" color="info" aria-label="add" onClick={() => openCreateBlog()} >
                         <AddIcon />
                     </Fab>
                 </div>
             )
+        }
+    }
+
+    const handleBlogType= (blogType)=>{
+        if(blogType==="TRAINING") {
+            return "Edzés"
+        }else if(blogType === "DIET"){
+            return "Étrend"
         }
     }
 
@@ -146,7 +118,7 @@ function Blogs(){
                                                             textColor="text.secondary"
                                                             sx={{fontWeight: 'md', fontSize: '1rem'}}
                                                         >
-                                                            {blog.blogType}
+                                                            {handleBlogType(blog.blogType)}
                                                         </Typography>
                                                         <Divider orientation="vertical"/>
                                                         <Typography
@@ -171,10 +143,10 @@ function Blogs(){
                         </Grid>
                         {handleCreateButton(userType)}
                     </div>
-                    <div className={style.createModal}>
-                        <Modal>
+                    <div className={styles.createModal}>
+                        <Modal open={createBlog} onClose={closeCreateBlog}>
                             <div>
-                                <CreateBlog/>
+                                <CreateBlog close={closeCreateBlog}/>
                             </div>
                         </Modal>
                     </div>

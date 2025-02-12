@@ -1,0 +1,33 @@
+.container{
+    width: 80vw;
+    overflow-x: hidden;
+    height: 80vh;
+    background-color: #fff;
+    margin: 80px auto;
+}
+
+.closeButton{
+    position: fixed;
+    top: 10vh;
+    right: 10vw;
+    margin: 10px
+}
+
+
+.closeButton:hover{
+    cursor: pointer;
+    color: red
+}
+
+.titleInput{
+    margin: 20px !important;
+}
+.textInputs{
+    display: flex;
+    gap: 10px;
+}
+
+.typeSelect{
+    margin: 20px;
+
+}

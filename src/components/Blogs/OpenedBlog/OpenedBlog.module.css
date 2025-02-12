@@ -13,6 +13,9 @@
     font-size: 1.2rem;
     line-height: 1.6;
 }
+.textContent{
+    max-width: 500px;
+}
 
 
 .blogText .kep {
