@@ -1,8 +1,49 @@
 .container{
     width: 60vw;
-    overflow-x: hidden;
     height: 60vh;
     background-color: #fff;
     margin: 100px auto;
     border-radius: 10px;
+}
+
+.closeButton{
+    position: fixed;
+    top:100px ;
+    right: 20vw;
+    margin: 10px;
+    background-color: aliceblue;
+}
+
+
+.closeButton:hover{
+    cursor: pointer;
+    color: red
+}
+
+.titleInput{
+    margin: 20px !important;
+}
+.textInputs{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.typeSelect{
+    margin: 20px;
+
+}
+.errorMessage{
+    color: red;
+}
+.textInput{
+    margin: 20px;
+    width:50vw ;
+}
+.submitButton{
+    margin: 20px !important;
+}
+.pageTitle{
+    text-align: center;
+    margin: 10px;
 }

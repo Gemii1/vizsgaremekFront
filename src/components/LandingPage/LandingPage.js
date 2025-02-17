@@ -14,10 +14,10 @@ import UserContext from "../Context/User/UserContext";
 import StarRateIcon from '@mui/icons-material/StarRate';
 import Divider from "@mui/joy/Divider";
 
-function LandingPage({trainers, open}){
+function LandingPage({trainers}){
 
     let navigate = useNavigate();
-    const {userType,isUserLoggedIn, setUser} = useContext(UserContext);
+    const {isUserLoggedIn} = useContext(UserContext);
 
 
 

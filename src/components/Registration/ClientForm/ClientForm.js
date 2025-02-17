@@ -6,7 +6,7 @@ import 'react-phone-input-2/lib/style.css'
 
 import Button from "@mui/material/Button";
 
-function ClientForm() {
+function ClientForm({save}) {
     let navigate = useNavigate();
 
     const {
@@ -17,20 +17,31 @@ function ClientForm() {
     }= useForm();
 
     let loginData = {
-        userName :'',
+        email :'',
         password : ''
     }
 
     const onSubmit = (data) => {
         setLoginData(data)
-        console.log(data);
+        try {
+            setLoginData(data)
+            const formattedData = {
+                name: data.name,
+                birthDate: data.birthDate,
+                gender: data.gender,
+                phone: data.phone,
+            };
+            save("",loginData,formattedData,false);
+        }catch(error){
+            console.log(error)
+        }
     };
 
 
 
 
     const setLoginData = (data) => {
-        loginData.userName = data.userName;
+        loginData.email = data.email;
         loginData.password  = data.password;
         console.log(loginData);
     };
@@ -42,13 +53,13 @@ function ClientForm() {
                         <label>Teljes név:</label>
                         <input className={styles.input}
                                placeholder="Jhon Do"
-                               {...register("userName", {
+                               {...register("name", {
                                    required: true,
                                    minLength: 2,
                                    pattern: /^[A-Za-z]+$/i,
                                })}
                         />
-                        {errors.userName && <span className={styles.error}>Hibás név!</span>}
+                        {errors.name && <span className={styles.error}>Hibás név!</span>}
                     </div>
                     <div>
                         <label>Email:</label>
@@ -86,11 +97,11 @@ function ClientForm() {
                         <input className={styles.input}
                                placeholder="Születési év"
                                type="date"
-                               {...register("birthDay", {
+                               {...register("birthDate", {
                                    required: true,
                                })}
                         />
-                        {errors.birthDay && <span className={styles.error}>Hibás születési év!</span>}
+                        {errors.birthDate && <span className={styles.error}>Hibás születési év!</span>}
                     </div>
                     <div>
                         <label>Jelszó:</label>

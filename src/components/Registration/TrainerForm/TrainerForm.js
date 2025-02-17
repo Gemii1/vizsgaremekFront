@@ -7,7 +7,7 @@ import 'react-phone-input-2/lib/style.css';
 import Button from "@mui/material/Button";
 import {useNavigate} from "react-router";
 
-function TrainerForm() {
+function TrainerForm({save}) {
     let navigate = useNavigate();
 
     const {
@@ -18,7 +18,7 @@ function TrainerForm() {
     }= useForm();
 
     let loginData = {
-        userName :'',
+        email :'',
         password : ''
     }
     function qualificationToEnum(data){
@@ -33,16 +33,29 @@ function TrainerForm() {
     }
 
     const onSubmit = (data) => {
-        setLoginData(data)
-        qualificationToEnum(data)
-        console.log(data);
+        try {
+           setLoginData(data)
+           qualificationToEnum(data)
+           const formattedData = {
+               name: data.name,
+               birthDate: data.birthDate,
+               gender: data.gender,
+               qualification: data.qualification,
+               picture: 'Images/img1.jpg',
+               phoneNumber: data.phoneNumber,
+               rating: 3
+           };
+           save(formattedData,loginData,"",true);
+       }catch(error){
+           console.log(error)
+       }
     };
 
     const trainerQualifications = ["Personal Trainer", "Fitness Instructor","Pilates Instructor", "Crossfit Coach", "TRX Trainer","Pound Trainer", "Other"]
 
 
     const setLoginData = (data) => {
-        loginData.userName = data.userName;
+        loginData.email = data.email;
         loginData.password  = data.password;
         console.log(loginData);
     };
@@ -54,7 +67,7 @@ function TrainerForm() {
                         <label>Teljes név:</label>
                         <input className={styles.input}
                                placeholder="Jhon Do"
-                               {...register("userName", {
+                               {...register("name", {
                                    required: true,
                                    minLength: 2,
                                    pattern: /^[A-Za-z]+$/i,
@@ -77,7 +90,7 @@ function TrainerForm() {
                     <div>
                         <label>Telefonszám:</label>
                         <Controller
-                            name="telefon"
+                            name="phoneNumber"
                             control={control}
                             rules={{required: 'A telefonszám megadása kötelező!'}}
                             render={({field: {onChange, value}}) => (
@@ -96,11 +109,11 @@ function TrainerForm() {
                         <input className={styles.input}
                                placeholder="Születési év"
                                type="date"
-                               {...register("birthDay", {
+                               {...register("birthDate", {
                                    required: true,
                                })}
                         />
-                        {errors.birthDay && <span className={styles.error}>Hibás születési év!</span>}
+                        {errors.birthDate && <span className={styles.error}>Hibás születési év!</span>}
                     </div>
                     <div className={styles.select}>
                         <label>Foglalkozás:</label>

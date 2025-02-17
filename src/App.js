@@ -18,11 +18,10 @@ function App() {
 
     /*
     Feladatok:
-        -Blogok befejezése
-        -Blogok CRUD műveletek
         -Login
         -User lekérdezés függvény ami meghatározza, hogy milyen típusú user vagy(Ez a bejelentkezéshez kapcsolódik)
         -Adataim Patch végpont(nincs backendhozzá),(Ehhez még userFetch metódus)
+        -Trainer és cliens létrehozásnál snackbar
      */
 
     const [trainersTest,setTrainerTest] = useState([])

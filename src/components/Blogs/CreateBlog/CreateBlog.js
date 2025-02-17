@@ -26,14 +26,11 @@ function CreateBlog({close}) {
     const closeErrorSnackBar = () => {
         setErrorSnackBar(false);
     }
-    const openErrorSnackBar = () => {
-        setErrorSnackBar(true);
-    }
+
     const {
         reset,
         handleSubmit,
         control,
-        formState:{},
     }= useForm();
 
 

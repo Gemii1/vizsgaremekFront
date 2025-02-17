@@ -17,7 +17,6 @@ import AddIcon from "@mui/icons-material/Add";
 import BlogContext from "../Context/Blog/BlogContext";
 import Modal from "@mui/material/Modal";
 import CreateBlog from "./CreateBlog/CreateBlog";
-import {type} from "@testing-library/user-event/dist/type";
 import axios from "axios";
 import EditBlog from "./EditBlog/EditBlog";
 
@@ -25,7 +24,7 @@ function Blogs(){
 
 
     const navigate = useNavigate();
-    const {userType,isUserLoggedIn} = useContext(UserContext)
+    const {userType} = useContext(UserContext)
     const [createBlog, setCreateBlog] = useState(false);
     const closeCreateBlog = () => {
         setCreateBlog(false);
@@ -164,19 +163,19 @@ function Blogs(){
                         </Grid>
                         {handleCreateButton(userType)}
                     </div>
-                    <div >
+                    <div>
                         <Modal open={createBlog} onClose={closeCreateBlog}>
-                            <div>
+                            <>
                                 <CreateBlog close={closeCreateBlog}/>
-                            </div>
+                            </>
                         </Modal>
                     </div>
 
-                    <div >
+                    <div>
                         <Modal open={editBlog} onClose={closeEditBlog}>
-                            <div>
+                            <>
                                 <EditBlog close={closeEditBlog} blog={editedBlog}/>
-                            </div>
+                            </>
                         </Modal>
                     </div>
                 </div>

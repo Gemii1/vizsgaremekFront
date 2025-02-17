@@ -1,7 +1,6 @@
 import styles from './Trainer.module.css';
 import Grid from '@mui/joy/Grid';
-import Divider, { dividerClasses } from '@mui/material/Divider';
-import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';

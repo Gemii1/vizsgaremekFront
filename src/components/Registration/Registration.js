@@ -19,20 +19,10 @@ function Registration() {
 
 
 
-    function qualificationToEnum(trainerFormData){
-        let qualSplitted = trainerFormData.qualification.toUpperCase().split(" ");
-        if (qualSplitted.length > 1){
-            let upperCaseQual = qualSplitted[0]+"_"+qualSplitted[1];
-            trainerFormData.qualification = upperCaseQual;
-        }else{
-            trainerFormData.qualification = trainerFormData.qualification.toUpperCase();
-        }
-
-    }
 
     async function save(trainerFormData, loginData, clientFormData, userType) {
+        console.log(trainerFormData);
         try {
-            qualificationToEnum();
 
             const loginResponse = await axios.post('/login/', loginData);
             const loginId = loginResponse.data.loginId;
@@ -93,10 +83,10 @@ function Registration() {
                         </Tab>
                     </TabList>
                     <TabPanel value={0}>
-                        <TrainerForm />
+                        <TrainerForm save={save} />
                     </TabPanel>
                     <TabPanel value={1}>
-                        <ClientForm/>
+                        <ClientForm save={save}/>
                     </TabPanel>
                 </Tabs>
 

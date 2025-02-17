@@ -5,7 +5,7 @@ import {Controller, useForm} from "react-hook-form";
 import {Select, Snackbar, TextField} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useState} from "react";
 import dayjs from "dayjs";
 import axios from "axios";
 import ProgramContext from "../../../Context/Program/ProgramContext";
@@ -13,11 +13,9 @@ import ProgramContext from "../../../Context/Program/ProgramContext";
 function EditTraining({program, close}) {
     const {fetchPrograms} = useContext(ProgramContext);
     const {
-        register,
         reset,
         handleSubmit,
         control,
-        formState:{errors},
     }= useForm();
 
     const onSubmit = async (data) => {
