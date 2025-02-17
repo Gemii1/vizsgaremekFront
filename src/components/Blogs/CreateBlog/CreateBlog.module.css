@@ -1,16 +1,18 @@
 .container{
-    width: 80vw;
+    width: 60vw;
     overflow-x: hidden;
-    height: 80vh;
+    height: 60vh;
     background-color: #fff;
-    margin: 80px auto;
+    margin: 100px auto;
+    border-radius: 10px;
 }
 
 .closeButton{
     position: fixed;
-    top: 10vh;
-    right: 10vw;
-    margin: 10px
+    top:100px ;
+    right: 20vw;
+    margin: 10px;
+    background-color: aliceblue;
 }
 
 
@@ -24,10 +26,25 @@
 }
 .textInputs{
     display: flex;
+    align-items: center;
     gap: 10px;
 }
 
 .typeSelect{
     margin: 20px;
 
+}
+.errorMessage{
+    color: red;
+}
+.textInput{
+    margin: 20px;
+    width:50vw ;
+}
+.submitButton{
+    margin: 20px !important;
+}
+.pageTitle{
+    text-align: center;
+    margin: 10px;
 }

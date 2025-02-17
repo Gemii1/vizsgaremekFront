@@ -63,6 +63,7 @@ function CreateBlog({close}) {
         <div className={styles.container}>
             <div className={styles.closeButton}><CloseIcon onClick={()=>{close()}}/></div>
             <div>
+                <h1 className={styles.pageTitle}>Blog létrehozása</h1>
                 <form onSubmit={    handleSubmit(onSubmit)} >
                     <div className={styles.textInputs}>
                         <Controller
@@ -102,7 +103,7 @@ function CreateBlog({close}) {
                                             </MenuItem>
                                         ))}
                                     </Select>
-                                    {error && <span style={{color: 'red'}}>{error.message}</span>}
+                                    {error && <span className={styles.errorMessage} >{error.message}</span>}
                                 </>
                             )}
                         />
@@ -114,12 +115,12 @@ function CreateBlog({close}) {
                             name="text"
                             control={control}
                             defaultValue={null}
-                            rules={{required: "A cím megadása kötelező!"}}
+                            rules={{required: "A szöveg megadása kötelező!"}}
                             render={({field, fieldState: {error}}) => (
                                 <>
                                     <Textarea className={styles.textInput}
                                               minRows={10}
-                                              placeholder="A Blog text megadása kötelező"
+                                              placeholder="A Blog szöveg megadása kötelező"
                                               {...field}
                                               onChange={(newValue) => field.onChange(newValue)}
                                     />

@@ -18,6 +18,8 @@ import BlogContext from "../Context/Blog/BlogContext";
 import Modal from "@mui/material/Modal";
 import CreateBlog from "./CreateBlog/CreateBlog";
 import {type} from "@testing-library/user-event/dist/type";
+import axios from "axios";
+import EditBlog from "./EditBlog/EditBlog";
 
 function Blogs(){
 
@@ -32,6 +34,15 @@ function Blogs(){
         setCreateBlog(true);
     }
 
+    const [editedBlog, setEditedBlog] = useState([]);
+    const [editBlog, setEditBlog] = useState(false);
+    const closeEditBlog = () => {
+        setEditBlog(false);
+    }
+    const openEditBlog = () => {
+        setEditBlog(true);
+    }
+
     const {blogs,fetchBlogs} = useContext(BlogContext);
     useEffect(()=>{
         fetchBlogs()
@@ -40,17 +51,27 @@ function Blogs(){
 
 
 
+    const blogDelete = async (id)=>{
+        try {
+            await axios.delete(`/blog/${id}`);
+            await fetchBlogs();
+        } catch (error) {
+            console.error('Error deleting Blog:', error);
+        }
+    }
 
 
 
-
-    function isUserTypeTrainer(userType){
+    function isUserTypeTrainer(userType,blog){
         if (userType){
             return(
                 <>
                     <div className={styles.trainerButtons}>
-                        <EditIcon/>
-                        <DeleteIcon/>
+                        <EditIcon onClick={()=>{
+                            openEditBlog()
+                            setEditedBlog(blog)
+                        }}/>
+                        <DeleteIcon onClick={()=>{blogDelete(blog.id)}}/>
                     </div>
                 </>
             )
@@ -126,7 +147,7 @@ function Blogs(){
                                                             textColor="text.secondary"
                                                             sx={{fontWeight: 'md'}}
                                                         >
-                                                            {isUserTypeTrainer(userType)}
+                                                            {isUserTypeTrainer(userType, blog)}
                                                         </Typography>
                                                     </CardContent>
                                                 </CardOverflow>
@@ -143,10 +164,18 @@ function Blogs(){
                         </Grid>
                         {handleCreateButton(userType)}
                     </div>
-                    <div className={styles.createModal}>
+                    <div >
                         <Modal open={createBlog} onClose={closeCreateBlog}>
                             <div>
                                 <CreateBlog close={closeCreateBlog}/>
+                            </div>
+                        </Modal>
+                    </div>
+
+                    <div >
+                        <Modal open={editBlog} onClose={closeEditBlog}>
+                            <div>
+                                <EditBlog close={closeEditBlog} blog={editedBlog}/>
                             </div>
                         </Modal>
                     </div>

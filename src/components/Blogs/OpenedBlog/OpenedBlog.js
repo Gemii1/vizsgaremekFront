@@ -49,32 +49,34 @@ function OpenedBlog(){
                 <Grid container style={{justifyContent: 'center'}} spacing={2} sx={{flexGrow: 1}}>
                     {blogs.length > 0 ? (
                         blogs.map((moreBlog, index) => {
-                                return (
-                                    <div key={index} className={styles.blog}>
-                                        <Card variant="outlined" className={styles.card}>
-                                            <CardOverflow onClick={() => {
-                                                navigate("/openedBlog", {state: moreBlog});
-                                            }}>
-                                                <AspectRatio ratio="2">
-                                                    <img
-                                                        src={blog.image}
-                                                        loading="lazy"
-                                                        alt=""
-                                                    />
-                                                </AspectRatio>
-                                            </CardOverflow>
-                                            <CardContent onClick={() => {
-                                                navigate("/openedBlog", {state: moreBlog});
-                                            }}>
-                                                <Typography level="title-xl" sx={{
-                                                    fontWeight: 'xl',
-                                                    fontSize: '1.3rem'
-                                                }}>{moreBlog.title}</Typography>
-                                            </CardContent>
+                                if (moreBlog.id !== blog.id){
+                                    return (
+                                        <div key={index} className={styles.blog}>
+                                            <Card variant="outlined" className={styles.card}>
+                                                <CardOverflow onClick={() => {
+                                                    navigate("/openedBlog", {state: moreBlog});
+                                                }}>
+                                                    <AspectRatio ratio="2">
+                                                        <img
+                                                            src={blog.image}
+                                                            loading="lazy"
+                                                            alt=""
+                                                        />
+                                                    </AspectRatio>
+                                                </CardOverflow>
+                                                <CardContent onClick={() => {
+                                                    navigate("/openedBlog", {state: moreBlog});
+                                                }}>
+                                                    <Typography level="title-xl" sx={{
+                                                        fontWeight: 'xl',
+                                                        fontSize: '1.3rem'
+                                                    }}>{moreBlog.title}</Typography>
+                                                </CardContent>
 
-                                        </Card>
-                                    </div>
-                                )
+                                            </Card>
+                                        </div>
+                                    )
+                                }
 
                         })
                     ) : (
