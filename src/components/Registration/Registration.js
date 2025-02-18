@@ -1,43 +1,31 @@
 import styles from './Registration.module.css';
-import Tabs from '@mui/joy/Tabs';
-import TabList from '@mui/joy/TabList';
-import Tab from '@mui/joy/Tab';
-import TabPanel from '@mui/joy/TabPanel';
-import {useState} from "react";
-import {useNavigate} from "react-router";
+import { Tabs, TabList, Tab, TabPanel } from '@mui/joy';
+import { useState } from "react";
+import { useNavigate } from "react-router";
 import axios from "axios";
 import TrainerForm from "./TrainerForm/TrainerForm";
 import ClientForm from "./ClientForm/ClientForm";
 
-
 function Registration() {
+    const [userType, setUserType] = useState(true); // false == Client, true == Trainer
+    const navigate = useNavigate();
 
-    //False == Cliens, True == Edző
-    const [userType, setUserType]=useState(true);
-    let navigate = useNavigate();
-
-
-
-
-
-    async function save(trainerFormData, loginData, clientFormData, userType) {
-        console.log(trainerFormData);
+    async function save(trainerFormData, loginData, clientFormData, isTrainer) {
+        console.log(trainerFormData || clientFormData);
         try {
-
             const loginResponse = await axios.post('/login/', loginData);
             const loginId = loginResponse.data.loginId;
 
-            if (userType) {
+            if (isTrainer) {
                 await saveTrainerData(trainerFormData, loginId);
             } else {
                 await saveClientData(clientFormData, loginId);
             }
 
             navigate('/login');
-
         } catch (error) {
             console.error(error);
-            alert('A regisztrálás nem volt sikeres!! Kérlek győződj meg róla, hogy minden mezőt kitöltöttél!');
+            alert('A regisztrálás nem volt sikeres! Kérlek győződj meg róla, hogy minden mezőt kitöltöttél!');
         }
     }
 
@@ -59,42 +47,26 @@ function Registration() {
         }
     }
 
-
     return (
-        <>
-            <div className={styles.container}>
-                <Tabs >
-                    <TabList tabFlex="auto">
-                        <Tab className={styles.tab}>
-                            <div className={styles.tabText}
-                            onClick={()=>{
-                                setUserType(true);
-                            }}>
-                                Edzőként
-                            </div>
-                        </Tab>
-                        <Tab className={styles.tab}>
-                            <div className={styles.tabText}
-                            onClick={()=>{
-                                setUserType(false);
-                            }}>
-                                Kliensként
-                            </div>
-                        </Tab>
-                    </TabList>
-                    <TabPanel value={0}>
-                        <TrainerForm save={save} />
-                    </TabPanel>
-                    <TabPanel value={1}>
-                        <ClientForm save={save}/>
-                    </TabPanel>
-                </Tabs>
-
-            </div>
-        </>
-    )
-
+        <div className={styles.container}>
+            <Tabs>
+                <TabList tabFlex="auto">
+                    <Tab className={styles.tab}>
+                        <div className={styles.tabText} onClick={() => setUserType(true)}>Edzőként</div>
+                    </Tab>
+                    <Tab className={styles.tab}>
+                        <div className={styles.tabText} onClick={() => setUserType(false)}>Kliensként</div>
+                    </Tab>
+                </TabList>
+                <TabPanel value={0}>
+                    <TrainerForm save={save} />
+                </TabPanel>
+                <TabPanel value={1}>
+                    <ClientForm save={save} />
+                </TabPanel>
+            </Tabs>
+        </div>
+    );
 }
-
 
 export default Registration;

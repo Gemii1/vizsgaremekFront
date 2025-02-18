@@ -1,24 +1,23 @@
 import styles from './Trainer.module.css';
-import Grid from '@mui/joy/Grid';
-import Divider from '@mui/material/Divider';
+import { Grid } from '@mui/joy';
+import { Divider, Fab, Modal } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import Modal from "@mui/material/Modal";
-import {useContext, useState} from "react";
+import { useContext, useState } from "react";
 import CreateTraining from "./CreateTraining/CreatTraining";
 import EditTraining from "./EditTraining/EditTraining";
 import ProgramContext from "../../Context/Program/ProgramContext";
 import axios from "axios";
-import Fab from '@mui/material/Fab';
 import UserContext from "../../Context/User/UserContext";
 
 function Trainer() {
     const daysOfWeek = ['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek'];
-    const [createModal,setCreateModal] = useState(false);
-    const [editModal,setEditModal] = useState(false);
-    const {programs,fetchPrograms} = useContext(ProgramContext);
-    const {isUserLoggedIn} = useContext(UserContext);
+    const [createModal, setCreateModal] = useState(false);
+    const [editModal, setEditModal] = useState(false);
+    const [openedProgram, setOpenedProgram] = useState(null);
+    const { programs, fetchPrograms } = useContext(ProgramContext);
+    const { isUserLoggedIn } = useContext(UserContext);
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -43,19 +42,10 @@ function Trainer() {
         return `${hours}:${minutes}`;
     };
 
-    const openCreateModal=()=>{
-        setCreateModal(true);
-    }
-    const closeCreateModal=()=>{
-        setCreateModal(false);
-    }
-    const openEditModal=()=>{
-        setEditModal(true);
-    }
-    const closeEditModal=()=>{
-        setEditModal(false);
-    }
-    const [openedProgram, setOpenedProgram] = useState([]);
+    const openCreateModal = () => setCreateModal(true);
+    const closeCreateModal = () => setCreateModal(false);
+    const openEditModal = () => setEditModal(true);
+    const closeEditModal = () => setEditModal(false);
 
     const deleteProgram = async (id) => {
         try {
@@ -66,86 +56,71 @@ function Trainer() {
         }
     };
 
-    const handleUserLoggedInEditAndDelete=(program)=>{
-        if (isUserLoggedIn){
+    const handleUserLoggedInEditAndDelete = (program) => {
+        if (isUserLoggedIn) {
             return (
-                <>
-                    <div style={styles.programIcons}>
-                        <EditIcon onClick={() => {
-                            setOpenedProgram(program)
-                            openEditModal()
-                            console.log(openedProgram)
-                        }}/>
-                        <DeleteIcon onClick={() => {
-                            deleteProgram(program.id)
-                        }}/>
-                    </div>
-                </>
-            )
+                <div className={styles.programIcons}>
+                    <EditIcon onClick={() => {
+                        setOpenedProgram(program);
+                        openEditModal();
+                    }} />
+                    <DeleteIcon onClick={() => deleteProgram(program.id)} />
+                </div>
+            );
         }
-    }
+        return null;
+    };
 
-    const handleCreatButton=()=>{
-        if(isUserLoggedIn){
+    const handleCreateButton = () => {
+        if (isUserLoggedIn) {
             return (
-                <>
-                    <Fab size="small" color="info" aria-label="add" onClick={openCreateModal}>
-                        <AddIcon />
-                    </Fab>
-                </>
-            )
+                <Fab size="small" color="info" aria-label="add" onClick={openCreateModal}>
+                    <AddIcon />
+                </Fab>
+            );
         }
-    }
+        return null;
+    };
 
     return (
         <div className={styles.calendar}>
-            <Grid container rowSpacing={1} spacing={2} columns={{xs: 2, sm: 2, md: 12}}>
+            <Grid container rowSpacing={1} spacing={2} columns={{ xs: 2, sm: 2, md: 12 }}>
                 {daysOfWeek.map((day) => (
                     <Grid item xs={2.4} key={day} className={styles.days}>
                         <div className={styles.program}>
                             <h2>{day}</h2>
-                            <Divider color='black'/>
+                            <Divider color='black' />
                             <div className={styles.programOnDay}>
                                 <p>Foglalt időpontok:</p>
                                 {groupedPrograms[day] ?
-                                    (groupedPrograms[day].map((program) => (
-                                            <>
-                                                <Divider/>
-                                                <div key={program.id} className={styles.dates}>
-                                                    <div>
-                                                        {getProgramTime(program.startTime)} - {getProgramTime(program.endTime)}
-                                                    </div>
-                                                    {handleUserLoggedInEditAndDelete(program)}
-                                                </div>
-                                            </>
-                                        ))
-                                    ) : (
-                                        <>
-                                            <Divider/>
-                                            <div className={styles.dates}>Nincs program</div>
-                                        </>
-                                    )}
+                                    groupedPrograms[day].map((program) => (
+                                        <div key={program.id}>
+                                            <Divider />
+                                            <div className={styles.dates}>
+                                                <div>{getProgramTime(program.startTime)} - {getProgramTime(program.endTime)}</div>
+                                                {handleUserLoggedInEditAndDelete(program)}
+                                            </div>
+                                        </div>
+                                    )) :
+                                    <>
+                                        <Divider />
+                                        <div className={styles.dates}>Nincs program</div>
+                                    </>
+                                }
                             </div>
                         </div>
-
                     </Grid>
-
                 ))}
             </Grid>
             <div className={styles.buttons}>
-                {handleCreatButton()}
+                {handleCreateButton()}
             </div>
             <Modal open={createModal} onClose={closeCreateModal}>
-                <div>
-                    <CreateTraining close={closeCreateModal} />
-                </div>
+                <CreateTraining close={closeCreateModal} />
             </Modal>
             <Modal open={editModal} onClose={closeEditModal}>
-                <div>
-                    <EditTraining program={openedProgram} close={closeEditModal} />
-                </div>
+                <EditTraining program={openedProgram} close={closeEditModal} />
             </Modal>
-
         </div>
     );
 }

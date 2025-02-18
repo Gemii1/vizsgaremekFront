@@ -24,14 +24,21 @@
     float: right;
     margin: 0 0 20px 20px;
     max-width: 500px;
+
 }
 
 .blog{
     margin: 50px;
-    overflow-y: hidden !important;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s ease-in-out;
     min-width: 400px;
+    height: 100%;
+}
+.moreBlogImage{
+    height: 250px;
+}
+.moreBlogImage img{
+    height: 250px !important;
 }
 .moreBlogs h1{
     text-align: center;

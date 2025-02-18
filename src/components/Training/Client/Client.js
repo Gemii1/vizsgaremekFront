@@ -1,18 +1,15 @@
 import styles from './Client.module.css';
-import Grid from '@mui/joy/Grid';
-import Divider from "@mui/material/Divider";
-import Button from "@mui/material/Button";
-import {useContext, useEffect, useState} from "react";
+import { Grid } from '@mui/joy';
+import { Divider, Button } from "@mui/material";
+import { useContext, useEffect, useState } from "react";
 import UserContext from "../../Context/User/UserContext";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ProgramContext from "../../Context/Program/ProgramContext";
 
 function Client() {
-
     const daysOfWeek = ['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek'];
-
-    const {userType,isUserLoggedIn} = useContext(UserContext);
-    const {programs} = useContext(ProgramContext);
+    const { isUserLoggedIn } = useContext(UserContext);
+    const { programs } = useContext(ProgramContext);
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -29,6 +26,7 @@ function Client() {
         acc[day].push(program);
         return acc;
     }, {});
+
     const getTime = (dateString) => {
         const date = new Date(dateString);
         const hours = date.getHours().toString().padStart(2, '0');
@@ -36,86 +34,82 @@ function Client() {
         return `${hours}:${minutes}`;
     };
 
-    function handleApplication(handler,program){
-        if (handler && program.status ==="UPCOMING") {
-            return (
-                <Button variant='contained' sx={{fontSize:'1.3rem'}}>Jelentkezés</Button>
-            )
+    const handleApplication = (isLoggedIn, program) => {
+        if (isLoggedIn && program.status === "UPCOMING") {
+            return <Button variant='contained' sx={{ fontSize: '1.3rem' }}>Jelentkezés</Button>;
         }
-    }
-    const handleStatus = (status)=>{
-        if (status === "UPCOMING") {
-            return (
-                <>
-                    <MoreVertIcon style={{color:'green'}}/>
-                    <div>Közelgő</div>
-                </>
-            );
-        }else if(status === "IN_PROGRESS") {
-            return (
-                <>
-                    <MoreVertIcon style={{color:'orange'}}/>
-                    <div>Folyamatban lévő</div>
-                </>
-            );
-        } else if(status === "COMPLETED") {
-            return (
-                <>
-                    <MoreVertIcon style={{color:'red'}}/>
-                    <div>Befejezett</div>
-                </>
-            );
+        return null;
+    };
+
+    const handleStatus = (status) => {
+        let color, statusText;
+        switch (status) {
+            case "UPCOMING":
+                color = 'green';
+                statusText = 'Közelgő';
+                break;
+            case "IN_PROGRESS":
+                color = 'orange';
+                statusText = 'Folyamatban lévő';
+                break;
+            case "COMPLETED":
+                color = 'red';
+                statusText = 'Befejezett';
+                break;
+            default:
+                return null;
         }
-    }
-
-
+        return (
+            <>
+                <MoreVertIcon style={{ color: color }} />
+                <div>{statusText}</div>
+            </>
+        );
+    };
 
     return (
         <div className={styles.calendar}>
-            <Grid container rowSpacing={1} spacing={2} columns={{xs: 2, sm: 2, md: 12}}>
+            <Grid container rowSpacing={1} spacing={2} columns={{ xs: 2, sm: 2, md: 12 }}>
                 {daysOfWeek.map((day) => (
                     <Grid item xs={2.4} key={day} className={styles.days}>
                         <div className={styles.program}>
                             <h2>{day}</h2>
-                            <p></p>
-                            <Divider color='black'/>
+                            <Divider color='black' />
                             <div className={styles.programOnDay}>
                                 <p>Programok:</p>
                                 {groupedPrograms[day] ?
-                                    (groupedPrograms[day].map((program, index) => (
-                                            <>
-                                                <Divider/>
-                                                <div className={styles.status}>
-                                                    {handleStatus(program.status)}
-                                                </div>
-                                                <div key={index} className={styles.dates}>
-
-                                                    <div><h3>Edzés : </h3> {program.programType}</div>
-                                                    <div><h3>Edző : </h3>  {program.trainer.name}</div>
-                                                    <div><h3>Kezdés : </h3>  {getTime(program.startTime)}</div>
-                                                    <div><h3>Vége : </h3>  {getTime(program.endTime)}</div>
-                                                    <div><h3>Ár : </h3>  {program.price} Ft</div>
-                                                </div>
-                                                <div className={styles.signUpButton}>
-                                                    {handleApplication(isUserLoggedIn, program)}
-                                                </div>
-
-                                            </>
-                                        ))
-                                    ) : (
-                                        <>
-                                            <Divider/>
-                                            <div >Nincs program</div>
-                                            {handleApplication(false)}
-                                        </>
-                                    )}
+                                    groupedPrograms[day].map((program, index) => (
+                                        <div key={index}>
+                                            <Divider />
+                                            <div className={styles.status}>
+                                                {handleStatus(program.status)}
+                                            </div>
+                                            <div className={styles.dates}>
+                                                <div><h3>Edzés : </h3> {program.programType}</div>
+                                                <div><h3>Edző : </h3> {program.trainer.name}</div>
+                                                <div><h3>Kezdés : </h3> {getTime(program.startTime)}</div>
+                                                <div><h3>Vége : </h3> {getTime(program.endTime)}</div>
+                                                <div><h3>Ár : </h3> {program.price} Ft</div>
+                                            </div>
+                                            <div className={styles.signUpButton}>
+                                                {handleApplication(isUserLoggedIn, program)}
+                                            </div>
+                                        </div>
+                                    ))
+                                    :
+                                    <>
+                                        <Divider />
+                                        <div>Nincs program</div>
+                                        {handleApplication(false)}
+                                    </>
+                                }
                             </div>
                         </div>
                     </Grid>
                 ))}
             </Grid>
         </div>
-    )
+    );
 }
 
 export default Client;

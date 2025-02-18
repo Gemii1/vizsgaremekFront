@@ -8,7 +8,6 @@ import PageNotFound from "./components/PageNotFound/PageNotFound";
 import Blogs from "./components/Blogs/Blogs";
 import Training from "./components/Training/Training";
 import OpenedBlog from "./components/Blogs/OpenedBlog/OpenedBlog";
-import UserContext from "./components/Context/User/UserContext";
 import ProgramProvider from "./components/Context/Program/ProgramProvider";
 import BlogProvider from "./components/Context/Blog/BlogProvider";
 
@@ -16,35 +15,21 @@ import BlogProvider from "./components/Context/Blog/BlogProvider";
 
 function App() {
 
-    /*
-    Feladatok:
-        -Login
-        -User lekérdezés függvény ami meghatározza, hogy milyen típusú user vagy(Ez a bejelentkezéshez kapcsolódik)
-        -Adataim Patch végpont(nincs backendhozzá),(Ehhez még userFetch metódus)
-        -Trainer és cliens létrehozásnál snackbar
-     */
+    //Login felhasználó név és jelszó Trainerhez: edzo, edzo
+    //Login felhasználó név és jelszó Klienshez: kliens, kliens
 
     const [trainersTest,setTrainerTest] = useState([])
-    const {setUser} = useContext(UserContext);
-    const getUserData =async ()=>{
-        const response = await axios.get(`/trainer/${101}`);
-        setUser(response.data);
-    }
 
-
-      useEffect(()=>{
+    useEffect(()=>{
         //init
-          axios.get('/trainer/').then(({data})=>{
-            const trainer = data;
-            setTrainerTest(trainer);
-          }).catch((error)=>{
-              console.log(error)
-          });
-          getUserData();
+      axios.get('/trainer/').then(({data})=>{
+        const trainer = data;
+        setTrainerTest(trainer);
+      }).catch((error)=>{
+          console.log(error)
+      });
 
-      },[])
-
-
+    },[])
 
 
   return (

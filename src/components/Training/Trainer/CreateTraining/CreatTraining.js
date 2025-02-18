@@ -1,44 +1,30 @@
 import styles from './CreateTraining.module.css';
-import {Controller, useForm} from "react-hook-form";
-import {DatePicker, LocalizationProvider, TimePicker} from "@mui/x-date-pickers";
-import Button from "@mui/material/Button";
-import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import {Select, Snackbar, TextField} from "@mui/material";
-import MenuItem from '@mui/material/MenuItem';
-import React, {useContext, useState} from "react";
+import { Controller, useForm } from "react-hook-form";
+import { DatePicker, LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { Button, Select, TextField, Snackbar, MenuItem } from "@mui/material";
+import React, { useContext, useState } from "react";
 import UserContext from "../../../Context/User/UserContext";
 import axios from "axios";
 import ProgramContext from "../../../Context/Program/ProgramContext";
 
-
-
-function CreateTraining({close}) {
-
-    const {user}= useContext(UserContext);
-    const {fetchPrograms} = useContext(ProgramContext);
+function CreateTraining({ close }) {
+    const { user } = useContext(UserContext);
+    const { fetchPrograms } = useContext(ProgramContext);
     const [successSnackBar, setSuccessSnackBar] = useState(false);
     const [errorSnackBar, setErrorSnackBar] = useState(false);
 
-    const closeSuccessSnackBar = () => {
-        setSuccessSnackBar(false);
-    }
-    const openSuccessSnackBar = () => {
-        setSuccessSnackBar(true);
-    }
-
-    const closeErrorSnackBar = () => {
-        setErrorSnackBar(false);
-    }
-    const openErrorSnackBar = () => {
-        setErrorSnackBar(true);
-    }
+    const closeSuccessSnackBar = () => setSuccessSnackBar(false);
+    const openSuccessSnackBar = () => setSuccessSnackBar(true);
+    const closeErrorSnackBar = () => setErrorSnackBar(false);
+    const openErrorSnackBar = () => setErrorSnackBar(true);
 
     const {
         reset,
         handleSubmit,
         control,
-        formState:{errors},
-    }= useForm();
+        formState: { errors },
+    } = useForm();
 
     const onSubmit = async (data) => {
         const formattedData = {
@@ -47,18 +33,20 @@ function CreateTraining({close}) {
             endTime: formatDateTime(data.date.$d, data.endTime.$d),
             price: data.price,
             capacity: data.capacity,
-            programType: data.programType.toUpperCase()
+            programType: data.programType.toUpperCase(),
         };
 
-        await axios.post('/program/', formattedData);
-        reset();
-        await fetchPrograms();
-        await openSuccessSnackBar();
-        setTimeout(() =>{
-            close()
-        },[2000])
-    }
-
+        try {
+            await axios.post('/program/', formattedData);
+            reset();
+            await fetchPrograms();
+            openSuccessSnackBar();
+            setTimeout(close, 2000);
+        } catch (error) {
+            console.error("Error creating training:", error);
+            openErrorSnackBar();
+        }
+    };
 
     const formatDateTime = (dateString, timeString) => {
         const date = new Date(dateString);
@@ -72,138 +60,116 @@ function CreateTraining({close}) {
         const minutes = time.getMinutes().toString().padStart(2, '0');
 
         return `${year}-${month}-${day}T${hours}:${minutes}`;
+    };
 
-    }
+    const programTypes = ["Strength_Training", "B_Fit", "Pilates", "Crossfit", "TRX", "Functional_Training", "Spinning"];
 
-    const programTypes = ["Strength_Training", "B_Fit","Pilates", "Crossfit", "TRX","Functional_Training", "Spinning"]
-
-
-    return(
+    return (
         <div className={styles.container}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <form  onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+                <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
                     <div className={styles.inputs}>
-                        <div>
-                            <Controller
-                                name="date"
-                                control={control}
-                                defaultValue={null}
-                                rules={{ required: "A dátum megadása kötelező!" }}
-                                render={({ field, fieldState: { error } }) => (
-                                    <>
-                                        <DatePicker
-                                            label="Nap"
-                                            {...field}
-                                            onChange={(newValue) => field.onChange(newValue)}
-                                        />
-                                        {error && <span style={{ color: 'red' }}>{error.message}</span>}
-                                    </>
-                                )}
-                            />
-                        </div>
-                        <div>
-                            <Controller
-                                name="startTime"
-                                control={control}
-                                defaultValue={null}
-                                rules={{required: "A kezdés idő megadása kötelező!"}}
-                                render={({field,fieldState:{error}}) => (
-                                    <>
-                                        <TimePicker
-                                            label="Kezdete"
-                                            {...field}
-                                            onChange={(newValue) => field.onChange(newValue)}
-                                        />
-                                        {error && <span style={{ color: 'red' }}>{error.message}</span>}
-                                    </>
+                        <Controller
+                            name="date"
+                            control={control}
+                            defaultValue={null}
+                            rules={{ required: "A dátum megadása kötelező!" }}
+                            render={({ field, fieldState: { error } }) => (
+                                <>
+                                    <DatePicker
+                                        label="Nap"
+                                        {...field}
+                                    />
+                                    {error && <span style={{ color: 'red' }}>{error.message}</span>}
+                                </>
                             )}
-                            />
-
-                        </div>
-                        <div>
-                            <Controller
-                                name="endTime"
-                                control={control}
-                                defaultValue={null}
-                                rules={{required: "A program végének ideje megadása kötelező!"}}
-                                render={({field,fieldState:{error}}) => (
-                                   <>
-                                       <TimePicker
-                                           label="Vége"
-                                           {...field}
-                                           onChange={(newValue) => field.onChange(newValue)}
-                                       />
-                                       {error && <span style={{ color: 'red' }}>{error.message}</span>}
-                                   </>
+                        />
+                        <Controller
+                            name="startTime"
+                            control={control}
+                            defaultValue={null}
+                            rules={{ required: "A kezdés idő megadása kötelező!" }}
+                            render={({ field, fieldState: { error } }) => (
+                                <>
+                                    <TimePicker
+                                        label="Kezdete"
+                                        {...field}
+                                    />
+                                    {error && <span style={{ color: 'red' }}>{error.message}</span>}
+                                </>
                             )}
-                            />
-                        </div>
-                        <div>
-                            <Controller
-                                name="price"
-                                control={control}
-                                defaultValue={null}
-                                rules={{required: "Az ár megadása kötelező!"}}
-                                render={({field,fieldState:{error}}) => (
-                                    <>
-                                        <TextField className={styles.textFields}
-                                                   label="Ár"
-                                                   type="number"
-                                                   {...field}
-                                                   onChange={(newValue) => field.onChange(newValue)}
-                                        />
-                                        {error && <span style={{ color: 'red' }}>{error.message}</span>}
-                                    </>
+                        />
+                        <Controller
+                            name="endTime"
+                            control={control}
+                            defaultValue={null}
+                            rules={{ required: "A program végének ideje megadása kötelező!" }}
+                            render={({ field, fieldState: { error } }) => (
+                                <>
+                                    <TimePicker
+                                        label="Vége"
+                                        {...field}
+                                    />
+                                    {error && <span style={{ color: 'red' }}>{error.message}</span>}
+                                </>
                             )}
-                            />
-
-                        </div>
-                        <div>
-                            <Controller
-                                name="capacity"
-                                control={control}
-                                defaultValue={null}
-                                rules={{required: "A létszám megadása kötelező"}}
-                                render={({field,fieldState:{error}}) => (
-                                    <>
-                                        <TextField className={styles.textFields}
-                                                   label="Max létszám"
-                                                   type="number"
-                                                   {...field}
-                                                   onChange={(newValue) => field.onChange(newValue)}
-                                        />
-                                        {error && <span style={{ color: 'red' }}>{error.message}</span>}
-                                    </>
-                                )}
-                            />
-
-                        </div>
-                        <div>
-                            <Controller
-                                name="programType"
-                                control={control}
-                                defaultValue={"TRX"}
-                                rules={{required: "A program típus megadása kötelező!"}}
-
-                                render={({ field,fieldState:{error} }) => (
-                                    <>
-                                        <Select
-                                            className={styles.textFields}
-                                            aria-label="Program Típus"
-                                            {...field}
-                                            onChange={(newValue) => field.onChange(newValue)}
-                                        >
-                                            {programTypes.map((type, key) => (
-                                                <MenuItem key={key} value={type}>
-                                                    {type}
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                        {error && <span style={{ color: 'red' }}>{error.message}</span>}
-                                    </>
+                        />
+                        <Controller
+                            name="price"
+                            control={control}
+                            defaultValue={null}
+                            rules={{ required: "Az ár megadása kötelező!" }}
+                            render={({ field, fieldState: { error } }) => (
+                                <>
+                                    <TextField
+                                        className={styles.textFields}
+                                        label="Ár"
+                                        type="number"
+                                        {...field}
+                                    />
+                                    {error && <span style={{ color: 'red' }}>{error.message}</span>}
+                                </>
                             )}
-                            />
-                        </div>
+                        />
+                        <Controller
+                            name="capacity"
+                            control={control}
+                            defaultValue={null}
+                            rules={{ required: "A létszám megadása kötelező" }}
+                            render={({ field, fieldState: { error } }) => (
+                                <>
+                                    <TextField
+                                        className={styles.textFields}
+                                        label="Max létszám"
+                                        type="number"
+                                        {...field}
+                                    />
+                                    {error && <span style={{ color: 'red' }}>{error.message}</span>}
+                                </>
+                            )}
+                        />
+                        <Controller
+                            name="programType"
+                            control={control}
+                            defaultValue="TRX"
+                            rules={{ required: "A program típus megadása kötelező!" }}
+                            render={({ field, fieldState: { error } }) => (
+                                <>
+                                    <Select
+                                        className={styles.textFields}
+                                        aria-label="Program Típus"
+                                        {...field}
+                                    >
+                                        {programTypes.map((type, key) => (
+                                            <MenuItem key={key} value={type}>
+                                                {type}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                    {error && <span style={{ color: 'red' }}>{error.message}</span>}
+                                </>
+                            )}
+                        />
                         <Button type="submit" variant="contained" className={styles.submitButton}>
                             Létrehozás
                         </Button>
@@ -220,7 +186,6 @@ function CreateTraining({close}) {
                         backgroundColor: 'green',
                     }
                 }}
-
             />
             <Snackbar
                 open={errorSnackBar}
@@ -229,12 +194,12 @@ function CreateTraining({close}) {
                 message="Sikertelen létrehozás!"
                 sx={{
                     '& .MuiSnackbarContent-root': {
-                        backgroundColor: 'red', 
+                        backgroundColor: 'red',
                     }
                 }}
             />
         </div>
-    )
+    );
 }
 
 export default CreateTraining;

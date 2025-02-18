@@ -1,43 +1,41 @@
 import styles from './EditBlog.module.css';
-import React, {useContext, useState} from "react";
+import React, { useContext, useState } from "react";
 import BlogContext from "../../Context/Blog/BlogContext";
-import {Controller, useForm} from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import CloseIcon from "@mui/icons-material/Close";
-import {Select, Snackbar, TextField} from "@mui/material";
-import MenuItem from "@mui/material/MenuItem";
-import {Textarea} from "@mui/joy";
-import Button from "@mui/material/Button";
+import { Select, Snackbar, TextField, MenuItem, Button } from "@mui/material";
+import { Textarea } from "@mui/joy";
 import axios from "axios";
 
-function EditBlog({blog, close}) {
-    const {fetchBlogs} = useContext(BlogContext);
+function EditBlog({ blog, close }) {
+    const { fetchBlogs } = useContext(BlogContext);
     const [successSnackBar, setSuccessSnackBar] = useState(false);
     const [errorSnackBar, setErrorSnackBar] = useState(false);
-    const blogTypes = ["TRAINING","DIET"]
+    const blogTypes = ["TRAINING", "DIET"];
 
     const closeSuccessSnackBar = () => {
         setSuccessSnackBar(false);
-    }
+    };
     const openSuccessSnackBar = () => {
         setSuccessSnackBar(true);
-    }
+    };
 
     const closeErrorSnackBar = () => {
         setErrorSnackBar(false);
-    }
+    };
     const openErrorSnackBar = () => {
         setErrorSnackBar(true);
-    }
+    };
 
-
-    const {
-        reset,
-        handleSubmit,
-        control,
-    }= useForm();
+    const { reset, handleSubmit, control } = useForm({
+        defaultValues: {
+            title: blog.title,
+            text: blog.text,
+            blogType: blog.blogType,
+        }
+    });
 
     const onSubmit = async (data) => {
-        console.log(blog.image);
         const formattedData = {
             trainerId: blog.trainer.id,
             title: data.title,
@@ -46,33 +44,22 @@ function EditBlog({blog, close}) {
             image: 'Images/edzesTervKep1.jpg',
         };
 
-
-       try{
-           await axios.put(`/blog/${blog.id}`, formattedData);
-           reset();
-           await fetchBlogs();
-           await openSuccessSnackBar();
-           setTimeout(() =>{
-               close()
-           },[2000])
-       }catch(err){
-           console.log(err);
-           openErrorSnackBar()
-           setTimeout(() =>{
-               close()
-           },[2000])
-       }
-    }
-
-
-
-
+        try {
+            await axios.put(`/blog/${blog.id}`, formattedData);
+            reset();
+            await fetchBlogs();
+            openSuccessSnackBar();
+            setTimeout(close, 2000);
+        } catch (error) {
+            console.error('Error updating blog:', error);
+            openErrorSnackBar();
+            setTimeout(close, 2000);
+        }
+    };
 
     return (
         <div className={styles.container}>
-            <div className={styles.closeButton}><CloseIcon onClick={() => {
-                close()
-            }}/></div>
+            <div className={styles.closeButton}><CloseIcon onClick={close} /></div>
             <div>
                 <h1 className={styles.pageTitle}>Blog módosítása</h1>
                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -80,17 +67,16 @@ function EditBlog({blog, close}) {
                         <Controller
                             name="title"
                             control={control}
-                            defaultValue={blog.title}
-                            rules={{required: "A cím megadása kötelező!"}}
-                            render={({field, fieldState: {error}}) => (
+                            rules={{ required: "A cím megadása kötelező!" }}
+                            render={({ field, fieldState: { error } }) => (
                                 <>
-                                    <TextField className={styles.titleInput}
-                                               label="Cím"
-                                               type="text"
-                                               {...field}
-                                               onChange={(newValue) => field.onChange(newValue)}
+                                    <TextField
+                                        className={styles.titleInput}
+                                        label="Cím"
+                                        type="text"
+                                        {...field}
                                     />
-                                    {error && <span style={{color: 'red'}}>{error.message}</span>}
+                                    {error && <span style={{ color: 'red' }}>{error.message}</span>}
                                 </>
                             )}
                         />
@@ -98,15 +84,12 @@ function EditBlog({blog, close}) {
                         <Controller
                             name="blogType"
                             control={control}
-                            defaultValue={blog.blogType}
-                            rules={{required: "A blog típus megadása kötelező!"}}
-
-                            render={({field, fieldState: {error}}) => (
+                            rules={{ required: "A blog típus megadása kötelező!" }}
+                            render={({ field, fieldState: { error } }) => (
                                 <>
                                     <Select
                                         className={styles.typeSelect}
                                         {...field}
-                                        onChange={(newValue) => field.onChange(newValue)}
                                     >
                                         {blogTypes.map((type, key) => (
                                             <MenuItem key={key} value={type}>
@@ -120,29 +103,27 @@ function EditBlog({blog, close}) {
                         />
                     </div>
 
-
                     <div>
                         <Controller
                             name="text"
                             control={control}
-                            defaultValue={blog.text}
-                            rules={{required: "A szöveg megadása kötelező!"}}
-                            render={({field, fieldState: {error}}) => (
+                            rules={{ required: "A szöveg megadása kötelező!" }}
+                            render={({ field, fieldState: { error } }) => (
                                 <>
-                                    <Textarea className={styles.textInput}
-                                              minRows={10}
-                                              placeholder="A Blog szöveg megadása kötelező"
-                                              {...field}
-                                              onChange={(newValue) => field.onChange(newValue)}
+                                    <Textarea
+                                        className={styles.textInput}
+                                        minRows={10}
+                                        placeholder="A Blog szöveg megadása kötelező"
+                                        {...field}
                                     />
-                                    {error && <span style={{color: 'red'}}>{error.message}</span>}
+                                    {error && <span style={{ color: 'red' }}>{error.message}</span>}
                                 </>
                             )}
                         />
                     </div>
                     <div>
                         <Button type="submit" variant="contained" className={styles.submitButton}>
-                            Létrehozás
+                            Módosítás
                         </Button>
                     </div>
                 </form>
@@ -150,13 +131,12 @@ function EditBlog({blog, close}) {
                     open={successSnackBar}
                     autoHideDuration={6000}
                     onClose={closeSuccessSnackBar}
-                    message="Sikeresen létrehozás!"
+                    message="Sikeresen módosítva!"
                     sx={{
                         '& .MuiSnackbarContent-root': {
                             backgroundColor: 'green',
                         }
                     }}
-
                 />
                 <Snackbar
                     open={errorSnackBar}
@@ -171,7 +151,7 @@ function EditBlog({blog, close}) {
                 />
             </div>
         </div>
-    )
+    );
 }
 
 export default EditBlog;

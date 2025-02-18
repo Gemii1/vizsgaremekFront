@@ -1,20 +1,51 @@
-import styles from './LoginPage.module.css'
-import * as React from 'react';
-import Button from "@mui/material/Button";
-import {useNavigate} from "react-router";
-import {useForm} from "react-hook-form";
-
+import styles from './LoginPage.module.css';
+import React, {useContext} from 'react';
+import { Button } from "@mui/material";
+import { useNavigate } from "react-router";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+import UserContext from "../Context/User/UserContext";
 
 function LoginPage() {
-
-    let navigate = useNavigate();
+    const navigate = useNavigate();
+    const {setUser,setIsUserLoggedIn,setUserType} = useContext(UserContext);
 
     const {
         register,
         handleSubmit,
-        formState:{errors},
-    }= useForm();
-    const onSubmit = (data) => console.log(data);
+        formState: { errors },
+    } = useForm();
+
+    const onSubmit = async (data) => {
+        //Ideiglenes bejelentkezés
+        console.log(data);
+        if (data.userName === "edzo" && data.password === "edzo") {
+            try {
+                //Test Trainer
+                const response = await axios.get(`/trainer/${101}`);
+                setUser(response.data);
+                setIsUserLoggedIn(true);
+                setUserType(true);
+                navigate("/landingPage")
+            } catch (err) {
+                console.log(err);
+                setIsUserLoggedIn(false);
+            }
+        }else if (data.userName === "kliens" && data.password === "kliens"){
+            try {
+                //Test Client
+                const response = await axios.get(`/client/${1}`);
+                setUser(response.data);
+                setIsUserLoggedIn(true);
+                setUserType(false);
+                navigate("/landingPage")
+
+            } catch (err) {
+                console.log(err);
+                setIsUserLoggedIn(false);
+            }
+        }
+    };
 
     return (
         <div className={styles.login}>
@@ -23,37 +54,56 @@ function LoginPage() {
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className={styles.inputs}>
                         <div>
-                            <input placeholder="Felhasználó név" className={styles.userName} {...register("userName", {
-                                required: true,
-                                minLength: 2,
-                            })} />
-                            <div className={styles.error}>
-                                {errors.userName && <span>Hibás felhasználó név</span>}
-                            </div>
+                            <input
+                                placeholder="Felhasználó név"
+                                className={styles.userName}
+                                {...register("userName", {
+                                    required: "Felhasználó név kötelező!",
+                                    minLength: {
+                                        value: 2,
+                                        message: "A felhasználó név legalább 2 karakter hosszú kell legyen!"
+                                    }
+                                })}
+                            />
+                            {errors.userName && <div className={styles.error}>{errors.userName.message}</div>}
                         </div>
                         <div>
-                            <input placeholder="Jelszó" type={"password"} className={styles.password} {...register("password", {
-                                required: true,
-                                minLength: 2,
-                            })} />
-                            <div className={styles.error}>
-                                {errors.password && <span>Hibás jelszó!</span>}
-                            </div>
+                            <input
+                                placeholder="Jelszó"
+                                type="password"
+                                className={styles.password}
+                                {...register("password", {
+                                    required: "Jelszó kötelező!",
+                                    minLength: {
+                                        value: 2,
+                                        message: "A jelszó legalább 2 karakter hosszú kell legyen!"
+                                    }
+                                })}
+                            />
+                            {errors.password && <div className={styles.error}>{errors.password.message}</div>}
                         </div>
                         <div className={styles.buttons}>
-                            <Button className={styles.closeButton} variant="contained"
-                                    onClick={() => {
-                                        navigate("/landingPage")
-                                    }}>Bezárás</Button>
-                            <Button className={styles.sendButton} variant="contained" color="info"
-                                    onClick={handleSubmit(onSubmit)} >Bejelentkezés</Button>
+                            <Button
+                                className={styles.closeButton}
+                                variant="contained"
+                                onClick={() => navigate("/landingPage")}
+                            >
+                                Bezárás
+                            </Button>
+                            <Button
+                                className={styles.sendButton}
+                                variant="contained"
+                                color="info"
+                                type="submit"
+                            >
+                                Bejelentkezés
+                            </Button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
-
-    )
+    );
 }
 
 export default LoginPage;

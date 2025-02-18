@@ -8,7 +8,7 @@ const UserProvider = ({ children }) => {
         {email: ''},
     ]);
     return (
-        <UserContext.Provider value={{userType,isUserLoggedIn, setIsUserLoggedIn, user, setUser}}>
+        <UserContext.Provider value={{userType,isUserLoggedIn, setIsUserLoggedIn, user, setUser,setUserType}}>
             {children}
         </UserContext.Provider>
     );

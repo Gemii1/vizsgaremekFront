@@ -4,8 +4,6 @@
     text-align: center;
 }
 
-
-
 .container >*{
     display: flex;
     flex-direction: column;
@@ -31,14 +29,10 @@
     right: 40px;
 
 }
-
 .buttons button{
     width: 60px;
     height: 60px;
 }
-
-
-
 .trainerButtons{
     display: flex;
     justify-content: space-between;

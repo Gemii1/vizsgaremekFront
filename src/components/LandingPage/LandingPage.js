@@ -1,50 +1,53 @@
-import styles from './LandingPage.module.css'
-import Navbar from '../Navbar/Navbar'
-import * as React from 'react';
-import AspectRatio from '@mui/joy/AspectRatio';
-import Card from '@mui/joy/Card';
-import CardContent from '@mui/joy/CardContent';
-import CardOverflow from '@mui/joy/CardOverflow';
-import Typography from '@mui/joy/Typography';
-import Grid from '@mui/joy/Grid';
-import {useContext} from "react";
-import Button from "@mui/material/Button";
-import {useNavigate} from "react-router";
+import styles from './LandingPage.module.css';
+import Navbar from '../Navbar/Navbar';
+import React from 'react';
+import {
+    AspectRatio,
+    Card,
+    CardContent,
+    CardOverflow,
+    Typography,
+    Grid,
+    Divider
+} from '@mui/joy';
+import { Button } from "@mui/material";
+import { useNavigate } from "react-router";
+import { useContext } from "react";
 import UserContext from "../Context/User/UserContext";
 import StarRateIcon from '@mui/icons-material/StarRate';
-import Divider from "@mui/joy/Divider";
 
-function LandingPage({trainers}){
+function LandingPage({ trainers }) {
+    const navigate = useNavigate();
+    const { isUserLoggedIn } = useContext(UserContext);
 
-    let navigate = useNavigate();
-    const {isUserLoggedIn} = useContext(UserContext);
-
-
-
-    function handleRegButton(){
-        if (!isUserLoggedIn){
-            return(
-                <>
-                    <Button style={{fontSize: '200%'}} variant="contained" className={styles.registrationButton}
-                            color="info" onClick={() => {
-                        navigate("/registration")
-                    }}>Regisztrálás</Button>
-                </>
-            )
+    const handleRegButton = () => {
+        if (!isUserLoggedIn) {
+            return (
+                <Button
+                    style={{ fontSize: '200%' }}
+                    variant="contained"
+                    className={styles.registrationButton}
+                    color="info"
+                    onClick={() => navigate("/registration")}
+                >
+                    Regisztrálás
+                </Button>
+            );
         }
-    }
-    function formatQualification(text) {
+    };
+
+    const formatQualification = (text) => {
         return text
             .toLowerCase()
             .replace(/_/g, ' ')
             .split(' ')
             .map(word => word.charAt(0).toUpperCase() + word.slice(1))
             .join(' ');
+    };
 
-    }
-    function formatPhoneNumber(phoneNumber) {
+    const formatPhoneNumber = (phoneNumber) => {
         return phoneNumber.replace(/(\d{2})(\d{2})(\d{3})(\d{3})/, '+$1 ($2) $3-$4');
-    }
+    };
 
     return (
         <>
@@ -62,7 +65,7 @@ function LandingPage({trainers}){
                         </div>
                     </div>
                 </section>
-                <Divider/>
+                <Divider />
                 <section>
                     <div className={styles.container}>
                         <div className={styles.title}>Edzőink</div>
@@ -74,8 +77,10 @@ function LandingPage({trainers}){
                                             <Card variant="outlined" sx={{ width: 320 }}>
                                                 <CardOverflow>
                                                     <AspectRatio minHeight="575px">
-                                                        <div className={styles.trainerImage}
-                                                             style={{ backgroundImage: `url(${trainer.picture})` }}></div>
+                                                        <div
+                                                            className={styles.trainerImage}
+                                                            style={{ backgroundImage: `url(${trainer.picture})` }}
+                                                        />
                                                     </AspectRatio>
                                                 </CardOverflow>
                                                 <CardContent className={styles.cardContent}>

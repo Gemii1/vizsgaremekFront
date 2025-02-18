@@ -1,187 +1,146 @@
 import Navbar from "../Navbar/Navbar";
 import styles from "./Blogs.module.css";
-import {useContext, useEffect, useState} from "react";
-import Card from '@mui/joy/Card';
-import CardContent from '@mui/joy/CardContent';
-import CardOverflow from '@mui/joy/CardOverflow';
-import Typography from '@mui/joy/Typography';
-import AspectRatio from '@mui/joy/AspectRatio';
-import Divider from '@mui/joy/Divider';
-import EditIcon from '@mui/icons-material/Edit';
+import { useContext, useEffect, useState } from "react";
+import {
+    Card,
+    CardContent,
+    CardOverflow,
+    Typography,
+    AspectRatio,
+    Divider,
+    Grid
+} from '@mui/joy';
+import  EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import Grid from '@mui/joy/Grid';
+import { useNavigate } from "react-router";
+import { Fab, Modal } from "@mui/material";
+import  AddIcon  from "@mui/icons-material/Add";
 import UserContext from "../Context/User/UserContext";
-import {useNavigate} from "react-router";
-import Fab from "@mui/material/Fab";
-import AddIcon from "@mui/icons-material/Add";
 import BlogContext from "../Context/Blog/BlogContext";
-import Modal from "@mui/material/Modal";
 import CreateBlog from "./CreateBlog/CreateBlog";
-import axios from "axios";
 import EditBlog from "./EditBlog/EditBlog";
+import axios from "axios";
 
-function Blogs(){
-
-
+function Blogs() {
     const navigate = useNavigate();
-    const {userType} = useContext(UserContext)
+    const { userType } = useContext(UserContext);
     const [createBlog, setCreateBlog] = useState(false);
-    const closeCreateBlog = () => {
-        setCreateBlog(false);
-    }
-    const openCreateBlog = () => {
-        setCreateBlog(true);
-    }
-
-    const [editedBlog, setEditedBlog] = useState([]);
     const [editBlog, setEditBlog] = useState(false);
-    const closeEditBlog = () => {
-        setEditBlog(false);
-    }
-    const openEditBlog = () => {
-        setEditBlog(true);
-    }
+    const [editedBlog, setEditedBlog] = useState(null);
 
-    const {blogs,fetchBlogs} = useContext(BlogContext);
-    useEffect(()=>{
-        fetchBlogs()
-        console.log(blogs)
-    },[]);
+    const { blogs, fetchBlogs } = useContext(BlogContext);
 
+    useEffect(() => {
+        fetchBlogs();
+        console.log(blogs);
+    }, []);
 
-
-    const blogDelete = async (id)=>{
+    const blogDelete = async (id) => {
         try {
             await axios.delete(`/blog/${id}`);
             await fetchBlogs();
         } catch (error) {
             console.error('Error deleting Blog:', error);
         }
-    }
+    };
 
-
-
-    function isUserTypeTrainer(userType,blog){
-        if (userType){
-            return(
-                <>
-                    <div className={styles.trainerButtons}>
-                        <EditIcon onClick={()=>{
-                            openEditBlog()
-                            setEditedBlog(blog)
-                        }}/>
-                        <DeleteIcon onClick={()=>{blogDelete(blog.id)}}/>
-                    </div>
-                </>
-            )
+    const isUserTypeTrainer = (userType, blog) => {
+        if (userType) {
+            return (
+                <div className={styles.trainerButtons}>
+                    <EditIcon onClick={() => {
+                        setEditBlog(true);
+                        setEditedBlog(blog);
+                    }} />
+                    <DeleteIcon onClick={() => blogDelete(blog.id)} />
+                </div>
+            );
         }
-    }
+        return null;
+    };
 
-    const handleCreateButton = (userType)=>{
-        if(userType) {
+    const handleCreateButton = (userType) => {
+        if (userType) {
             return (
                 <div className={styles.buttons}>
-                    <Fab size="small" color="info" aria-label="add" onClick={() => openCreateBlog()} >
+                    <Fab size="small" color="info" aria-label="add" onClick={() => setCreateBlog(true)}>
                         <AddIcon />
                     </Fab>
                 </div>
-            )
+            );
         }
-    }
+    };
 
-    const handleBlogType= (blogType)=>{
-        if(blogType==="TRAINING") {
-            return "Edzés"
-        }else if(blogType === "DIET"){
-            return "Étrend"
-        }
-    }
-
+    const handleBlogType = (blogType) => {
+        return blogType === "TRAINING" ? "Edzés" : "Étrend";
+    };
 
     return (
         <div className={styles.blogs}>
-            <Navbar/>
+            <Navbar />
             <div>
                 <div className={styles.container}>
                     <div className={styles.blogContainer}>
-                        <Grid container style={{justifyContent: 'center'}} spacing={2} sx={{flexGrow: 1}}>
+                        <Grid container style={{ justifyContent: 'center' }} spacing={2} sx={{ flexGrow: 1 }}>
                             {blogs.length > 0 ? (
-                                blogs.map((blog, index) => {
-                                    return (
-                                        <div key={index} className={styles.blog}>
-                                            <Card variant="outlined" className={styles.card}>
-                                                <CardOverflow onClick={() => {
-                                                    navigate("/openedBlog", {state: blog});
-                                                }}>
-                                                    <AspectRatio ratio="1.6">
-                                                        <img
-                                                            src={blog.blogImage}
-                                                            loading="lazy"
-                                                            alt=""
-                                                        />
-                                                    </AspectRatio>
-                                                </CardOverflow>
-                                                <CardContent onClick={() => {
-                                                    navigate("/openedBlog", {state: blog});
-                                                }}>
-                                                    <Typography level="title-xl" sx={{
-                                                        fontWeight: 'xl',
-                                                        fontSize: '1.3rem'
-                                                    }}>{blog.title}</Typography>
-                                                    <Typography level="body-sm">{blog.writer}</Typography>
+                                blogs.map((blog, index) => (
+                                    <div key={index} className={styles.blog}>
+                                        <Card variant="outlined" className={styles.card}>
+                                            <CardOverflow onClick={() => navigate("/openedBlog", { state: blog })}>
+                                                {console.log(blog)}
+                                                <AspectRatio ratio="1.6">
+                                                    <img
+                                                        src={blog.image}
+                                                        loading="lazy"
+                                                        alt=""
+                                                    />
+                                                </AspectRatio>
+                                            </CardOverflow>
+                                            <CardContent onClick={() => navigate("/openedBlog", { state: blog })}>
+                                                <Typography level="title-xl" sx={{ fontWeight: 'xl', fontSize: '1.3rem' }}>
+                                                    {blog.title}
+                                                </Typography>
+                                                <Typography level="body-sm">{blog.writer}</Typography>
+                                            </CardContent>
+                                            <CardOverflow variant="soft" sx={{ bgcolor: 'background.level1' }}>
+                                                <Divider inset="context" />
+                                                <CardContent orientation="horizontal">
+                                                    <Typography
+                                                        level="body-xs"
+                                                        textColor="text.secondary"
+                                                        sx={{ fontWeight: 'md', fontSize: '1rem' }}
+                                                    >
+                                                        {handleBlogType(blog.blogType)}
+                                                    </Typography>
+                                                    <Divider orientation="vertical" />
+                                                    <Typography
+                                                        level="body-xs"
+                                                        textColor="text.secondary"
+                                                        sx={{ fontWeight: 'md' }}
+                                                    >
+                                                        {isUserTypeTrainer(userType, blog)}
+                                                    </Typography>
                                                 </CardContent>
-                                                <CardOverflow variant="soft" sx={{bgcolor: 'background.level1'}}>
-                                                    <Divider inset="context"/>
-                                                    <CardContent orientation="horizontal">
-                                                        <Typography
-                                                            level="body-xs"
-                                                            textColor="text.secondary"
-                                                            sx={{fontWeight: 'md', fontSize: '1rem'}}
-                                                        >
-                                                            {handleBlogType(blog.blogType)}
-                                                        </Typography>
-                                                        <Divider orientation="vertical"/>
-                                                        <Typography
-                                                            level="body-xs"
-                                                            textColor="text.secondary"
-                                                            sx={{fontWeight: 'md'}}
-                                                        >
-                                                            {isUserTypeTrainer(userType, blog)}
-                                                        </Typography>
-                                                    </CardContent>
-                                                </CardOverflow>
-                                            </Card>
-                                        </div>
-
-                                    )
-                                })
+                                            </CardOverflow>
+                                        </Card>
+                                    </div>
+                                ))
                             ) : (
-                                <>
-                                    <h1 className={styles.blogError}>Jelenleg egy blog sem elérhető</h1>
-                                </>
+                                <h1 className={styles.blogError}>Jelenleg egy blog sem elérhető</h1>
                             )}
                         </Grid>
                         {handleCreateButton(userType)}
                     </div>
-                    <div>
-                        <Modal open={createBlog} onClose={closeCreateBlog}>
-                            <>
-                                <CreateBlog close={closeCreateBlog}/>
-                            </>
-                        </Modal>
-                    </div>
-
-                    <div>
-                        <Modal open={editBlog} onClose={closeEditBlog}>
-                            <>
-                                <EditBlog close={closeEditBlog} blog={editedBlog}/>
-                            </>
-                        </Modal>
-                    </div>
+                    <Modal open={createBlog} onClose={() => setCreateBlog(false)}>
+                        <CreateBlog close={() => setCreateBlog(false)} />
+                    </Modal>
+                    <Modal open={editBlog} onClose={() => setEditBlog(false)}>
+                        <EditBlog close={() => setEditBlog(false)} blog={editedBlog} />
+                    </Modal>
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default Blogs;

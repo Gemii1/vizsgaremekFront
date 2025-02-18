@@ -1,82 +1,82 @@
 import styles from './CreateBlog.module.css';
 import CloseIcon from '@mui/icons-material/Close';
-import {Controller, useForm} from "react-hook-form";
-import {Select, Snackbar, TextField} from "@mui/material";
-import React, {useContext, useState} from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Select, Snackbar, TextField, MenuItem, Button } from "@mui/material";
+import React, { useContext, useState } from "react";
 import axios from "axios";
-import {Textarea} from "@mui/joy";
-import MenuItem from "@mui/material/MenuItem";
+import { Textarea } from "@mui/joy";
 import UserContext from "../../Context/User/UserContext";
 import BlogContext from "../../Context/Blog/BlogContext";
-import Button from "@mui/material/Button";
 
-function CreateBlog({close}) {
-    const {user}= useContext(UserContext);
-    const {fetchBlogs} = useContext(BlogContext);
+function CreateBlog({ close }) {
+    const { user } = useContext(UserContext);
+    const { fetchBlogs } = useContext(BlogContext);
     const [successSnackBar, setSuccessSnackBar] = useState(false);
     const [errorSnackBar, setErrorSnackBar] = useState(false);
 
     const closeSuccessSnackBar = () => {
         setSuccessSnackBar(false);
-    }
+    };
     const openSuccessSnackBar = () => {
         setSuccessSnackBar(true);
-    }
+    };
 
     const closeErrorSnackBar = () => {
         setErrorSnackBar(false);
-    }
+    };
 
     const {
         reset,
         handleSubmit,
         control,
-    }= useForm();
-
+    } = useForm();
 
     const onSubmit = async (data) => {
-        console.log(data);
         const formattedData = {
             trainerId: user.id,
             title: data.title,
             text: data.text,
             blogType: data.blogType,
-            image: 'Images/edzesTervKep1.jpg',
+            image: 'Images/etrendKep2.jpg',
         };
+        console.log(formattedData)
+        console.log(user)
 
+        try {
+            await axios.post('/blog/', formattedData);
+            reset();
+            await fetchBlogs();
+            openSuccessSnackBar();
+            setTimeout(close, 2000);
+        } catch (error) {
+            console.error('Error creating blog:', error);
+            setErrorSnackBar(true);
+        }
+    };
 
+    const blogTypes = ["TRAINING", "DIET"];
 
-        await axios.post('/blog/', formattedData);
-        reset();
-        await fetchBlogs();
-        await openSuccessSnackBar();
-        setTimeout(() =>{
-            close()
-        },[2000])
-    }
-
-    const blogTypes = ["TRAINING","DIET"]
     return (
         <div className={styles.container}>
-            <div className={styles.closeButton}><CloseIcon onClick={()=>{close()}}/></div>
+            <div className={styles.closeButton}><CloseIcon onClick={close} /></div>
             <div>
                 <h1 className={styles.pageTitle}>Blog létrehozása</h1>
-                <form onSubmit={    handleSubmit(onSubmit)} >
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <div className={styles.textInputs}>
                         <Controller
                             name="title"
                             control={control}
                             defaultValue={null}
-                            rules={{required: "A cím megadása kötelező!"}}
-                            render={({field, fieldState: {error}}) => (
+                            rules={{ required: "A cím megadása kötelező!" }}
+                            render={({ field, fieldState: { error } }) => (
                                 <>
-                                    <TextField className={styles.titleInput}
-                                               label="Cím"
-                                               type="text"
-                                               {...field}
-                                               onChange={(newValue) => field.onChange(newValue)}
+                                    <TextField
+                                        className={styles.titleInput}
+                                        label="Cím"
+                                        type="text"
+                                        {...field}
                                     />
-                                    {error && <span style={{color: 'red'}}>{error.message}</span>}
+                                    {error && <span style={{ color: 'red' }}>{error.message}</span>}
                                 </>
                             )}
                         />
@@ -85,14 +85,12 @@ function CreateBlog({close}) {
                             name="blogType"
                             control={control}
                             defaultValue={"DIET"}
-                            rules={{required: "A blog típus megadása kötelező!"}}
-
-                            render={({field, fieldState: {error}}) => (
+                            rules={{ required: "A blog típus megadása kötelező!" }}
+                            render={({ field, fieldState: { error } }) => (
                                 <>
                                     <Select
                                         className={styles.typeSelect}
                                         {...field}
-                                        onChange={(newValue) => field.onChange(newValue)}
                                     >
                                         {blogTypes.map((type, key) => (
                                             <MenuItem key={key} value={type}>
@@ -100,28 +98,27 @@ function CreateBlog({close}) {
                                             </MenuItem>
                                         ))}
                                     </Select>
-                                    {error && <span className={styles.errorMessage} >{error.message}</span>}
+                                    {error && <span className={styles.errorMessage}>{error.message}</span>}
                                 </>
                             )}
                         />
                     </div>
-
 
                     <div>
                         <Controller
                             name="text"
                             control={control}
                             defaultValue={null}
-                            rules={{required: "A szöveg megadása kötelező!"}}
-                            render={({field, fieldState: {error}}) => (
+                            rules={{ required: "A szöveg megadása kötelező!" }}
+                            render={({ field, fieldState: { error } }) => (
                                 <>
-                                    <Textarea className={styles.textInput}
-                                              minRows={10}
-                                              placeholder="A Blog szöveg megadása kötelező"
-                                              {...field}
-                                              onChange={(newValue) => field.onChange(newValue)}
+                                    <Textarea
+                                        className={styles.textInput}
+                                        minRows={10}
+                                        placeholder="A Blog szöveg megadása kötelező"
+                                        {...field}
                                     />
-                                    {error && <span style={{color: 'red'}}>{error.message}</span>}
+                                    {error && <span style={{ color: 'red' }}>{error.message}</span>}
                                 </>
                             )}
                         />
@@ -142,7 +139,6 @@ function CreateBlog({close}) {
                             backgroundColor: 'green',
                         }
                     }}
-
                 />
                 <Snackbar
                     open={errorSnackBar}
@@ -157,8 +153,7 @@ function CreateBlog({close}) {
                 />
             </div>
         </div>
-    )
-
+    );
 }
 
 export default CreateBlog;
