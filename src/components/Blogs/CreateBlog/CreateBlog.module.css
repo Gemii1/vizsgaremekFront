@@ -1,7 +1,7 @@
 .container{
     width: 60vw;
-    overflow-x: hidden;
-    height: 60vh;
+    overflow: hidden;
+    height: 65vh;
     background-color: #fff;
     margin: 100px auto;
     border-radius: 10px;
@@ -47,4 +47,11 @@
 .pageTitle{
     text-align: center;
     margin: 10px;
+}
+
+@media (max-width: 800px) {
+    .container{
+        height: 33vh;
+    }
+
 }
