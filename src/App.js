@@ -32,6 +32,13 @@ function App() {
     },[])
 
 
+    /*
+    Feladatok
+    User delete
+    Onchange és patchek megírása
+     */
+
+
   return (
    <div>
        <ProgramProvider>

@@ -35,12 +35,12 @@ function CreateBlog({ close }) {
         const formattedData = {
             trainerId: user.id,
             title: data.title,
-            text: data.text,
+            headerText: data.headerText,
+            mainText: data.mainText,
             blogType: data.blogType,
             image: 'Images/etrendKep2.jpg',
         };
-        console.log(formattedData)
-        console.log(user)
+
 
         try {
             await axios.post('/blog/', formattedData);
@@ -67,8 +67,8 @@ function CreateBlog({ close }) {
                             name="title"
                             control={control}
                             defaultValue={null}
-                            rules={{ required: "A cím megadása kötelező!" }}
-                            render={({ field, fieldState: { error } }) => (
+                            rules={{required: "A cím megadása kötelező!"}}
+                            render={({field, fieldState: {error}}) => (
                                 <>
                                     <TextField
                                         className={styles.titleInput}
@@ -76,7 +76,7 @@ function CreateBlog({ close }) {
                                         type="text"
                                         {...field}
                                     />
-                                    {error && <span style={{ color: 'red' }}>{error.message}</span>}
+                                    {error && <span style={{color: 'red'}}>{error.message}</span>}
                                 </>
                             )}
                         />
@@ -85,8 +85,8 @@ function CreateBlog({ close }) {
                             name="blogType"
                             control={control}
                             defaultValue={"DIET"}
-                            rules={{ required: "A blog típus megadása kötelező!" }}
-                            render={({ field, fieldState: { error } }) => (
+                            rules={{required: "A blog típus megadása kötelező!"}}
+                            render={({field, fieldState: {error}}) => (
                                 <>
                                     <Select
                                         className={styles.typeSelect}
@@ -103,22 +103,40 @@ function CreateBlog({ close }) {
                             )}
                         />
                     </div>
-
                     <div>
                         <Controller
-                            name="text"
+                            name="headerText"
                             control={control}
                             defaultValue={null}
-                            rules={{ required: "A szöveg megadása kötelező!" }}
-                            render={({ field, fieldState: { error } }) => (
+                            rules={{required: "A bevezetés szöveg megadása kötelező!"}}
+                            render={({field, fieldState: {error}}) => (
                                 <>
                                     <Textarea
                                         className={styles.textInput}
                                         minRows={10}
-                                        placeholder="A Blog szöveg megadása kötelező"
+                                        placeholder="A Blog bevezetés szöveg megadása"
                                         {...field}
                                     />
-                                    {error && <span style={{ color: 'red' }}>{error.message}</span>}
+                                    {error && <span style={{color: 'red'}}>{error.message}</span>}
+                                </>
+                            )}
+                        />
+                    </div>
+                    <div>
+                        <Controller
+                            name="mainText"
+                            control={control}
+                            defaultValue={null}
+                            rules={{required: "A fő szöveg megadása kötelező!"}}
+                            render={({field, fieldState: {error}}) => (
+                                <>
+                                    <Textarea
+                                        className={styles.textInput}
+                                        minRows={10}
+                                        placeholder="A Blog fő szöveg megadása"
+                                        {...field}
+                                    />
+                                    {error && <span style={{color: 'red'}}>{error.message}</span>}
                                 </>
                             )}
                         />

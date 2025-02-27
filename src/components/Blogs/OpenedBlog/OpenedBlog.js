@@ -17,7 +17,7 @@ function OpenedBlog() {
             <div className={styles.container}>
                 <h1 className={styles.blogTitle}>{blog.title}</h1>
                 <div className={styles.blogText}>
-                    <div className={styles.textContent}>{blog.text}</div>
+                    <div className={styles.textContent}>{blog.headerText}</div>
                     <div className={styles.kep}>
                         <img
                             src={blog.blogImage || "https://www.helpinhearing.co.uk/wp-content/uploads/2019/01/image-placeholder-500x500.jpg"}
@@ -25,13 +25,8 @@ function OpenedBlog() {
                         />
                     </div>
                 </div>
-                <div>
-                    {/* Placeholder text */}
-                    Lorem ipsum odor amet, consectetuer adipiscing elit. Maecenas suscipit cursus rutrum malesuada sollicitudin nostra odio. Tortor montes dignissim sagittis feugiat morbi. Praesent vivamus mauris platea dignissim porta consectetur. Justo tellus suscipit cubilia dignissim eu vestibulum. Efficitur nulla est per per ullamcorper vel donec aptent. Maximus elit porttitor id nec; natoque imperdiet rutrum. Per primis quis interdum magna neque. Porta sed inceptos euismod ornare elementum vivamus. Tellus rutrum maximus viverra nec odio dolor euismod.
-
-                    Maximus scelerisque dictum litora efficitur turpis potenti. Nec auctor luctus magna; in mauris aliquet mauris ante sit. Cursus rutrum pharetra neque parturient fermentum nisi nulla. Conubia luctus feugiat non montes auctor; ullamcorper consequat. At fusce fringilla fusce inceptos volutpat congue sodales. Enim elementum amet dis, pretium torquent mus dignissim. Magnis senectus risus neque nostra velit nam iaculis tristique tellus. Sed cubilia viverra amet; nibh non magnis quis lacus. Malesuada massa magna consectetur imperdiet fusce magnis.
-
-                    {/* ... Additional placeholder text can be added here */}
+                <div className={styles.blogText}>
+                    {blog.mainText}
                 </div>
             </div>
             <Divider />

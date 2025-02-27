@@ -19,6 +19,7 @@ function Navbar() {
     const [isSelectEdited, setIsSelectEdited] = useState(true);
     const [isBirthYearEdited, setIsBirthYearEdited] = useState(true);
     const [isPhoneEdited, setIsPhoneEdited] = useState(true);
+    const [isNameEdited, setIsNameEdited] = useState(true);
     const [snackBar, setSnackBar] = useState(false);
 
     const trainerQualifications = ["Personal Trainer", "Fitness Instructor", "Pilates Instructor", "Crossfit Coach", "TRX Trainer", "Pound Trainer", "Other"];
@@ -101,6 +102,12 @@ function Navbar() {
         }
     };
 
+
+    //onChange-ek Írása és patch befejezés
+    const patchName = ()=>{
+
+    }
+
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <div className={styles.body}>
@@ -120,7 +127,25 @@ function Navbar() {
                     <div className={styles.modalContainer}>
                         <div className={styles.modalHeadder}>
                             <div><AccountCircleIcon className={styles.icon}/></div>
-                            <h2>{user.name}</h2>
+                            <h2>
+                                <div className={styles.info}>
+                                    <TextField
+                                        className={styles.editInputs}
+                                        label="név"
+                                        disabled={isNameEdited}
+                                        defaultValue={user.name}
+                                    />
+                                    <div onClick={() => setIsNameEdited(false)}>
+                                        <EditIcon/>
+                                        {!isNameEdited && <Button onClick={(e) => {
+                                            e.stopPropagation();
+                                            setIsNameEdited(true);
+                                            console.log(e)
+                                            openSnackBar();
+                                        }}>Ok</Button>}
+                                    </div>
+                                </div>
+                            </h2>
                         </div>
                         <div className={styles.informations}>
                             <div className={styles.info}>
