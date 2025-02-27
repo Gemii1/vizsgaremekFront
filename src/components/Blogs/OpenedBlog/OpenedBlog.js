@@ -35,7 +35,7 @@ function OpenedBlog() {
                 <Grid container style={{ justifyContent: 'center' }} spacing={2} sx={{ flexGrow: 1 }}>
                     {blogs.length > 0 ? (
                         blogs.map((moreBlog, index) => {
-                            if (moreBlog.id !== blog.id) {
+                            if (moreBlog.id !== blog.id && index<3) {
                                 return (
                                     <div key={index} className={styles.blog}>
                                         <Card variant="outlined" className={styles.card}>

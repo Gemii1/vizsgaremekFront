@@ -72,41 +72,49 @@ function LandingPage({ trainers }) {
                         <div className={styles.cardsContainer}>
                             <Grid container spacing={2} sx={{ flexGrow: 1 }}>
                                 {trainers.length > 0 ? (
-                                    trainers.map((trainer) => (
-                                        <div className={styles.cards} key={trainer.id}>
-                                            <Card variant="outlined" sx={{ width: 320 }}>
-                                                <CardOverflow>
-                                                    <AspectRatio minHeight="575px">
-                                                        <div
-                                                            className={styles.trainerImage}
-                                                            style={{ backgroundImage: `url(${trainer.picture})` }}
-                                                        />
-                                                    </AspectRatio>
-                                                </CardOverflow>
-                                                <CardContent className={styles.cardContent}>
-                                                    <div>
-                                                        <Typography level="title-md">{trainer.name}</Typography>
-                                                        <Typography level="body-sm">{formatPhoneNumber(trainer.phoneNumber)}</Typography>
-                                                        <Typography level="body-sm">{formatQualification(trainer.qualification)}</Typography>
-                                                    </div>
-                                                    <div className={styles.rating}>
-                                                        <label>{trainer.rating}</label>
-                                                        <StarRateIcon className={styles.star} color="primary" />
-                                                    </div>
-                                                </CardContent>
-                                            </Card>
-                                        </div>
-                                    ))
-                                ) : (
+                                    trainers.map((trainer, index) =>{
+                                        if (index<5) {
+                                            return (
+                                                <div className={styles.cards} key={trainer.id}>
+                                                    <Card variant="outlined" sx={{width: 320}}>
+                                                        <CardOverflow>
+                                                            <AspectRatio minHeight="575px">
+                                                                <div
+                                                                    className={styles.trainerImage}
+                                                                    style={{backgroundImage: `url(${trainer.picture})`}}
+                                                                />
+                                                            </AspectRatio>
+                                                        </CardOverflow>
+                                                        <CardContent className={styles.cardContent}>
+                                                            <div>
+                                                                <Typography level="title-md">{trainer.name}</Typography>
+                                                                <Typography
+                                                                    level="body-sm">{formatPhoneNumber(trainer.phoneNumber)}</Typography>
+                                                                <Typography
+                                                                    level="body-sm">{formatQualification(trainer.qualification)}</Typography>
+                                                            </div>
+                                                            <div className={styles.rating}>
+                                                                <label>{trainer.rating}</label>
+                                                                <StarRateIcon className={styles.star} color="primary"/>
+                                                            </div>
+                                                        </CardContent>
+                                                    </Card>
+                                                </div>
+                                            );
+                                        }
+                                        return null;
+                                    })
+                                    ) : (
                                     <h1 className={styles.trainerError}>Jelenleg egy edző se dolgozik nálunk!</h1>
-                                )}
-                            </Grid>
-                        </div>
+                            )}
+                        </Grid>
                     </div>
-                </section>
             </div>
-        </>
-    );
+        </section>
+</div>
+</>
+)
+    ;
 }
 
 export default LandingPage;

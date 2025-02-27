@@ -18,6 +18,13 @@ function App() {
     //Login felhasználó név és jelszó Trainerhez: edzo, edzo
     //Login felhasználó név és jelszó Klienshez: kliens, kliens
 
+
+    //Blog Crudnál fluiditási hibák
+
+    // Light vagy dark theme change
+
+
+
     const [trainersTest,setTrainerTest] = useState([])
 
     useEffect(()=>{
