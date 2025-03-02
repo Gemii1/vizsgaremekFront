@@ -5,10 +5,11 @@ import { useContext, useEffect, useState } from "react";
 import UserContext from "../../Context/User/UserContext";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ProgramContext from "../../Context/Program/ProgramContext";
+import axios from "axios";
 
 function Client() {
     const daysOfWeek = ['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek'];
-    const { isUserLoggedIn } = useContext(UserContext);
+    const { user,isUserLoggedIn } = useContext(UserContext);
     const { programs } = useContext(ProgramContext);
 
     const formatDate = (dateString) => {
@@ -34,9 +35,16 @@ function Client() {
         return `${hours}:${minutes}`;
     };
 
+    const handleUserRegistrationToProgram = async (program) =>{
+        const response =  await axios.post(`/program/${program.id}/clients/${user.id}`);
+        console.log("sikeres jelentkezés")
+    }
+
     const handleApplication = (isLoggedIn, program) => {
         if (isLoggedIn && program.status === "UPCOMING") {
-            return <Button variant='contained' sx={{ fontSize: '1.3rem' }}>Jelentkezés</Button>;
+            return <Button variant='contained' sx={{ fontSize: '1.3rem' }} onClick={()=>{
+                handleUserRegistrationToProgram(program)
+            }}>Jelentkezés</Button>;
         }
         return null;
     };

@@ -10,10 +10,11 @@ import UserContext from "../Context/User/UserContext";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
+import axios from "axios";
 
 function Navbar() {
     const navigate = useNavigate();
-    const { userType, isUserLoggedIn, setIsUserLoggedIn, user } = useContext(UserContext);
+    const { userType, isUserLoggedIn, setIsUserLoggedIn, user,fetchUser,deleteUser} = useContext(UserContext);
     const [openInfoModal, setOpenInfoModal] = useState(false);
     const [email, setEmail] = useState('');
     const [isSelectEdited, setIsSelectEdited] = useState(true);
@@ -21,38 +22,32 @@ function Navbar() {
     const [isPhoneEdited, setIsPhoneEdited] = useState(true);
     const [isNameEdited, setIsNameEdited] = useState(true);
     const [snackBar, setSnackBar] = useState(false);
-
+    const [patchData,setPatchData] = useState({});
     const trainerQualifications = ["Personal Trainer", "Fitness Instructor", "Pilates Instructor", "Crossfit Coach", "TRX Trainer", "Pound Trainer", "Other"];
 
-    useEffect(() => {
-        if (user && user.login && user.login.email) {
-            setEmail(user.login.email);
-        }
-    }, [user]);
+
 
     const handleOpenInfo = () => setOpenInfoModal(true);
     const handleCloseInfo = () => setOpenInfoModal(false);
     const closeSnackBar = () => setSnackBar(false);
     const openSnackBar = () => setSnackBar(true);
-
     const whichUser = (userType) => userType ? <>Edző</> : <>Kliens</>;
-
     const handleLogout = () => {
         navigate('/landingPage');
         setIsUserLoggedIn(false);
     };
-
     const isThereQualification = () => {
         if (userType) {
             return (
                 <div className={styles.info}>
                     <h4>Végzettség:</h4>
                     <Select
-                        className={styles.textFields}
+                        className={styles.textFields, styles.editInputs}
                         aria-label="Program Típus"
                         disabled={isSelectEdited}
                         defaultValue={user.qualification}
-                        className={styles.editInputs}
+                        onChange={handleChange}
+                        name = "qualification"
                     >
                         {trainerQualifications.map((qualification, key) => (
                             <MenuItem key={key} value={qualification.toUpperCase().replace(" ", "_")}>
@@ -65,14 +60,13 @@ function Navbar() {
                         {!isSelectEdited && <Button onClick={(e) => {
                             e.stopPropagation();
                             setIsSelectEdited(true);
-                            openSnackBar();
+                            patchUserData(patchData)
                         }}>Ok</Button>}
                     </div>
                 </div>
             );
         }
     };
-
     const handleLoginNavbar = () => {
         if (isUserLoggedIn) {
             return (
@@ -102,12 +96,56 @@ function Navbar() {
         }
     };
 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
 
-    //onChange-ek Írása és patch befejezés
-    const patchName = ()=>{
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const day = date.getDate().toString().padStart(2, '0');
 
+
+        return `${year}-${month}-${day}`;
+    };
+
+    const handleChange = (event)=>{
+        console.log(patchData)
+
+        let targetName;
+        try{
+           targetName  = event.target.name;
+        }catch(e){
+            targetName = "birth_date";
+        }
+        if(targetName !== "birth_date"){
+            setPatchData(values => ({...values,
+                "selected" : event.target.name.toUpperCase(),
+                "value" : event.target.value
+            }));
+        }else{
+            setPatchData(values => ({...values,
+                "selected" : "BIRTH_DATE",
+                "value" : formatDate(event.$d)
+            }));
+        }
     }
 
+
+    const patchUserData = async (data)=>{
+        if (userType){
+            await axios.patch(`/trainer/${user.id}`,patchData);
+        }else{
+            await axios.patch(`/client/${user.id}`,patchData);
+        }
+        await fetchUser(userType);
+        openSnackBar();
+    }
+
+
+    useEffect(() => {
+        if (user && user.login && user.login.email) {
+            setEmail(user.login.email);
+        }
+    }, [user]);
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <div className={styles.body}>
@@ -134,14 +172,15 @@ function Navbar() {
                                         label="név"
                                         disabled={isNameEdited}
                                         defaultValue={user.name}
+                                        name = "name"
+                                        onChange={handleChange}
                                     />
                                     <div onClick={() => setIsNameEdited(false)}>
                                         <EditIcon/>
                                         {!isNameEdited && <Button onClick={(e) => {
                                             e.stopPropagation();
                                             setIsNameEdited(true);
-                                            console.log(e)
-                                            openSnackBar();
+                                            patchUserData(patchData)
                                         }}>Ok</Button>}
                                     </div>
                                 </div>
@@ -158,13 +197,15 @@ function Navbar() {
                                     disabled={isBirthYearEdited}
                                     defaultValue={dayjs(user.birthDate)}
                                     className={styles.editInputs}
+                                    name = "birth_date"
+                                    onChange={handleChange}
                                 />
                                 <div onClick={() => setIsBirthYearEdited(false)}>
                                     <EditIcon/>
                                     {!isBirthYearEdited && <Button onClick={(e) => {
                                         e.stopPropagation();
                                         setIsBirthYearEdited(true);
-                                        openSnackBar();
+                                        patchUserData(patchData)
                                     }}>Ok</Button>}
                                 </div>
                             </div>
@@ -177,15 +218,24 @@ function Navbar() {
                                     type="number"
                                     disabled={isPhoneEdited}
                                     defaultValue={user.phoneNumber}
+                                    onChange={handleChange}
+                                    name = "phone_Number"
                                 />
                                 <div onClick={() => setIsPhoneEdited(false)}>
                                     <EditIcon/>
                                     {!isPhoneEdited && <Button onClick={(e) => {
                                         e.stopPropagation();
                                         setIsPhoneEdited(true);
-                                        openSnackBar();
+                                        patchUserData(patchData)
                                     }}>Ok</Button>}
                                 </div>
+                            </div>
+                            <div className={styles.deleteButton}>
+                                <Button color="error" onClick={()=>{
+                                    deleteUser(userType);
+                                    navigate("/landingPage");
+                                    setIsUserLoggedIn(false);
+                                }}>Fiók törlése</Button>
                             </div>
                         </div>
                     </div>
@@ -195,7 +245,13 @@ function Navbar() {
                     autoHideDuration={6000}
                     onClose={closeSnackBar}
                     message="Sikeres módosítás!"
+                    sx={{
+                        '& .MuiSnackbarContent-root': {
+                            backgroundColor: 'green',
+                        }
+                    }}
                 />
+
             </div>
         </LocalizationProvider>
     );

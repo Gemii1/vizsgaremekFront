@@ -117,11 +117,15 @@
     align-items: center;
 }
 
-
-
 .editInputs{
     max-width: 100%;
     width: 200px;
+}
+
+.deleteButton{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 @media only screen and (max-width: 720px) {

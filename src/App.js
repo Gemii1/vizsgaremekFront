@@ -41,8 +41,8 @@ function App() {
 
     /*
     Feladatok
-    User delete
-    Onchange és patchek megírása
+    trainer kép létrehozáskor adatbázis hiányzik hozzá
+    delete backend probléma
      */
 
 
