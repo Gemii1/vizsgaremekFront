@@ -1,7 +1,7 @@
 import styles from './Client.module.css';
 import { Grid } from '@mui/joy';
-import { Divider, Button } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { Divider, Button, Snackbar } from "@mui/material";
+import React, { useContext, useEffect, useState } from "react";
 import UserContext from "../../Context/User/UserContext";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ProgramContext from "../../Context/Program/ProgramContext";
@@ -9,8 +9,17 @@ import axios from "axios";
 
 function Client() {
     const daysOfWeek = ['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek'];
-    const { user,isUserLoggedIn } = useContext(UserContext);
+    const { user, isUserLoggedIn } = useContext(UserContext);
     const { programs } = useContext(ProgramContext);
+    const [snackBarSuccess, setSnackBarSuccess] = useState(false);
+    const [snackBarError, setSnackBarError] = useState(false);
+    const [registeredPrograms, setRegisteredPrograms] = useState({});
+
+    const closeSnackBarSuccess = () => setSnackBarSuccess(false);
+    const openSnackBarSuccess = () => setSnackBarSuccess(true);
+
+    const closeSnackBarError = () => setSnackBarError(false);
+    const openSnackBarError = () => setSnackBarError(true);
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -35,16 +44,60 @@ function Client() {
         return `${hours}:${minutes}`;
     };
 
-    const handleUserRegistrationToProgram = async (program) =>{
-        const response =  await axios.post(`/program/${program.id}/clients/${user.id}`);
-        console.log("sikeres jelentkezés")
-    }
+    const handleUserRegistrationToProgram = async (program) => {
+        try {
+            const response = await axios.post(`/program/${program.id}/clients/${user.id}`);
+            await getProgramClients(program);
+            openSnackBarSuccess();
+        } catch (error) {
+            openSnackBarError();
+        }
+    };
+
+    const  handleUserCancellationToProgram = async (program) => {
+        try {
+            const response = await axios.delete(`/program/${program.id}/clients/${user.id}`);
+            await getProgramClients(program);
+            openSnackBarSuccess()
+        } catch (error) {
+            openSnackBarError();
+        }
+    };
+
+    const getProgramClients = async (program) => {
+        try {
+            const response = await axios.get(`/program/${program.id}/client-list`);
+            if (response.data && Array.isArray(response.data)) {
+                const isRegistered = response.data.some(client => client.id === user.id);
+                setRegisteredPrograms(prevState => ({
+                    ...prevState,
+                    [program.id]: isRegistered
+                }));
+            }
+        } catch (error) {
+            console.error("Hiba a jelentkezők lekérése során:", error);
+        }
+    };
+
+    useEffect(() => {
+        programs.forEach(program => {
+            getProgramClients(program);
+        });
+    }, [programs]);
 
     const handleApplication = (isLoggedIn, program) => {
-        if (isLoggedIn && program.status === "UPCOMING") {
-            return <Button variant='contained' sx={{ fontSize: '1.3rem' }} onClick={()=>{
-                handleUserRegistrationToProgram(program)
-            }}>Jelentkezés</Button>;
+        if (isLoggedIn && program.status === "UPCOMING" && !registeredPrograms[program.id]) {
+            return (
+                <Button variant='contained' sx={{ fontSize: '1.3rem' }} onClick={() => handleUserRegistrationToProgram(program)}>
+                    Jelentkezés
+                </Button>
+            );
+        }else if (isLoggedIn && program.status === "UPCOMING" && registeredPrograms[program.id]){
+            return (
+                <Button variant='outlined' color='error' sx={{ fontSize: '1.3rem' }} onClick={() => handleUserCancellationToProgram(program)}>
+                    Lemondás
+                </Button>
+            )
         }
         return null;
     };
@@ -108,7 +161,6 @@ function Client() {
                                     <>
                                         <Divider />
                                         <div>Nincs program</div>
-                                        {handleApplication(false)}
                                     </>
                                 }
                             </div>
@@ -116,6 +168,28 @@ function Client() {
                     </Grid>
                 ))}
             </Grid>
+            <Snackbar
+                open={snackBarSuccess}
+                autoHideDuration={6000}
+                onClose={closeSnackBarSuccess}
+                message="Sikeres!"
+                sx={{
+                    '& .MuiSnackbarContent-root': {
+                        backgroundColor: 'green',
+                    }
+                }}
+            />
+            <Snackbar
+                open={snackBarError}
+                autoHideDuration={6000}
+                onClose={closeSnackBarError}
+                message="Sikertelen próbálkozás!"
+                sx={{
+                    '& .MuiSnackbarContent-root': {
+                        backgroundColor: 'red',
+                    }
+                }}
+            />
         </div>
     );
 }

@@ -34,7 +34,7 @@ function LoginPage() {
         }else if (data.userName === "kliens" && data.password === "kliens"){
             try {
                 //Test Client
-                const response = await axios.get(`/client/${1}`);
+                const response = await axios.get(`/client/${2}`);
                 setUser(response.data);
                 setIsUserLoggedIn(true);
                 setUserType(false);

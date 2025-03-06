@@ -1,5 +1,5 @@
 import Navbar from "../Navbar/Navbar";
-import { useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import styles from "./Training.module.css";
 import Trainer from "./Trainer/Trainer";
 import Client from "./Client/Client";
@@ -20,7 +20,8 @@ function Training() {
 
     return (
         <>
-            <Navbar />
+            <meta name="viewport" content="width=720"/>
+            <Navbar/>
             <div className={styles.calendar}>
                 {handleUser()}
             </div>

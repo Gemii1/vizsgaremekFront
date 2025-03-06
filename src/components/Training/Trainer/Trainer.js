@@ -1,10 +1,10 @@
 import styles from './Trainer.module.css';
 import { Grid } from '@mui/joy';
-import { Divider, Fab, Modal } from '@mui/material';
+import {Divider, Fab, Modal, Snackbar} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import CreateTraining from "./CreateTraining/CreatTraining";
 import EditTraining from "./EditTraining/EditTraining";
 import ProgramContext from "../../Context/Program/ProgramContext";
@@ -18,7 +18,9 @@ function Trainer() {
     const [openedProgram, setOpenedProgram] = useState(null);
     const { programs, fetchPrograms } = useContext(ProgramContext);
     const { isUserLoggedIn } = useContext(UserContext);
-
+    const [snackBarError, setSnackBarError] = useState(false);
+    const closeSnackBarError = () => setSnackBarError(false);
+    const openSnackBarError = () => setSnackBarError(true);
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const options = { weekday: 'long' };
@@ -52,7 +54,7 @@ function Trainer() {
             await axios.delete(`/program/${id}`);
             await fetchPrograms();
         } catch (error) {
-            console.error('Error deleting Programs:', error);
+            openSnackBarError();
         }
     };
 
@@ -121,6 +123,17 @@ function Trainer() {
             <Modal open={editModal} onClose={closeEditModal}>
                 <EditTraining program={openedProgram} close={closeEditModal} />
             </Modal>
+            <Snackbar
+                open={snackBarError}
+                autoHideDuration={6000}
+                onClose={closeSnackBarError}
+                message="Sikertelen próbálkozás!"
+                sx={{
+                    '& .MuiSnackbarContent-root': {
+                        backgroundColor: 'red',
+                    }
+                }}
+            />
         </div>
     );
 }

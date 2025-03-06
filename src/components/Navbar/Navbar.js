@@ -43,7 +43,6 @@ function Navbar() {
                     <h4>Végzettség:</h4>
                     <Select
                         className={styles.textFields, styles.editInputs}
-                        aria-label="Program Típus"
                         disabled={isSelectEdited}
                         defaultValue={user.qualification}
                         onChange={handleChange}
@@ -108,7 +107,6 @@ function Navbar() {
     };
 
     const handleChange = (event)=>{
-        console.log(patchData)
 
         let targetName;
         try{
@@ -214,7 +212,6 @@ function Navbar() {
                                 <h4>Telefonszám:</h4>
                                 <TextField
                                     className={styles.editInputs}
-                                    label="Ár"
                                     type="number"
                                     disabled={isPhoneEdited}
                                     defaultValue={user.phoneNumber}
@@ -235,6 +232,7 @@ function Navbar() {
                                     deleteUser(userType);
                                     navigate("/landingPage");
                                     setIsUserLoggedIn(false);
+                                    handleCloseInfo();
                                 }}>Fiók törlése</Button>
                             </div>
                         </div>

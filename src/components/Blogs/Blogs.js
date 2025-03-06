@@ -1,6 +1,6 @@
 import Navbar from "../Navbar/Navbar";
 import styles from "./Blogs.module.css";
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
     Card,
     CardContent,
@@ -13,7 +13,7 @@ import {
 import  EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from "react-router";
-import { Fab, Modal } from "@mui/material";
+import {Fab, Modal, Snackbar} from "@mui/material";
 import  AddIcon  from "@mui/icons-material/Add";
 import UserContext from "../Context/User/UserContext";
 import BlogContext from "../Context/Blog/BlogContext";
@@ -27,12 +27,12 @@ function Blogs() {
     const [createBlog, setCreateBlog] = useState(false);
     const [editBlog, setEditBlog] = useState(false);
     const [editedBlog, setEditedBlog] = useState(null);
-
+    const [snackBarError, setSnackBarError] = useState(false);
     const { blogs, fetchBlogs } = useContext(BlogContext);
-
+    const closeSnackBarError = () => setSnackBarError(false);
+    const openSnackBarError = () => setSnackBarError(true);
     useEffect(() => {
         fetchBlogs();
-        console.log(blogs);
     }, []);
 
     const blogDelete = async (id) => {
@@ -40,7 +40,7 @@ function Blogs() {
             await axios.delete(`/blog/${id}`);
             await fetchBlogs();
         } catch (error) {
-            console.error('Error deleting Blog:', error);
+            openSnackBarError()
         }
     };
 
@@ -77,17 +77,17 @@ function Blogs() {
 
     return (
         <div className={styles.blogs}>
-            <Navbar />
+            <meta name="viewport" content="width=720"/>
+            <Navbar/>
             <div>
                 <div className={styles.container}>
                     <div className={styles.blogContainer}>
-                        <Grid container style={{ justifyContent: 'center' }} spacing={2} sx={{ flexGrow: 1 }}>
+                        <Grid container style={{justifyContent: 'center'}} spacing={2} sx={{flexGrow: 1}}>
                             {blogs.length > 0 ? (
                                 blogs.map((blog, index) => (
                                     <div key={index} className={styles.blog}>
                                         <Card variant="outlined" className={styles.card}>
-                                            <CardOverflow onClick={() => navigate("/openedBlog", { state: blog })}>
-                                                {console.log(blog)}
+                                            <CardOverflow onClick={() => navigate("/openedBlog", {state: blog})}>
                                                 <AspectRatio ratio="1.6">
                                                     <img
                                                         src={blog.image}
@@ -96,27 +96,28 @@ function Blogs() {
                                                     />
                                                 </AspectRatio>
                                             </CardOverflow>
-                                            <CardContent onClick={() => navigate("/openedBlog", { state: blog })}>
-                                                <Typography level="title-xl" sx={{ fontWeight: 'xl', fontSize: '1.3rem' }}>
+                                            <CardContent onClick={() => navigate("/openedBlog", {state: blog})}>
+                                                <Typography level="title-xl"
+                                                            sx={{fontWeight: 'xl', fontSize: '1.3rem'}}>
                                                     {blog.title}
                                                 </Typography>
                                                 <Typography level="body-sm">{blog.writer}</Typography>
                                             </CardContent>
-                                            <CardOverflow variant="soft" sx={{ bgcolor: 'background.level1' }}>
-                                                <Divider inset="context" />
+                                            <CardOverflow variant="soft" sx={{bgcolor: 'background.level1'}}>
+                                                <Divider inset="context"/>
                                                 <CardContent orientation="horizontal">
                                                     <Typography
                                                         level="body-xs"
                                                         textColor="text.secondary"
-                                                        sx={{ fontWeight: 'md', fontSize: '1rem' }}
+                                                        sx={{fontWeight: 'md', fontSize: '1rem'}}
                                                     >
                                                         {handleBlogType(blog.blogType)}
                                                     </Typography>
-                                                    <Divider orientation="vertical" />
+                                                    <Divider orientation="vertical"/>
                                                     <Typography
                                                         level="body-xs"
                                                         textColor="text.secondary"
-                                                        sx={{ fontWeight: 'md' }}
+                                                        sx={{fontWeight: 'md'}}
                                                     >
                                                         {isUserTypeTrainer(userType, blog)}
                                                     </Typography>
@@ -132,11 +133,22 @@ function Blogs() {
                         {handleCreateButton(userType)}
                     </div>
                     <Modal open={createBlog} onClose={() => setCreateBlog(false)}>
-                        <CreateBlog close={() => setCreateBlog(false)} />
+                        <CreateBlog close={() => setCreateBlog(false)}/>
                     </Modal>
                     <Modal open={editBlog} onClose={() => setEditBlog(false)}>
-                        <EditBlog close={() => setEditBlog(false)} blog={editedBlog} />
+                        <EditBlog close={() => setEditBlog(false)} blog={editedBlog}/>
                     </Modal>
+                    <Snackbar
+                        open={snackBarError}
+                        autoHideDuration={6000}
+                        onClose={closeSnackBarError}
+                        message="Sikertelen próbálkozás!"
+                        sx={{
+                            '& .MuiSnackbarContent-root': {
+                                backgroundColor: 'red',
+                            }
+                        }}
+                    />
                 </div>
             </div>
         </div>
