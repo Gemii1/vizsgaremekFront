@@ -4,6 +4,7 @@ import PhoneInput from "react-phone-input-2";
 import 'react-phone-input-2/lib/style.css';
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router";
+import axios from "axios";
 
 function TrainerForm({ save }) {
     const navigate = useNavigate();
@@ -15,7 +16,7 @@ function TrainerForm({ save }) {
         formState: { errors },
     } = useForm();
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         try {
             qualificationToEnum(data);
             const formattedData = {
@@ -27,9 +28,26 @@ function TrainerForm({ save }) {
                 phoneNumber: data.phoneNumber,
                 rating: 3
             };
-            save(formattedData, { email: data.email, password: data.password }, "", true);
+            const response = await save(formattedData, { email: data.email, password: data.password }, "", true);
+            console.log(response);
+            await savePictureToTrainer(response, data.file[0]); // Küldjük a fájlt
         } catch (error) {
             console.error("Form submission error:", error);
+        }
+    };
+
+    const savePictureToTrainer = async (response, file) => {
+        try {
+            const formData = new FormData();
+            formData.append('file', file); // Hozzáadjuk a fájlt a FormData-hoz
+
+            const valasz = await axios.post(`/trainer/upload-picture/${response.data.id}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+        } catch (e) {
+            console.error("Error updating training:", e);
         }
     };
 
@@ -157,6 +175,11 @@ function TrainerForm({ save }) {
                             Egyéb
                         </label>
                         {errors.gender && <span className={styles.error}>{errors.gender.message}</span>}
+                    </div>
+                    <div>
+                        <label>Kép: </label>
+                        <input type="file" {...register("file", { required: "A kép feltöltése kötelező!" })} />
+                        {errors.file && <span className={styles.error}>{errors.file.message}</span>}
                     </div>
                 </div>
                 <div className={styles.buttons}>

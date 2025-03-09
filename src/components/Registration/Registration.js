@@ -11,18 +11,18 @@ function Registration() {
     const navigate = useNavigate();
 
     async function save(trainerFormData, loginData, clientFormData, isTrainer) {
-        console.log(trainerFormData || clientFormData);
         try {
             const loginResponse = await axios.post('/login/', loginData);
             const loginId = loginResponse.data.loginId;
-
+            let response;
             if (isTrainer) {
-                await saveTrainerData(trainerFormData, loginId);
+                response =  await saveTrainerData(trainerFormData, loginId);
             } else {
-                await saveClientData(clientFormData, loginId);
+                response =  await saveClientData(clientFormData, loginId);
             }
 
             navigate('/login');
+            return response;
         } catch (error) {
             console.error(error);
             alert('A regisztrálás nem volt sikeres! Kérlek győződj meg róla, hogy minden mezőt kitöltöttél!');
@@ -32,7 +32,8 @@ function Registration() {
     async function saveTrainerData(trainerFormData, loginId) {
         try {
             trainerFormData.loginId = loginId;
-            await axios.post('/trainer/', trainerFormData);
+           const response =  await axios.post('/trainer/', trainerFormData);
+           return response;
         } catch (error) {
             throw new Error('Trainer registration failed.');
         }
@@ -41,7 +42,7 @@ function Registration() {
     async function saveClientData(clientFormData, loginId) {
         try {
             clientFormData.loginId = loginId;
-            await axios.post('/client/', clientFormData);
+            return await axios.post('/client/', clientFormData);
         } catch (error) {
             throw new Error('Client registration failed.');
         }
