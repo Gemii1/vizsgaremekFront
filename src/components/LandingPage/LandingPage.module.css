@@ -4,10 +4,12 @@
 }
 body{
     overflow-x: hidden;
+    background-color: #e0e0e0;
 }
 
 .banner{
-    background-image: url('../../../public/Images/asd.jpg');
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 99%, #dcdcdc 100%),
+    url('../../../public/Images/asd.jpg') no-repeat center;
     background-size: cover;
     background-repeat: no-repeat;
     position: relative;
@@ -26,7 +28,7 @@ body{
 }
 
 .container{
-    background-color: whitesmoke;
+    background-color: #dcdcdc;
     margin: 0px;
     padding: 0px;
     font-size: 25px;

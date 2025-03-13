@@ -29,7 +29,6 @@ function TrainerForm({ save }) {
                 rating: 3
             };
             const response = await save(formattedData, { email: data.email, password: data.password }, "", true);
-            console.log(response);
             await savePictureToTrainer(response, data.file[0]); // Küldjük a fájlt
         } catch (error) {
             console.error("Form submission error:", error);

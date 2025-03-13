@@ -14,7 +14,7 @@ import axios from "axios";
 
 function Navbar() {
     const navigate = useNavigate();
-    const { userType, isUserLoggedIn, setIsUserLoggedIn, user,fetchUser,deleteUser} = useContext(UserContext);
+    const { userType,setUserType, isUserLoggedIn, setIsUserLoggedIn, user,fetchUser,deleteUser} = useContext(UserContext);
     const [openInfoModal, setOpenInfoModal] = useState(false);
     const [email, setEmail] = useState('');
     const [isSelectEdited, setIsSelectEdited] = useState(true);
@@ -35,6 +35,7 @@ function Navbar() {
     const handleLogout = () => {
         navigate('/landingPage');
         setIsUserLoggedIn(false);
+        setUserType(false);
     };
     const isThereQualification = () => {
         if (userType) {
@@ -72,7 +73,7 @@ function Navbar() {
                 <Dropdown>
                     <MenuButton className={styles.menuButton}><AccountCircleIcon style={{ fontSize: 'xxx-large' }}/></MenuButton>
                     <Menu>
-                        <div>
+                        <div className={styles.dropdown}>
                             <div className={styles.dropdownHead}>
                                 <div><AccountCircleIcon style={{ fontSize: 'xxx-large' }}/></div>
                                 <div>{user.name}</div>

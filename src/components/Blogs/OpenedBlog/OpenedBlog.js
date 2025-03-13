@@ -20,7 +20,7 @@ function OpenedBlog() {
                     <div className={styles.textContent}>{blog.headerText}</div>
                     <div className={styles.kep}>
                         <img
-                            src={blog.blogImage || "https://www.helpinhearing.co.uk/wp-content/uploads/2019/01/image-placeholder-500x500.jpg"}
+                            src={blog.image || "https://www.helpinhearing.co.uk/wp-content/uploads/2019/01/image-placeholder-500x500.jpg"}
                             alt="Blog Image"
                         />
                     </div>

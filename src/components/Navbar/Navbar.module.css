@@ -145,5 +145,22 @@
     .menuButton{
         margin: 10px !important;
     }
+
+    .dropdown{
+        font-size: 30px !important;
+    }
+
+    .dropdown li {
+        font-size: 30px !important;
+    }
+    .modalContainer{
+        font-size: 20px !important;
+    }
+    .editInputs input{
+        font-size: 25px !important;
+    }
+    .modalContainer button{
+        font-size: 20px !important;
+    }
 }
 

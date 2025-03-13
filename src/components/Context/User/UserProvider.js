@@ -3,8 +3,8 @@ import UserContext from './UserContext';
 import axios from "axios";
 
 const UserProvider = ({ children }) => {
-    const [userType, setUserType] = useState(true);
-    const [isUserLoggedIn, setIsUserLoggedIn] = useState(true);
+    const [userType, setUserType] = useState(false);
+    const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
     const [user, setUser] = useState([
         {email: ''},
     ]);

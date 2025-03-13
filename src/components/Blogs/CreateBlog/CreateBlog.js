@@ -26,12 +26,14 @@ function CreateBlog({ close }) {
     };
 
     const {
+        register,
         reset,
         handleSubmit,
         control,
     } = useForm();
 
     const onSubmit = async (data) => {
+        console.log(data);
         const formattedData = {
             trainerId: user.id,
             title: data.title,
@@ -43,7 +45,8 @@ function CreateBlog({ close }) {
 
 
         try {
-            await axios.post('/blog/', formattedData);
+            const response =  await axios.post('/blog/', formattedData);
+            await savePictureToBlog(response, data.file[0]);
             reset();
             await fetchBlogs();
             openSuccessSnackBar();
@@ -51,6 +54,22 @@ function CreateBlog({ close }) {
         } catch (error) {
             console.error('Error creating blog:', error);
             setErrorSnackBar(true);
+        }
+    };
+
+    const savePictureToBlog = async (response, file) => {
+        try {
+            const formData = new FormData();
+            formData.append('file', file); // Hozzáadjuk a fájlt a FormData-hoz
+
+            const valasz = await axios.post(`/blog/upload-picture/${response.data.id}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            console.log(valasz)
+        } catch (e) {
+            console.error("Error updating training:", e);
         }
     };
 
@@ -139,6 +158,12 @@ function CreateBlog({ close }) {
                                     {error && <span style={{color: 'red'}}>{error.message}</span>}
                                 </>
                             )}
+                        />
+                    </div>
+                    <div>
+                        <input type="file"
+                               className={styles.textInput}
+                               {...register("file", {required:"Kötelező képet feltölteni"})}
                         />
                     </div>
                     <div>

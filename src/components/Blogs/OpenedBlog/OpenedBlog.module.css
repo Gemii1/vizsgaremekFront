@@ -7,6 +7,10 @@
     text-align: center;
 }
 
+.kep img{
+    width: 500px;
+    max-height: 500px;
+}
 .blogText {
     display: flex;
     padding: 30px 50px 50px 50px;

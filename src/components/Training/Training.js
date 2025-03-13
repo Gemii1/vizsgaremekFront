@@ -12,7 +12,7 @@ function Training() {
 
     useEffect(() => {
         fetchPrograms();
-    }, [fetchPrograms]);
+    }, []);
 
     const handleUser = () => {
         return userType ? <Trainer /> : <Client />;

@@ -74,8 +74,6 @@ function LandingPage({ trainers }) {
                                 {trainers.length > 0 ? (
                                     trainers.map((trainer, index) =>{
                                         if (index<5) {
-                                            console.log(trainer.picture)
-
                                             return (
                                                 <div className={styles.cards} key={trainer.id}>
                                                     <Card variant="outlined" sx={{width: 320}}>

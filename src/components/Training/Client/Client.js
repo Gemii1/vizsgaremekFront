@@ -83,7 +83,7 @@ function Client() {
         programs.forEach(program => {
             getProgramClients(program);
         });
-    }, [programs]);
+    }, []);
 
     const handleApplication = (isLoggedIn, program) => {
         if (isLoggedIn && program.status === "UPCOMING" && !registeredPrograms[program.id]) {

@@ -22,7 +22,7 @@ function App() {
     //Blog Crudnál fluiditási hibák
 
     // Light vagy dark theme change
-
+    //Rating--
 
 
     const [trainersTest,setTrainerTest] = useState([])
@@ -38,12 +38,6 @@ function App() {
 
     },[])
 
-
-    /*
-    Feladatok
-    trainer kép létrehozáskor adatbázis hiányzik hozzá
-    delete backend probléma
-     */
 
 
   return (
