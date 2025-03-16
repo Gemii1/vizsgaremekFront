@@ -21,7 +21,8 @@ function Navbar() {
     const [isBirthYearEdited, setIsBirthYearEdited] = useState(true);
     const [isPhoneEdited, setIsPhoneEdited] = useState(true);
     const [isNameEdited, setIsNameEdited] = useState(true);
-    const [snackBar, setSnackBar] = useState(false);
+    const [snackBarSuccess, setSnackBarSuccess] = useState(false);
+    const [snackBarError, setSnackBarError] = useState(false);
     const [patchData,setPatchData] = useState({});
     const trainerQualifications = ["Personal Trainer", "Fitness Instructor", "Pilates Instructor", "Crossfit Coach", "TRX Trainer", "Pound Trainer", "Other"];
 
@@ -29,8 +30,10 @@ function Navbar() {
 
     const handleOpenInfo = () => setOpenInfoModal(true);
     const handleCloseInfo = () => setOpenInfoModal(false);
-    const closeSnackBar = () => setSnackBar(false);
-    const openSnackBar = () => setSnackBar(true);
+    const closeSnackBarSuccess = () => setSnackBarSuccess(false);
+    const openSnackBarSuccess = () => setSnackBarSuccess(true);
+    const closeSnackBarError = () => setSnackBarError(false);
+    const openSnackBarError = () => setSnackBarError(true);
     const whichUser = (userType) => userType ? <>Edző</> : <>Kliens</>;
     const handleLogout = () => {
         navigate('/landingPage');
@@ -130,13 +133,20 @@ function Navbar() {
 
 
     const patchUserData = async (data)=>{
-        if (userType){
-            await axios.patch(`/trainer/${user.id}`,patchData);
-        }else{
-            await axios.patch(`/client/${user.id}`,patchData);
+        try {
+            if (userType){
+
+                await axios.patch(`/trainer/${user.id}`,patchData);
+            }else if(!userType){
+                await axios.patch(`/client/${user.id}`,patchData);
+            }
+            openSnackBarSuccess();
+
+        }catch (e){
+            openSnackBarError();
         }
+
         await fetchUser(userType);
-        openSnackBar();
     }
 
 
@@ -240,13 +250,24 @@ function Navbar() {
                     </div>
                 </Modal>
                 <Snackbar
-                    open={snackBar}
+                    open={snackBarSuccess}
                     autoHideDuration={6000}
-                    onClose={closeSnackBar}
+                    onClose={closeSnackBarSuccess}
                     message="Sikeres módosítás!"
                     sx={{
                         '& .MuiSnackbarContent-root': {
                             backgroundColor: 'green',
+                        }
+                    }}
+                />
+                <Snackbar
+                    open={snackBarError}
+                    autoHideDuration={6000}
+                    onClose={closeSnackBarError}
+                    message="Sikertelen módosítás!"
+                    sx={{
+                        '& .MuiSnackbarContent-root': {
+                            backgroundColor: 'red',
                         }
                     }}
                 />

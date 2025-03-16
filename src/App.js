@@ -19,10 +19,11 @@ function App() {
     //Login felhasználó név és jelszó Klienshez: kliens, kliens
 
 
-    //Blog Crudnál fluiditási hibák
-
-    // Light vagy dark theme change
     //Rating--
+    //Program státusz nem frissül, ha letellik akkor nem írja át
+    //Meg kéne egy olyan hogy az összes programot törli a hétről
+    //Ha a trainer hozott létre blogot vagy programot ne lehessen törölni
+    //Törlésnél confirmation-ök megírása
 
 
     const [trainersTest,setTrainerTest] = useState([])

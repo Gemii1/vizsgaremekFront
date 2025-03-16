@@ -24,11 +24,12 @@ const UserProvider = ({ children }) => {
     }
 
     const deleteUser = async (usertype) => {
+
         try{
             if (usertype){
                 const response = await axios.delete(`/trainer/${user.id}`);
                 setUser(response.data);
-            }else {
+            }else if(!usertype){
                 const response = await axios.delete(`/client/${user.id}`);
                 setUser(response.data);
             }
