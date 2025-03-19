@@ -247,6 +247,7 @@ function Navbar() {
                                 }}>Fiók törlése</Button>
                             </div>
                         </div>
+
                     </div>
                 </Modal>
                 <Snackbar

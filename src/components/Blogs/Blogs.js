@@ -20,6 +20,7 @@ import BlogContext from "../Context/Blog/BlogContext";
 import CreateBlog from "./CreateBlog/CreateBlog";
 import EditBlog from "./EditBlog/EditBlog";
 import axios from "axios";
+import Confirmation from "../Confirmation";
 
 function Blogs() {
     const navigate = useNavigate();
@@ -27,10 +28,18 @@ function Blogs() {
     const [createBlog, setCreateBlog] = useState(false);
     const [editBlog, setEditBlog] = useState(false);
     const [editedBlog, setEditedBlog] = useState(null);
+    const [deleteModal, setDeleteModal] = useState(false);
+
     const [snackBarError, setSnackBarError] = useState(false);
     const { blogs, fetchBlogs } = useContext(BlogContext);
     const closeSnackBarError = () => setSnackBarError(false);
     const openSnackBarError = () => setSnackBarError(true);
+    const openDeleteModal = (id) => {
+        setDeleteModal(true);
+        setDeletingId(id)
+    };
+    const closeDeleteModal = () => setDeleteModal(false);
+    const [deletingId, setDeletingId] = useState(null);
     useEffect(() => {
         fetchBlogs();
     }, []);
@@ -52,7 +61,7 @@ function Blogs() {
                         setEditBlog(true);
                         setEditedBlog(blog);
                     }} />
-                    <DeleteIcon onClick={() => blogDelete(blog.id)} />
+                    <DeleteIcon onClick={() => openDeleteModal(blog.id)} />
                 </div>
             );
         }
@@ -137,6 +146,9 @@ function Blogs() {
                     </Modal>
                     <Modal open={editBlog} onClose={() => setEditBlog(false)}>
                         <EditBlog close={() => setEditBlog(false)} blog={editedBlog}/>
+                    </Modal>
+                    <Modal open={deleteModal} onClose={closeDeleteModal}>
+                        <Confirmation close={closeDeleteModal} deleteFunction={blogDelete} deletingId={deletingId} />
                     </Modal>
                     <Snackbar
                         open={snackBarError}

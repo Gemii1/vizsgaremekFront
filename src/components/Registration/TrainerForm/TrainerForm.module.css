@@ -43,5 +43,22 @@
     width: 110% !important;
 }
 
+@media (max-width: 800px) {
+    .form{
+        font-size: 25px !important;
+    }
+    .form input{
+        font-size: 25px !important;
+    }
+    .buttons button{
+        font-size: 20px !important;
+    }
+    .formRadio input{
+        width: 30px;
+        height: 20px;
+    }
+
+}
+
 
 

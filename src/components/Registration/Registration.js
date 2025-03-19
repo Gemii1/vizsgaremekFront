@@ -1,13 +1,13 @@
 import styles from './Registration.module.css';
 import { Tabs, TabList, Tab, TabPanel } from '@mui/joy';
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import TrainerForm from "./TrainerForm/TrainerForm";
 import ClientForm from "./ClientForm/ClientForm";
 
 function Registration() {
-    const [userType, setUserType] = useState(true); // false == Client, true == Trainer
+    const [ setUserType] = useState(true); // false == Client, true == Trainer
     const navigate = useNavigate();
 
     async function save(trainerFormData, loginData, clientFormData, isTrainer) {
@@ -50,6 +50,7 @@ function Registration() {
 
     return (
         <div className={styles.container}>
+            <meta name="viewport" content="width=720"/>
             <Tabs>
                 <TabList tabFlex="auto">
                     <Tab className={styles.tab}>
@@ -60,10 +61,10 @@ function Registration() {
                     </Tab>
                 </TabList>
                 <TabPanel value={0}>
-                    <TrainerForm save={save} />
+                    <TrainerForm save={save}/>
                 </TabPanel>
                 <TabPanel value={1}>
-                    <ClientForm save={save} />
+                    <ClientForm save={save}/>
                 </TabPanel>
             </Tabs>
         </div>

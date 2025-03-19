@@ -16,9 +16,12 @@ import { useContext } from "react";
 import UserContext from "../Context/User/UserContext";
 import StarRateIcon from '@mui/icons-material/StarRate';
 
+
 function LandingPage({ trainers }) {
     const navigate = useNavigate();
     const { isUserLoggedIn } = useContext(UserContext);
+
+
 
     const handleRegButton = () => {
         if (!isUserLoggedIn) {
@@ -48,6 +51,7 @@ function LandingPage({ trainers }) {
     const formatPhoneNumber = (phoneNumber) => {
         return phoneNumber.replace(/(\d{2})(\d{2})(\d{3})(\d{3})/, '+$1 ($2) $3-$4');
     };
+
 
     return (
         <>
@@ -81,17 +85,17 @@ function LandingPage({ trainers }) {
                                                             <AspectRatio minHeight="575px">
                                                                 <div
                                                                     className={styles.trainerImage}
-                                                                    style={{backgroundImage: `url(${trainer.picture})`}}
+                                                                    style={{backgroundImage: `url(${trainer.picture}?t=${Date.now()})`}}
                                                                 />
                                                             </AspectRatio>
                                                         </CardOverflow>
                                                         <CardContent className={styles.cardContent}>
                                                             <div>
-                                                                <Typography level="title-md">{trainer.name}</Typography>
+                                                                <Typography >{trainer.name}</Typography>
                                                                 <Typography
-                                                                    level="body-sm">{formatPhoneNumber(trainer.phoneNumber)}</Typography>
+                                                                   >{formatPhoneNumber(trainer.phoneNumber)}</Typography>
                                                                 <Typography
-                                                                    level="body-sm">{formatQualification(trainer.qualification)}</Typography>
+                                                                    >{formatQualification(trainer.qualification)}</Typography>
                                                             </div>
                                                             <div className={styles.rating}>
                                                                 <label>{trainer.rating}</label>

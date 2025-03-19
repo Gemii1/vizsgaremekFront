@@ -10,14 +10,16 @@ import EditTraining from "./EditTraining/EditTraining";
 import ProgramContext from "../../Context/Program/ProgramContext";
 import axios from "axios";
 import UserContext from "../../Context/User/UserContext";
+import Confirmation from "../../Confirmation";
 
 function Trainer() {
     const daysOfWeek = ['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek'];
     const [createModal, setCreateModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
+    const [deleteModal, setDeleteModal] = useState(false);
     const [openedProgram, setOpenedProgram] = useState(null);
     const { programs, fetchPrograms } = useContext(ProgramContext);
-    const { isUserLoggedIn } = useContext(UserContext);
+    const {user, isUserLoggedIn } = useContext(UserContext);
     const [snackBarError, setSnackBarError] = useState(false);
     const closeSnackBarError = () => setSnackBarError(false);
     const openSnackBarError = () => setSnackBarError(true);
@@ -49,6 +51,12 @@ function Trainer() {
     const openEditModal = () => setEditModal(true);
     const closeEditModal = () => setEditModal(false);
 
+    const openDeleteModal = (id) => {
+        setDeleteModal(true);
+        setDeletingId(id)
+    };
+    const closeDeleteModal = () => setDeleteModal(false);
+    const [deletingId, setDeletingId] = useState(null);
     const deleteProgram = async (id) => {
         try {
             await axios.delete(`/program/${id}`);
@@ -59,14 +67,14 @@ function Trainer() {
     };
 
     const handleUserLoggedInEditAndDelete = (program) => {
-        if (isUserLoggedIn) {
+        if (isUserLoggedIn && user.id === program.trainer.id) {
             return (
                 <div className={styles.programIcons}>
                     <EditIcon onClick={() => {
                         setOpenedProgram(program);
                         openEditModal();
                     }} />
-                    <DeleteIcon onClick={() => deleteProgram(program.id)} />
+                    <DeleteIcon onClick={() => openDeleteModal(program.id)} />
                 </div>
             );
         }
@@ -122,6 +130,9 @@ function Trainer() {
             </Modal>
             <Modal open={editModal} onClose={closeEditModal}>
                 <EditTraining program={openedProgram} close={closeEditModal} />
+            </Modal>
+            <Modal open={deleteModal} onClose={closeDeleteModal}>
+                <Confirmation close={closeDeleteModal} deleteFunction={deleteProgram} deletingId={deletingId} />
             </Modal>
             <Snackbar
                 open={snackBarError}

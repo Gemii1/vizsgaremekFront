@@ -1,6 +1,6 @@
 import styles from './LoginPage.module.css';
-import React, {useContext} from 'react';
-import { Button } from "@mui/material";
+import React, {useContext, useState} from 'react';
+import {Button, Snackbar} from "@mui/material";
 import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -9,6 +9,9 @@ import UserContext from "../Context/User/UserContext";
 function LoginPage() {
     const navigate = useNavigate();
     const {setUser,setIsUserLoggedIn,setUserType} = useContext(UserContext);
+    const [snackBarError, setSnackBarError] = useState(false);
+    const closeSnackBarError = () => setSnackBarError(false);
+    const openSnackBarError = () => setSnackBarError(true);
 
     const {
         register,
@@ -22,7 +25,7 @@ function LoginPage() {
         if (data.userName === "edzo" && data.password === "edzo") {
             try {
                 //Test Trainer
-                const response = await axios.get(`/trainer/${101}`);
+                const response = await axios.get(`/trainer/${102}`);
                 setUser(response.data);
                 setIsUserLoggedIn(true);
                 setUserType(true);
@@ -30,6 +33,7 @@ function LoginPage() {
             } catch (err) {
                 console.log(err);
                 setIsUserLoggedIn(false);
+                openSnackBarError();
             }
         }else if (data.userName === "kliens" && data.password === "kliens"){
             try {
@@ -43,6 +47,7 @@ function LoginPage() {
             } catch (err) {
                 console.log(err);
                 setIsUserLoggedIn(false);
+                openSnackBarError();
             }
         }
     };
@@ -102,6 +107,17 @@ function LoginPage() {
                     </div>
                 </form>
             </div>
+            <Snackbar
+                open={snackBarError}
+                autoHideDuration={6000}
+                onClose={closeSnackBarError}
+                message="Sikertelen bejelentkezés!"
+                sx={{
+                    '& .MuiSnackbarContent-root': {
+                        backgroundColor: 'red',
+                    }
+                }}
+            />
         </div>
     );
 }

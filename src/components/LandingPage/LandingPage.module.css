@@ -99,6 +99,9 @@ body{
     .registration h3{
         width: 500px;
     }
+    .cardContent p{
+        font-size: 20px !important;
+    }
 }
 
 

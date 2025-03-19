@@ -36,9 +36,6 @@ body{
     .container{
         font-size: xx-large !important;
     }
-    .tabText{
-        font-size: 25px !important;
-    }
 
 }
 

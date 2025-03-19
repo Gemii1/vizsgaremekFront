@@ -53,3 +53,19 @@
     width: 60px;
     height: 60px;
 }
+
+.programIcons svg :hover{
+    cursor: pointer;
+    color: blue;
+}
+
+@media (max-width: 800px){
+    .calendar{
+        font-size: 25px;
+        margin: 55px;
+    }
+    .dates{
+        margin: 15px;
+    }
+
+}

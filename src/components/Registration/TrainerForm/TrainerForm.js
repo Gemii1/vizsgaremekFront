@@ -182,8 +182,8 @@ function TrainerForm({ save }) {
                     </div>
                 </div>
                 <div className={styles.buttons}>
-                    <Button className={styles.closeButton} variant="contained" color="error" onClick={() => navigate("/landingPage")}>Bezárás</Button>
-                    <Button className={styles.closeButton} variant="contained" color="info" type="submit">Regisztrálás</Button>
+                    <Button  variant="contained" color="error" onClick={() => navigate("/landingPage")}>Bezárás</Button>
+                    <Button  variant="contained" color="info" type="submit">Regisztrálás</Button>
                 </div>
             </form>
         </div>
