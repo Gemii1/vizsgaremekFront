@@ -61,7 +61,7 @@ function EditBlog({ blog, close }) {
 
     return (
         <div className={styles.container}>
-            <div className={styles.closeButton}><CloseIcon onClick={close} /></div>
+            <div className={styles.closeButton}><CloseIcon onClick={close}/></div>
             <div>
                 <h1 className={styles.pageTitle}>Blog módosítása</h1>
                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -114,7 +114,8 @@ function EditBlog({ blog, close }) {
                                 <>
                                     <Textarea
                                         className={styles.textInput}
-                                        minRows={10}
+                                        minRows={5}
+                                        maxRows={10}
                                         placeholder="A Blog bevezetés szöveg megadása "
                                         {...field}
                                     />
@@ -132,7 +133,8 @@ function EditBlog({ blog, close }) {
                                 <>
                                     <Textarea
                                         className={styles.textInput}
-                                        minRows={10}
+                                        minRows={5}
+                                        maxRows={15}
                                         placeholder="A Blog fő szöveg megadása "
                                         {...field}
                                     />

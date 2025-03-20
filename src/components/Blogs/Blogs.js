@@ -106,17 +106,14 @@ function Blogs() {
                                                 </AspectRatio>
                                             </CardOverflow>
                                             <CardContent onClick={() => navigate("/openedBlog", {state: blog})}>
-                                                <Typography level="title-xl"
-                                                            sx={{fontWeight: 'xl', fontSize: '1.3rem'}}>
+                                                <Typography sx={{fontWeight: 'xl', fontSize: '1.3rem'}}>
                                                     {blog.title}
                                                 </Typography>
-                                                <Typography level="body-sm">{blog.writer}</Typography>
                                             </CardContent>
-                                            <CardOverflow variant="soft" sx={{bgcolor: 'background.level1'}}>
+                                            <CardOverflow variant="soft" >
                                                 <Divider inset="context"/>
                                                 <CardContent orientation="horizontal">
                                                     <Typography
-                                                        level="body-xs"
                                                         textColor="text.secondary"
                                                         sx={{fontWeight: 'md', fontSize: '1rem'}}
                                                     >
@@ -124,7 +121,6 @@ function Blogs() {
                                                     </Typography>
                                                     <Divider orientation="vertical"/>
                                                     <Typography
-                                                        level="body-xs"
                                                         textColor="text.secondary"
                                                         sx={{fontWeight: 'md'}}
                                                     >

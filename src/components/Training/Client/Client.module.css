@@ -4,15 +4,23 @@
     border-radius: 5px;
     height: 85vh;
 }
+.calendarWeek{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
 
 .program {
     text-align: center;
-    padding: 20px;
+    padding: 15px;
     min-width: 200px;
+    max-width: 400px;
     min-height: 100px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     background-color: #fffcfc;
+    overflow-x: hidden;
 }
 
 .programOnDay{
@@ -29,17 +37,17 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
 
 }
 .dates h3{
     display: inline;
-    margin-left: 20%;
 }
 
 .status{
     display: flex;
     text-align: left;
-    margin: 10px;
+    margin: 10px 10px 10px 20px;
 }
 .signUpButton{
     margin: 20px;
@@ -54,6 +62,12 @@
     }
     .status svg{
         font-size: 35px;
+    }
+    .calendarWeek{
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        margin-top: 10px;
     }
 
 }

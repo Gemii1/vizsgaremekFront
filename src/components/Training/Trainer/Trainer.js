@@ -1,9 +1,11 @@
 import styles from './Trainer.module.css';
 import { Grid } from '@mui/joy';
-import {Divider, Fab, Modal, Snackbar} from '@mui/material';
+import { Divider, Fab, Modal, Snackbar, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import React, { useContext, useState } from "react";
 import CreateTraining from "./CreateTraining/CreatTraining";
 import EditTraining from "./EditTraining/EditTraining";
@@ -13,25 +15,62 @@ import UserContext from "../../Context/User/UserContext";
 import Confirmation from "../../Confirmation";
 
 function Trainer() {
-    const daysOfWeek = ['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek'];
+    const { programs, fetchPrograms } = useContext(ProgramContext);
+    const { user, isUserLoggedIn } = useContext(UserContext);
     const [createModal, setCreateModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
     const [deleteModal, setDeleteModal] = useState(false);
     const [openedProgram, setOpenedProgram] = useState(null);
-    const { programs, fetchPrograms } = useContext(ProgramContext);
-    const {user, isUserLoggedIn } = useContext(UserContext);
+    const [deletingId, setDeletingId] = useState(null);
     const [snackBarError, setSnackBarError] = useState(false);
+    const [currentWeekStart, setCurrentWeekStart] = useState(new Date()); // Aktuális hét kezdete
+
     const closeSnackBarError = () => setSnackBarError(false);
     const openSnackBarError = () => setSnackBarError(true);
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
+
+    const getWeekDays = (startDate) => {
+        const days = [];
+        const start = new Date(startDate);
+        start.setDate(start.getDate() - start.getDay() + 1); // Hétfőre állítás
+        for (let i = 0; i < 5; i++) { // Csak munkanapok (Hétfő-Péntek)
+            const day = new Date(start);
+            day.setDate(start.getDate() + i);
+            days.push(day);
+        }
+        return days;
+    };
+
+    const [weekDays, setWeekDays] = useState(getWeekDays(currentWeekStart));
+
+    const handlePrevWeek = () => {
+        const newStart = new Date(currentWeekStart);
+        newStart.setDate(newStart.getDate() - 7);
+        setCurrentWeekStart(newStart);
+        setWeekDays(getWeekDays(newStart));
+    };
+
+    const handleNextWeek = () => {
+        const newStart = new Date(currentWeekStart);
+        newStart.setDate(newStart.getDate() + 7);
+        setCurrentWeekStart(newStart);
+        setWeekDays(getWeekDays(newStart));
+    };
+
+    const formatDate = (date) => {
         const options = { weekday: 'long' };
         const dayName = new Intl.DateTimeFormat('hu-HU', options).format(date);
         return dayName.charAt(0).toUpperCase() + dayName.slice(1);
     };
 
-    const groupedPrograms = programs.reduce((acc, program) => {
-        const day = formatDate(program.startTime);
+    const filteredPrograms = programs.filter(program => {
+        const programDate = new Date(program.startTime);
+        const weekStart = new Date(weekDays[0]);
+        const weekEnd = new Date(weekDays[4]);
+        return programDate >= weekStart && programDate <= weekEnd;
+    });
+
+    const groupedPrograms = filteredPrograms.reduce((acc, program) => {
+        const day = formatDate(new Date(program.startTime));
         if (!acc[day]) {
             acc[day] = [];
         }
@@ -53,14 +92,15 @@ function Trainer() {
 
     const openDeleteModal = (id) => {
         setDeleteModal(true);
-        setDeletingId(id)
+        setDeletingId(id);
     };
     const closeDeleteModal = () => setDeleteModal(false);
-    const [deletingId, setDeletingId] = useState(null);
+
     const deleteProgram = async (id) => {
         try {
             await axios.delete(`/program/${id}`);
             await fetchPrograms();
+            closeDeleteModal();
         } catch (error) {
             openSnackBarError();
         }
@@ -94,56 +134,66 @@ function Trainer() {
 
     return (
         <div className={styles.calendar}>
-            <Grid container rowSpacing={1} spacing={2} columns={{ xs: 2, sm: 2, md: 12 }}>
-                {daysOfWeek.map((day) => (
-                    <Grid item xs={2.4} key={day} className={styles.days}>
-                        <div className={styles.program}>
-                            <h2>{day}</h2>
-                            <Divider color='black' />
-                            <div className={styles.programOnDay}>
-                                <p>Foglalt időpontok:</p>
-                                {groupedPrograms[day] ?
-                                    groupedPrograms[day].map((program) => (
-                                        <div key={program.id}>
-                                            <Divider />
-                                            <div className={styles.dates}>
-                                                <div>{getProgramTime(program.startTime)} - {getProgramTime(program.endTime)}</div>
-                                                {handleUserLoggedInEditAndDelete(program)}
+            <meta name="viewport" content="width=720"/>
+            <div className={styles.calendarWeek}>
+                <IconButton onClick={handlePrevWeek}>
+                    <ArrowBackIcon/>
+                </IconButton>
+                <h3>{`${weekDays[0].toLocaleDateString('hu-HU')} - ${weekDays[4].toLocaleDateString('hu-HU')}`}</h3>
+                <IconButton onClick={handleNextWeek}>
+                    <ArrowForwardIcon/>
+                </IconButton>
+            </div>
+            <Grid container rowSpacing={1} spacing={2} columns={{xs: 2, sm: 2, md: 12}}>
+                {weekDays.map((date) => {
+                    const day = formatDate(date);
+                    return (
+                        <Grid item xs={2.4} key={day} className={styles.days}>
+                            <div className={styles.program}>
+                                <h2>{day}</h2>
+                                <Divider color='black'/>
+                                <div className={styles.programOnDay}>
+                                    <p>Foglalt időpontok:</p>
+                                    {groupedPrograms[day] ? (
+                                        groupedPrograms[day].map((program) => (
+                                            <div key={program.id}>
+                                                <Divider/>
+                                                <div className={styles.dates}>
+                                                    <div>{getProgramTime(program.startTime)} - {getProgramTime(program.endTime)}</div>
+                                                    {handleUserLoggedInEditAndDelete(program)}
+                                                </div>
                                             </div>
-                                        </div>
-                                    )) :
-                                    <>
-                                        <Divider />
-                                        <div className={styles.dates}>Nincs program</div>
-                                    </>
-                                }
+                                        ))
+                                    ) : (
+                                        <>
+                                            <Divider/>
+                                            <div className={styles.dates}>Nincs program</div>
+                                        </>
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    </Grid>
-                ))}
+                        </Grid>
+                    );
+                })}
             </Grid>
             <div className={styles.buttons}>
                 {handleCreateButton()}
             </div>
             <Modal open={createModal} onClose={closeCreateModal}>
-                <CreateTraining close={closeCreateModal} />
+                <CreateTraining close={closeCreateModal}/>
             </Modal>
             <Modal open={editModal} onClose={closeEditModal}>
-                <EditTraining program={openedProgram} close={closeEditModal} />
+                <EditTraining program={openedProgram} close={closeEditModal}/>
             </Modal>
             <Modal open={deleteModal} onClose={closeDeleteModal}>
-                <Confirmation close={closeDeleteModal} deleteFunction={deleteProgram} deletingId={deletingId} />
+                <Confirmation close={closeDeleteModal} deleteFunction={deleteProgram} deletingId={deletingId}/>
             </Modal>
             <Snackbar
                 open={snackBarError}
                 autoHideDuration={6000}
                 onClose={closeSnackBarError}
                 message="Sikertelen próbálkozás!"
-                sx={{
-                    '& .MuiSnackbarContent-root': {
-                        backgroundColor: 'red',
-                    }
-                }}
+                sx={{'& .MuiSnackbarContent-root': {backgroundColor: 'red'}}}
             />
         </div>
     );

@@ -1,11 +1,15 @@
 .container{
-    width: 60vw;
-    height: 60vh;
+    min-width: 60vw;
+    max-width: 80vw;
+    overflow: hidden;
+    min-height: 50vh;
     background-color: #fff;
     margin: 100px auto;
     border-radius: 10px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
 }
-
 .closeButton{
     position: fixed;
     top:100px ;
@@ -47,3 +51,15 @@
     text-align: center;
     margin: 10px;
 }
+
+@media (max-width: 800px){
+   .textInputs textarea{
+       font-size: 30px !important;
+       max-height: 400px;
+   }
+   .textInputs textarea > *{
+       font-size: 30px !important;
+   }
+
+}
+

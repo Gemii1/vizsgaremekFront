@@ -47,6 +47,7 @@ function Navbar() {
                     <h4>Végzettség:</h4>
                     <Select
                         className={styles.textFields, styles.editInputs}
+                        className={styles.textFields, styles.editInputs}
                         disabled={isSelectEdited}
                         defaultValue={user.qualification}
                         onChange={handleChange}
@@ -64,7 +65,7 @@ function Navbar() {
                             e.stopPropagation();
                             setIsSelectEdited(true);
                             patchUserData(patchData)
-                        }}>Ok</Button>}
+                        }}>Mentés</Button>}
                     </div>
                 </div>
             );
@@ -165,7 +166,7 @@ function Navbar() {
                         </div>
                         <div className={styles.pages}>
                             <div className={styles.pageBlog} onClick={() => navigate("/blogs")}>Blogok</div>
-                            <div className={styles.pageTraining} onClick={() => navigate("/training")}>Tréning</div>
+                            <div className={styles.pageTraining} onClick={() => navigate("/training")}>Programok</div>
                             {handleLoginNavbar()}
                         </div>
                     </div>
@@ -190,7 +191,7 @@ function Navbar() {
                                             e.stopPropagation();
                                             setIsNameEdited(true);
                                             patchUserData(patchData)
-                                        }}>Ok</Button>}
+                                        }}>Mentés</Button>}
                                     </div>
                                 </div>
                             </h2>
@@ -215,7 +216,7 @@ function Navbar() {
                                         e.stopPropagation();
                                         setIsBirthYearEdited(true);
                                         patchUserData(patchData)
-                                    }}>Ok</Button>}
+                                    }}>Mentés</Button>}
                                 </div>
                             </div>
                             {isThereQualification()}
@@ -235,7 +236,7 @@ function Navbar() {
                                         e.stopPropagation();
                                         setIsPhoneEdited(true);
                                         patchUserData(patchData)
-                                    }}>Ok</Button>}
+                                    }}>Mentés</Button>}
                                 </div>
                             </div>
                             <div className={styles.deleteButton}>

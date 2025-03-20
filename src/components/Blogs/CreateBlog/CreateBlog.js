@@ -77,7 +77,7 @@ function CreateBlog({ close }) {
 
     return (
         <div className={styles.container}>
-            <div className={styles.closeButton}><CloseIcon onClick={close} /></div>
+            <div className={styles.closeButton}><CloseIcon onClick={close}/></div>
             <div>
                 <h1 className={styles.pageTitle}>Blog létrehozása</h1>
                 <form onSubmit={handleSubmit(onSubmit)}>
@@ -163,7 +163,7 @@ function CreateBlog({ close }) {
                     <div>
                         <input type="file"
                                className={styles.textInput}
-                               {...register("file", {required:"Kötelező képet feltölteni"})}
+                               {...register("file", {required: "Kötelező képet feltölteni"})}
                         />
                     </div>
                     <div>

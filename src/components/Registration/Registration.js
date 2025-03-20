@@ -7,7 +7,7 @@ import TrainerForm from "./TrainerForm/TrainerForm";
 import ClientForm from "./ClientForm/ClientForm";
 
 function Registration() {
-    const [ setUserType] = useState(true); // false == Client, true == Trainer
+    const [user, setUserType] = useState(true); // false == Client, true == Trainer
     const navigate = useNavigate();
 
     async function save(trainerFormData, loginData, clientFormData, isTrainer) {

@@ -56,18 +56,11 @@
     border-radius: 5px;
 }
 
-@media (max-width: 500px){
-    .card{
-        width: 200px !important;
-    }
 
-
-}
 
 @media (max-width: 800px){
     .card{
-        width: 400px;
-        font-size: 25px !important;
+        max-width: 460px;
     }
 
 }

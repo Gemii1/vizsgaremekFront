@@ -1,35 +1,70 @@
 import styles from './Client.module.css';
 import { Grid } from '@mui/joy';
-import { Divider, Button, Snackbar } from "@mui/material";
+import { Divider, Button, Snackbar, IconButton } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import UserContext from "../../Context/User/UserContext";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ProgramContext from "../../Context/Program/ProgramContext";
 import axios from "axios";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 function Client() {
-    const daysOfWeek = ['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek'];
     const { user, isUserLoggedIn } = useContext(UserContext);
     const { programs } = useContext(ProgramContext);
     const [snackBarSuccess, setSnackBarSuccess] = useState(false);
     const [snackBarError, setSnackBarError] = useState(false);
     const [registeredPrograms, setRegisteredPrograms] = useState({});
+    const [currentWeekStart, setCurrentWeekStart] = useState(new Date()); // Aktuális hét kezdete
 
     const closeSnackBarSuccess = () => setSnackBarSuccess(false);
     const openSnackBarSuccess = () => setSnackBarSuccess(true);
-
     const closeSnackBarError = () => setSnackBarError(false);
     const openSnackBarError = () => setSnackBarError(true);
 
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
+    const getWeekDays = (startDate) => {
+        const days = [];
+        const start = new Date(startDate);
+        start.setDate(start.getDate() - start.getDay() + 1);
+        for (let i = 0; i < 5; i++) { // Csak munkanapok (Hétfő-Péntek)
+            const day = new Date(start);
+            day.setDate(start.getDate() + i);
+            days.push(day);
+        }
+        return days;
+    };
+
+    const [weekDays, setWeekDays] = useState(getWeekDays(currentWeekStart));
+
+    const handlePrevWeek = () => {
+        const newStart = new Date(currentWeekStart);
+        newStart.setDate(newStart.getDate() - 7);
+        setCurrentWeekStart(newStart);
+        setWeekDays(getWeekDays(newStart));
+    };
+
+    const handleNextWeek = () => {
+        const newStart = new Date(currentWeekStart);
+        newStart.setDate(newStart.getDate() + 7);
+        setCurrentWeekStart(newStart);
+        setWeekDays(getWeekDays(newStart));
+    };
+
+    const formatDate = (date) => {
         const options = { weekday: 'long' };
         const dayName = new Intl.DateTimeFormat('hu-HU', options).format(date);
         return dayName.charAt(0).toUpperCase() + dayName.slice(1);
     };
 
-    const groupedPrograms = programs.reduce((acc, program) => {
-        const day = formatDate(program.startTime);
+    const filteredPrograms = programs.filter(program => {
+        const programDate = new Date(program.startTime);
+        const weekStart = new Date(weekDays[0]);
+        const weekEnd = new Date(weekDays[4]);
+        return programDate >= weekStart && programDate <= weekEnd;
+    });
+
+    const groupedPrograms = filteredPrograms.reduce((acc, program) => {
+        const day = formatDate(new Date(program.startTime));
         if (!acc[day]) {
             acc[day] = [];
         }
@@ -54,11 +89,11 @@ function Client() {
         }
     };
 
-    const  handleUserCancellationToProgram = async (program) => {
+    const handleUserCancellationToProgram = async (program) => {
         try {
             const response = await axios.delete(`/program/${program.id}/clients/${user.id}`);
             await getProgramClients(program);
-            openSnackBarSuccess()
+            openSnackBarSuccess();
         } catch (error) {
             openSnackBarError();
         }
@@ -83,7 +118,7 @@ function Client() {
         programs.forEach(program => {
             getProgramClients(program);
         });
-    }, []);
+    }, [programs]);
 
     const handleApplication = (isLoggedIn, program) => {
         if (isLoggedIn && program.status === "UPCOMING" && !registeredPrograms[program.id]) {
@@ -92,12 +127,12 @@ function Client() {
                     Jelentkezés
                 </Button>
             );
-        }else if (isLoggedIn && program.status === "UPCOMING" && registeredPrograms[program.id]){
+        } else if (isLoggedIn && program.status === "UPCOMING" && registeredPrograms[program.id]) {
             return (
                 <Button variant='outlined' color='error' sx={{ fontSize: '1.3rem' }} onClick={() => handleUserCancellationToProgram(program)}>
                     Lemondás
                 </Button>
-            )
+            );
         }
         return null;
     };
@@ -109,7 +144,7 @@ function Client() {
                 color = 'green';
                 statusText = 'Közelgő';
                 break;
-            case "IN_PROGRESS":
+            case "ONGOING":
                 color = 'orange';
                 statusText = 'Folyamatban lévő';
                 break;
@@ -128,67 +163,90 @@ function Client() {
         );
     };
 
+    const handleProgramType = (programType) => {
+        let typeText;
+        switch (programType) {
+            case "FUNCTIONAL_TRAINING":
+                typeText = "Funkcionális edzés";
+                break;
+            case "B_FIT":
+                typeText = "B edzés";
+                break;
+            case "PILATES":
+                typeText = "Pilates edzés";
+                break;
+            default:
+                return null;
+        }
+        return <>{typeText}</>;
+    };
+
     return (
         <div className={styles.calendar}>
-            <Grid container rowSpacing={1} spacing={2} columns={{ xs: 2, sm: 2, md: 12 }}>
-                {daysOfWeek.map((day) => (
-                    <Grid item xs={2.4} key={day} className={styles.days}>
-                        <div className={styles.program}>
-                            <h2>{day}</h2>
-                            <Divider color='black' />
-                            <div className={styles.programOnDay}>
-                                <p>Programok:</p>
-                                {groupedPrograms[day] ?
-                                    groupedPrograms[day].map((program, index) => (
-                                        <div key={index}>
-                                            <Divider />
-                                            <div className={styles.status}>
-                                                {handleStatus(program.status)}
+            <meta name="viewport" content="width=720"/>
+            <div className={styles.calendarWeek}>
+                <IconButton onClick={handlePrevWeek}>
+                    <ArrowBackIcon/>
+                </IconButton>
+                <h3>{`${weekDays[0].toLocaleDateString('hu-HU')} - ${weekDays[4].toLocaleDateString('hu-HU')}`}</h3>
+                <IconButton onClick={handleNextWeek}>
+                    <ArrowForwardIcon/>
+                </IconButton>
+            </div>
+            <Grid container rowSpacing={1} spacing={2} columns={{xs: 2, sm: 2, md: 12}}>
+                {weekDays.map((date) => {
+                    const day = formatDate(date);
+                    return (
+                        <Grid item xs={2.4} key={day} className={styles.days}>
+                            <div className={styles.program}>
+                                <h2>{day}</h2>
+                                <Divider color='black'/>
+                                <div className={styles.programOnDay}>
+                                    <p>Programok:</p>
+                                    {groupedPrograms[day] ? (
+                                        groupedPrograms[day].map((program, index) => (
+                                            <div key={index}>
+                                                <Divider/>
+                                                <div className={styles.status}>
+                                                    {handleStatus(program.status)}
+                                                </div>
+                                                <div className={styles.dates}>
+                                                    <div><h3>Edzés: </h3> {handleProgramType(program.programType)}</div>
+                                                    <div><h3>Edző: </h3> {program.trainer.name}</div>
+                                                    <div><h3>Kezdés: </h3> {getTime(program.startTime)}</div>
+                                                    <div><h3>Vége: </h3> {getTime(program.endTime)}</div>
+                                                    <div><h3>Ár: </h3> {program.price} Ft</div>
+                                                </div>
+                                                <div className={styles.signUpButton}>
+                                                    {handleApplication(isUserLoggedIn, program)}
+                                                </div>
                                             </div>
-                                            <div className={styles.dates}>
-                                                <div><h3>Edzés : </h3> {program.programType}</div>
-                                                <div><h3>Edző : </h3> {program.trainer.name}</div>
-                                                <div><h3>Kezdés : </h3> {getTime(program.startTime)}</div>
-                                                <div><h3>Vége : </h3> {getTime(program.endTime)}</div>
-                                                <div><h3>Ár : </h3> {program.price} Ft</div>
-                                            </div>
-                                            <div className={styles.signUpButton}>
-                                                {handleApplication(isUserLoggedIn, program)}
-                                            </div>
-                                        </div>
-                                    ))
-                                    :
-                                    <>
-                                        <Divider />
-                                        <div>Nincs program</div>
-                                    </>
-                                }
+                                        ))
+                                    ) : (
+                                        <>
+                                            <Divider/>
+                                            <div>Nincs program</div>
+                                        </>
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    </Grid>
-                ))}
+                        </Grid>
+                    );
+                })}
             </Grid>
             <Snackbar
                 open={snackBarSuccess}
                 autoHideDuration={6000}
                 onClose={closeSnackBarSuccess}
                 message="Sikeres!"
-                sx={{
-                    '& .MuiSnackbarContent-root': {
-                        backgroundColor: 'green',
-                    }
-                }}
+                sx={{'& .MuiSnackbarContent-root': {backgroundColor: 'green'}}}
             />
             <Snackbar
                 open={snackBarError}
                 autoHideDuration={6000}
                 onClose={closeSnackBarError}
                 message="Sikertelen próbálkozás!"
-                sx={{
-                    '& .MuiSnackbarContent-root': {
-                        backgroundColor: 'red',
-                    }
-                }}
+                sx={{'& .MuiSnackbarContent-root': {backgroundColor: 'red'}}}
             />
         </div>
     );

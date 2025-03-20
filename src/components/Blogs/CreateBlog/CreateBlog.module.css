@@ -1,16 +1,20 @@
 .container{
-    width: 60vw;
+    min-width: 60vw;
+    max-width: 80vw;
     overflow: hidden;
-    height: 65vh;
+    min-height: 50vh;
     background-color: #fff;
     margin: 100px auto;
     border-radius: 10px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
 }
 
 .closeButton{
     position: fixed;
-    top:100px ;
-    right: 20vw;
+    top:95px ;
+    right: 10vw;
     margin: 10px;
     background-color: aliceblue;
 }
@@ -52,6 +56,13 @@
 @media (max-width: 800px) {
     .container{
         height: 33vh;
+    }
+    .container form{
+        font-size: 20px !important;
+    }
+    .textInputs > *{
+        font-size: 20px !important;
+
     }
 
 }
