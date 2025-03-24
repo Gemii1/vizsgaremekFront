@@ -18,28 +18,11 @@ function App() {
     //Login felhasználó név és jelszó Trainerhez: edzo, edzo
     //Login felhasználó név és jelszó Klienshez: kliens, kliens
 
-
     //Rating--
     //Program státusz nem frissül, ha letellik akkor nem írja át
     //Meg kéne egy olyan hogy az összes programot törli a hétről
     //Ha a trainer hozott létre blogot vagy programot ne lehessen törölni
     //Törlésnél confirmation-ök megírása
-
-
-    const [trainersTest,setTrainerTest] = useState([])
-
-    useEffect(()=>{
-        //init
-      axios.get('/trainer/').then(({data})=>{
-        const trainer = data;
-        setTrainerTest(trainer);
-      }).catch((error)=>{
-          console.log(error)
-      });
-
-    },[])
-
-
 
   return (
    <div>
@@ -47,8 +30,8 @@ function App() {
            <BlogProvider>
                <BrowserRouter>
                    <Routes>
-                       <Route index element={<LandingPage trainers={trainersTest}/>} />
-                       <Route path="/landingPage" element={<LandingPage trainers={trainersTest}/>} />
+                       <Route index element={<LandingPage />} />
+                       <Route path="/landingPage" element={<LandingPage/>} />
                        <Route path="/login" element={<LoginPage/>} />
                        <Route path="/registration" element={<Registration />} />
                        <Route path="/blogs" element={<Blogs  />} />

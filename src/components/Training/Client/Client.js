@@ -8,6 +8,7 @@ import ProgramContext from "../../Context/Program/ProgramContext";
 import axios from "axios";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import Rating from '@mui/material/Rating';
 
 function Client() {
     const { user, isUserLoggedIn } = useContext(UserContext);
@@ -15,7 +16,8 @@ function Client() {
     const [snackBarSuccess, setSnackBarSuccess] = useState(false);
     const [snackBarError, setSnackBarError] = useState(false);
     const [registeredPrograms, setRegisteredPrograms] = useState({});
-    const [currentWeekStart, setCurrentWeekStart] = useState(new Date()); // Aktuális hét kezdete
+    const [currentWeekStart, setCurrentWeekStart] = useState(new Date());
+    const [participatedPrograms, setParticipatedPrograms] = useState({});
 
     const closeSnackBarSuccess = () => setSnackBarSuccess(false);
     const openSnackBarSuccess = () => setSnackBarSuccess(true);
@@ -26,7 +28,7 @@ function Client() {
         const days = [];
         const start = new Date(startDate);
         start.setDate(start.getDate() - start.getDay() + 1);
-        for (let i = 0; i < 5; i++) { // Csak munkanapok (Hétfő-Péntek)
+        for (let i = 0; i < 5; i++) {
             const day = new Date(start);
             day.setDate(start.getDate() + i);
             days.push(day);
@@ -81,7 +83,7 @@ function Client() {
 
     const handleUserRegistrationToProgram = async (program) => {
         try {
-            const response = await axios.post(`/program/${program.id}/clients/${user.id}`);
+            await axios.post(`/program/${program.id}/clients/${user.id}`);
             await getProgramClients(program);
             openSnackBarSuccess();
         } catch (error) {
@@ -91,7 +93,7 @@ function Client() {
 
     const handleUserCancellationToProgram = async (program) => {
         try {
-            const response = await axios.delete(`/program/${program.id}/clients/${user.id}`);
+            await axios.delete(`/program/${program.id}/clients/${user.id}`);
             await getProgramClients(program);
             openSnackBarSuccess();
         } catch (error) {
@@ -114,11 +116,36 @@ function Client() {
         }
     };
 
+    // Ellenőrzi, hogy a kliens részt vett-e a programon
+    const wasOnProgram = async (clientId, programId) => {
+        try {
+            const response = await axios.get(`/program/${programId}/client-list`);
+            return response.data.some(client => client.id === clientId);
+        } catch (error) {
+            console.error("Hiba a program résztvevőinek ellenőrzésekor:", error);
+            return false;
+        }
+    };
+
     useEffect(() => {
         programs.forEach(program => {
             getProgramClients(program);
         });
     }, [programs]);
+
+    const handleRatingSubmit = async (trainerId, score) => {
+        try {
+            if (score > 0) {
+                await axios.post(`/trainer/${trainerId}/rating`, {
+                    score: score
+                });
+                openSnackBarSuccess();
+            }
+        } catch (error) {
+            console.error("Hiba az értékelés beküldésekor:", error);
+            openSnackBarError();
+        }
+    };
 
     const handleApplication = (isLoggedIn, program) => {
         if (isLoggedIn && program.status === "UPCOMING" && !registeredPrograms[program.id]) {
@@ -132,6 +159,21 @@ function Client() {
                 <Button variant='outlined' color='error' sx={{ fontSize: '1.3rem' }} onClick={() => handleUserCancellationToProgram(program)}>
                     Lemondás
                 </Button>
+            );
+        } else if (isLoggedIn && program.status === "COMPLETED" && participatedPrograms[program.id]) {
+            return (
+                <div >
+                    <Rating
+                        name={`rating-${program.id}`}
+                        defaultValue={0}
+                        onChange={(event, newValue) => {
+                            if (newValue) {
+                                handleRatingSubmit(program.trainer.id, newValue);
+                            }
+                        }}
+                        size="medium"
+                    />
+                </div>
             );
         }
         return null;
@@ -183,30 +225,30 @@ function Client() {
 
     return (
         <div className={styles.calendar}>
-            <meta name="viewport" content="width=720"/>
+            <meta name="viewport" content="width=720" />
             <div className={styles.calendarWeek}>
                 <IconButton onClick={handlePrevWeek}>
-                    <ArrowBackIcon/>
+                    <ArrowBackIcon />
                 </IconButton>
                 <h3>{`${weekDays[0].toLocaleDateString('hu-HU')} - ${weekDays[4].toLocaleDateString('hu-HU')}`}</h3>
                 <IconButton onClick={handleNextWeek}>
-                    <ArrowForwardIcon/>
+                    <ArrowForwardIcon />
                 </IconButton>
             </div>
-            <Grid container rowSpacing={1} spacing={2} columns={{xs: 2, sm: 2, md: 12}}>
+            <Grid container rowSpacing={1} spacing={2} columns={{ xs: 2, sm: 2, md: 12 }}>
                 {weekDays.map((date) => {
                     const day = formatDate(date);
                     return (
                         <Grid item xs={2.4} key={day} className={styles.days}>
                             <div className={styles.program}>
                                 <h2>{day}</h2>
-                                <Divider color='black'/>
+                                <Divider color='black' />
                                 <div className={styles.programOnDay}>
                                     <p>Programok:</p>
                                     {groupedPrograms[day] ? (
                                         groupedPrograms[day].map((program, index) => (
                                             <div key={index}>
-                                                <Divider/>
+                                                <Divider />
                                                 <div className={styles.status}>
                                                     {handleStatus(program.status)}
                                                 </div>
@@ -224,7 +266,7 @@ function Client() {
                                         ))
                                     ) : (
                                         <>
-                                            <Divider/>
+                                            <Divider />
                                             <div>Nincs program</div>
                                         </>
                                     )}
@@ -239,14 +281,14 @@ function Client() {
                 autoHideDuration={6000}
                 onClose={closeSnackBarSuccess}
                 message="Sikeres!"
-                sx={{'& .MuiSnackbarContent-root': {backgroundColor: 'green'}}}
+                sx={{ '& .MuiSnackbarContent-root': { backgroundColor: 'green' } }}
             />
             <Snackbar
                 open={snackBarError}
                 autoHideDuration={6000}
                 onClose={closeSnackBarError}
                 message="Sikertelen próbálkozás!"
-                sx={{'& .MuiSnackbarContent-root': {backgroundColor: 'red'}}}
+                sx={{ '& .MuiSnackbarContent-root': { backgroundColor: 'red' } }}
             />
         </div>
     );

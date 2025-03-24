@@ -43,7 +43,6 @@ function CreateBlog({ close }) {
             image: 'Images/etrendKep2.jpg',
         };
 
-
         try {
             const response =  await axios.post('/blog/', formattedData);
             await savePictureToBlog(response, data.file[0]);

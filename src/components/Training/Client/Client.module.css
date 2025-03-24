@@ -14,7 +14,7 @@
 .program {
     text-align: center;
     padding: 15px;
-    min-width: 200px;
+    min-width: 100px;
     max-width: 400px;
     min-height: 100px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -52,10 +52,11 @@
 .signUpButton{
     margin: 20px;
 }
-@media (max-width: 800px){
+@media (max-width: 900px){
     .calendar{
         font-size: 25px;
         margin: 55px;
+        justify-content: center;
     }
     .dates{
         margin: 15px;
@@ -69,6 +70,15 @@
         margin-bottom: 10px;
         margin-top: 10px;
     }
+    .days{
+        display: flex;
+        justify-content: center;
+    }
+    .program{
+        min-width: 300px;
+    }
+
+
 
 }
 

@@ -1,6 +1,6 @@
 import styles from './LandingPage.module.css';
 import Navbar from '../Navbar/Navbar';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     AspectRatio,
     Card,
@@ -15,11 +15,26 @@ import { useNavigate } from "react-router";
 import { useContext } from "react";
 import UserContext from "../Context/User/UserContext";
 import StarRateIcon from '@mui/icons-material/StarRate';
+import axios from "axios";
 
 
-function LandingPage({ trainers }) {
+function LandingPage() {
     const navigate = useNavigate();
     const { isUserLoggedIn } = useContext(UserContext);
+    const [trainers,setTrainer]= useState([]);
+
+    const fetchTrainers = async () => {
+        axios.get('/trainer/').then(({data})=>{
+            const trainer = data;
+            setTrainer(trainer);
+        }).catch((error)=>{
+            console.log(error)
+        });
+    }
+
+    useEffect(() => {
+        fetchTrainers();
+    }, []);
 
 
 
@@ -56,14 +71,14 @@ function LandingPage({ trainers }) {
     return (
         <>
             {/* Font import */}
-            <link href="https://fonts.googleapis.com/css?family=Kalam" rel="stylesheet" />
+            <link href="https://fonts.googleapis.com/css?family=Inter" rel="stylesheet" />
             <meta name="viewport" content="width=720" />
-            <div style={{ fontFamily: "Kalam" }}>
+            <div style={{ fontFamily: "Inter" }}>
                 <Navbar />
                 <section className={styles.banner}>
                     <div>
                         <div className={styles.registration}>
-                            <h3 style={{ margin: '10px' }}>Eddz velünk</h3>
+                            <h3 style={{ margin: '10px' }}>Eddz velünk!</h3>
                             <p className={styles.quote}>„Nem a kő súlya az, ami számít. Hanem az ok, amiért felemeled.” --Hugo Girard</p>
                             {handleRegButton()}
                         </div>
@@ -78,6 +93,7 @@ function LandingPage({ trainers }) {
                                 {trainers.length > 0 ? (
                                     trainers.map((trainer, index) =>{
                                         if (index<5) {
+                                            console.log(trainer);
                                             return (
                                                 <div className={styles.cards} key={trainer.id}>
                                                     <Card variant="outlined" sx={{width: 320}}>

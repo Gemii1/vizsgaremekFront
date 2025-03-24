@@ -21,11 +21,10 @@ function LoginPage() {
 
     const onSubmit = async (data) => {
         //Ideiglenes bejelentkezés
-        console.log(data);
         if (data.userName === "edzo" && data.password === "edzo") {
             try {
                 //Test Trainer
-                const response = await axios.get(`/trainer/${102}`);
+                const response   = await axios.get(`/trainer/${102}`);
                 setUser(response.data);
                 setIsUserLoggedIn(true);
                 setUserType(true);
@@ -38,7 +37,7 @@ function LoginPage() {
         }else if (data.userName === "kliens" && data.password === "kliens"){
             try {
                 //Test Client
-                const response = await axios.get(`/client/${3}`);
+                const response = await axios.get(`/client/${2}`);
                 setUser(response.data);
                 setIsUserLoggedIn(true);
                 setUserType(false);
@@ -49,6 +48,11 @@ function LoginPage() {
                 setIsUserLoggedIn(false);
                 openSnackBarError();
             }
+        }else{
+            openSnackBarError();
+            return(
+                <span>Nemsdadasdasdsdsad</span>
+            );
         }
     };
 

@@ -9,7 +9,7 @@ body{
 
 .banner{
     background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 99%, #dcdcdc 100%),
-    url('../../../public/Images/asd.jpg') no-repeat center;
+    url('../../../public/Images/hatter.png') no-repeat center;
     background-size: cover;
     background-repeat: no-repeat;
     position: relative;
