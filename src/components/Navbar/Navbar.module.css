@@ -44,7 +44,7 @@
 .nav Button{
     padding: 14px 16px;
 }
-.pageBlog:hover, .pageTraining:hover{
+.pageBlog:hover, .pageTraining:hover, .pageAdmin:hover {
     color: lightgray;
 }
 
@@ -138,7 +138,7 @@
         margin: 10px ! important;
 
     }
-    .pageBlog, .pageTraining{
+    .pageBlog, .pageTraining, .pageAdmin{
         margin: 10px;
     }
 

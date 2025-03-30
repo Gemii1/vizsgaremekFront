@@ -15,7 +15,7 @@ function Training() {
     }, []);
 
     const handleUser = () => {
-        return userType ? <Trainer /> : <Client />;
+        return userType==='TRAINER' ? <Trainer /> : <Client />;
     };
 
     return (

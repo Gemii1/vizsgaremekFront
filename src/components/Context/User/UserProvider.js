@@ -3,17 +3,18 @@ import UserContext from './UserContext';
 import axios from "axios";
 
 const UserProvider = ({ children }) => {
-    const [userType, setUserType] = useState(false);
+    const [userType, setUserType] = useState('');
     const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
     const [user, setUser] = useState([
         {email: ''},
     ]);
     const fetchUser = async (usertype) => {
        try{
-           if (usertype){
+           if (usertype ==='TRAINER'){
                const response = await axios.get(`/trainer/${user.id}`);
                setUser(response.data);
-           }else {
+           }
+           if (usertype==='CLIENT') {
                const response = await axios.get(`/client/${user.id}`);
                setUser(response.data);
            }
@@ -26,10 +27,11 @@ const UserProvider = ({ children }) => {
     const deleteUser = async (usertype) => {
 
         try{
-            if (usertype){
+            if (usertype==='TRAINER'){
                 const response = await axios.delete(`/trainer/${user.id}`);
                 setUser(response.data);
-            }else if(!usertype){
+            }
+            if(usertype==='CLIENT'){
                 const response = await axios.delete(`/client/${user.id}`);
                 setUser(response.data);
             }

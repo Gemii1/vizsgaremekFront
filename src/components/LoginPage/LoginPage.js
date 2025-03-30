@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import UserContext from "../Context/User/UserContext";
+import AuthContext from "../Context/Auth/AuthContext";
 
 function LoginPage() {
     const navigate = useNavigate();
@@ -19,40 +20,19 @@ function LoginPage() {
         formState: { errors },
     } = useForm();
 
-    const onSubmit = async (data) => {
-        //Ideiglenes bejelentkezés
-        if (data.userName === "edzo" && data.password === "edzo") {
-            try {
-                //Test Trainer
-                const response   = await axios.get(`/trainer/${102}`);
-                setUser(response.data);
-                setIsUserLoggedIn(true);
-                setUserType(true);
-                navigate("/landingPage")
-            } catch (err) {
-                console.log(err);
-                setIsUserLoggedIn(false);
-                openSnackBarError();
-            }
-        }else if (data.userName === "kliens" && data.password === "kliens"){
-            try {
-                //Test Client
-                const response = await axios.get(`/client/${3}`);
-                setUser(response.data);
-                setIsUserLoggedIn(true);
-                setUserType(false);
-                navigate("/landingPage")
+    const {login} = useContext(AuthContext);
 
-            } catch (err) {
-                console.log(err);
-                setIsUserLoggedIn(false);
-                openSnackBarError();
-            }
-        }else{
+    const onSubmit = async (data) => {
+        try {
+            const loginData = await login(data.email, data.password);
+            setUserType(loginData.role);
+            setIsUserLoggedIn(true);
+            //nincs még beállítva a user, mert nincs auth/me végpont
+            const userResponse = await axios.get(`/trainer/${101}`)
+            setUser(userResponse.data);
+            navigate('/landingPage')
+        } catch (error) {
             openSnackBarError();
-            return(
-                <span>Nemsdadasdasdsdsad</span>
-            );
         }
     };
 
@@ -65,8 +45,8 @@ function LoginPage() {
                         <div>
                             <input
                                 placeholder="Felhasználó név"
-                                className={styles.userName}
-                                {...register("userName", {
+                                className={styles.email}
+                                {...register("email", {
                                     required: "Felhasználó név kötelező!",
                                     minLength: {
                                         value: 2,
@@ -115,7 +95,7 @@ function LoginPage() {
                 open={snackBarError}
                 autoHideDuration={6000}
                 onClose={closeSnackBarError}
-                message="Sikertelen bejelentkezés!"
+                message="Sikertelen bejelentkezés! Hibás felhasználó név vagy jelszó!"
                 sx={{
                     '& .MuiSnackbarContent-root': {
                         backgroundColor: 'red',

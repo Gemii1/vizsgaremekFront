@@ -59,7 +59,7 @@ function CreateBlog({ close }) {
     const savePictureToBlog = async (response, file) => {
         try {
             const formData = new FormData();
-            formData.append('file', file); // Hozzáadjuk a fájlt a FormData-hoz
+            formData.append('file', file);
 
             const valasz = await axios.post(`/blog/upload-picture/${response.data.id}`, formData, {
                 headers: {

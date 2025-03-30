@@ -21,7 +21,7 @@ function LandingPage() {
     const navigate = useNavigate();
     const { isUserLoggedIn } = useContext(UserContext);
     const [trainers, setTrainers] = useState([]);
-    const [trainerImages, setTrainerImages] = useState({}); // Store image URLs by trainer ID
+    const [trainerImages, setTrainerImages] = useState({});
 
     // Fetch trainers
     const fetchTrainers = async () => {

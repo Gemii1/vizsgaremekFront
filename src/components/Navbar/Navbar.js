@@ -25,29 +25,30 @@ function Navbar() {
     const [snackBarError, setSnackBarError] = useState(false);
     const [patchData,setPatchData] = useState({});
     const trainerQualifications = ["Personal Trainer", "Fitness Instructor", "Pilates Instructor", "Crossfit Coach", "TRX Trainer", "Pound Trainer", "Other"];
-
-
-
     const handleOpenInfo = () => setOpenInfoModal(true);
     const handleCloseInfo = () => setOpenInfoModal(false);
     const closeSnackBarSuccess = () => setSnackBarSuccess(false);
     const openSnackBarSuccess = () => setSnackBarSuccess(true);
     const closeSnackBarError = () => setSnackBarError(false);
     const openSnackBarError = () => setSnackBarError(true);
-    const whichUser = (userType) => userType ? <>Edző</> : <>Kliens</>;
+    const whichUser = (userType) => userType==='TRAINER' ? <>Edző</> : <>Kliens</>;
+
     const handleLogout = () => {
         navigate('/landingPage');
         setIsUserLoggedIn(false);
-        setUserType(false);
+        setUserType('');
+        localStorage.removeItem('accessToken');
+        axios.defaults.headers.common['Authorization'] = '';
     };
+
     const isThereQualification = () => {
-        if (userType) {
+        if (userType ==='TRAINER') {
             return (
                 <div className={styles.info}>
                     <h4>Végzettség:</h4>
                     <Select
-                        className={styles.textFields, styles.editInputs}
-                        className={styles.textFields, styles.editInputs}
+                        className={styles.textFields}
+                        className={styles.editInputs}
                         disabled={isSelectEdited}
                         defaultValue={user.qualification}
                         onChange={handleChange}
@@ -135,10 +136,9 @@ function Navbar() {
 
     const patchUserData = async (data)=>{
         try {
-            if (userType){
-
+            if (userType ==='TRAINER'){
                 await axios.patch(`/trainer/${user.id}`,patchData);
-            }else if(!userType){
+            }else if(userType==='CLIENT'){
                 await axios.patch(`/client/${user.id}`,patchData);
             }
             openSnackBarSuccess();
@@ -149,6 +149,13 @@ function Navbar() {
 
         await fetchUser(userType);
     }
+    const handleAdminPage = (userType)=>{
+        if(userType==='ADMIN'){
+            return(
+                <div className={styles.pageAdmin} onClick={()=>navigate("/adminPage")}>Felhasználók</div>
+            );
+        }
+    }
 
 
     useEffect(() => {
@@ -156,6 +163,23 @@ function Navbar() {
             setEmail(user.login.email);
         }
     }, [user]);
+
+    const handleDeleteButton=(userType)=>{
+        if(userType==='CLIENT'){
+            return (
+                <div className={styles.deleteButton}>
+                    <Button color="error" onClick={() => {
+                        deleteUser(userType);
+                        navigate("/landingPage");
+                        setIsUserLoggedIn(false);
+                        handleCloseInfo();
+                    }}>Fiók törlése</Button>
+                </div>
+            )
+        }
+    }
+
+
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <div className={styles.body}>
@@ -165,6 +189,7 @@ function Navbar() {
                             <FitnessCenterOutlinedIcon fontSize='large'/>
                         </div>
                         <div className={styles.pages}>
+                            {handleAdminPage('ADMIN')}
                             <div className={styles.pageBlog} onClick={() => navigate("/blogs")}>Blogok</div>
                             <div className={styles.pageTraining} onClick={() => navigate("/training")}>Programok</div>
                             {handleLoginNavbar()}
@@ -239,14 +264,7 @@ function Navbar() {
                                     }}>Mentés</Button>}
                                 </div>
                             </div>
-                            <div className={styles.deleteButton}>
-                                <Button color="error" onClick={()=>{
-                                    deleteUser(userType);
-                                    navigate("/landingPage");
-                                    setIsUserLoggedIn(false);
-                                    handleCloseInfo();
-                                }}>Fiók törlése</Button>
-                            </div>
+                            {handleDeleteButton(userType)}
                         </div>
 
                     </div>

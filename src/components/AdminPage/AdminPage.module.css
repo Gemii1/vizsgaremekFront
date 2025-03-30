@@ -1,0 +1,85 @@
+.adminPage {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 50px;
+    font-family: Arial, sans-serif;
+}
+
+h2 {
+    font-size: 24px;
+    color: #333;
+}
+
+.subtitle {
+    font-size: 16px;
+    color: #666;
+    font-weight: normal;
+}
+
+.section {
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.sectionHeader {
+    background-color: #f5f5f5;
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    color: #333;
+}
+
+.toggleIcon {
+    font-size: 12px;
+}
+
+.sectionContent {
+    padding: 10px;
+}
+
+.endpoint {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.endpoint:last-child {
+    border-bottom: none;
+}
+
+.deleteBtn {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.deleteBtn:disabled {
+    background-color: #ff9999;
+    cursor: not-allowed;
+}
+
+.endpointPath {
+    color: #333;
+    font-family: monospace;
+    margin-right: 10px;
+}
+
+.endpointDescription {
+    flex: 1;
+    color: #666;
+}
+
+.status {
+    color: #999;
+    font-style: italic;
+}
