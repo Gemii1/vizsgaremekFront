@@ -7,9 +7,13 @@ import BlogContext from "../../Context/Blog/BlogContext";
 
 function OpenedBlog() {
     const location = useLocation();
-    const blog = location.state;
+    const blogImages = location.state.blogImages;
     const { blogs } = useContext(BlogContext);
     const navigate = useNavigate();
+    const blog = location.state?.blog || location.state?.moreBlog;
+
+    const imageUrl = blogImages[blog.id] || '';
+
 
     return (
         <div className={styles.test}>
@@ -20,7 +24,7 @@ function OpenedBlog() {
                     <div className={styles.textContent}>{blog.headerText}</div>
                     <div className={styles.kep}>
                         <img
-                            src={blog.image || "https://www.helpinhearing.co.uk/wp-content/uploads/2019/01/image-placeholder-500x500.jpg"}
+                            src={imageUrl || "https://www.helpinhearing.co.uk/wp-content/uploads/2019/01/image-placeholder-500x500.jpg"}
                             alt="Blog Image"
                         />
                     </div>
@@ -39,7 +43,7 @@ function OpenedBlog() {
                                 return (
                                     <div key={index} className={styles.blog}>
                                         <Card variant="outlined" className={styles.card}>
-                                            <CardOverflow onClick={() => navigate("/openedBlog", { state: moreBlog })}>
+                                            <CardOverflow onClick={() => navigate("/openedBlog", { state: {moreBlog}})}>
                                                 <AspectRatio ratio="1.7" className={styles.moreBlogImage}>
                                                     <img
                                                         src={moreBlog.image}
@@ -48,7 +52,7 @@ function OpenedBlog() {
                                                     />
                                                 </AspectRatio>
                                             </CardOverflow>
-                                            <CardContent onClick={() => navigate("/openedBlog", { state: moreBlog })}>
+                                            <CardContent onClick={() => navigate("/openedBlog", { state: {moreBlog} })}>
                                                 <Typography level="title-xl" sx={{ fontWeight: 'xl', fontSize: '1.3rem' }}>
                                                     {moreBlog.title}
                                                 </Typography>

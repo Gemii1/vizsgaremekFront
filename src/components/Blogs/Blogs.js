@@ -97,7 +97,7 @@ function Blogs() {
     };
 
     const isUserTypeTrainer = (userType, blog) => {
-        if (userType) {
+        if (userType==='TRAINER') {
             return (
                 <div className={styles.trainerButtons}>
                     <EditIcon onClick={() => {
@@ -112,7 +112,7 @@ function Blogs() {
     };
 
     const handleCreateButton = (userType) => {
-        if (userType) {
+        if (userType==='TRAINER') {
             return (
                 <div className={styles.buttons}>
                     <Fab size="small" color="info" aria-label="add" onClick={() => setCreateBlog(true)}>
@@ -141,7 +141,7 @@ function Blogs() {
                                     return (
                                         <div key={index} className={styles.blog}>
                                             <Card variant="outlined" className={styles.card}>
-                                                <CardOverflow onClick={() => navigate("/openedBlog", { state: blog })}>
+                                                <CardOverflow onClick={() => navigate("/openedBlog", { state: {blog,blogImages}})}>
                                                     <AspectRatio ratio="1.6">
                                                         {isLoadingImages ? (
                                                             <Typography>Loading image...</Typography>
