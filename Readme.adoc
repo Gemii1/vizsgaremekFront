@@ -1,0 +1,131 @@
+= Fitness Weboldal README
+:toc: left
+:sectnums:
+:icons: font
+== Összegzés icon:info-circle[]
+A fitness weboldal egy olyan platform, amelyet mi, a csapat – Nagy Kristóf, Vass Dániel és Gadnai Geminián – fejlesztettünk, hogy támogassuk az egészséges életmódot és a közösségi edzéstervezést. Az alkalmazás lehetővé teszi kliensek számára, hogy edzésterveket böngésszenek és jelentkezzenek rájuk, edzők számára, hogy programokat hozzanak létre és kezeljenek, valamint adminisztrátorok számára, hogy felügyeljék az edzőket. A blogrendszer inspirációt nyújt, és a lapozható naptár segít az edzések időzítésében. A projektet GitHub segítségével fejlesztettük, biztosítva a stabil és összehangolt munkafolyamatot.
+
+=== Főbb funkciók
+icon:user[] Kliensek: Edzéstervek böngészése, jelentkezés, edzők értékelése.
+
+icon:chalkboard-teacher[] Edzők: Edzéstervek létrehozása, szerkesztése, törlése; blogok írása.
+
+icon:user-shield[] Adminisztrátorok: Edzők kezelése, törlése (kirúgása) az admin panelen keresztül.
+
+icon:blog[] Blogrendszer: Blogok olvasása, írása (edzők számára).
+
+icon:mobile-alt[] Reszponzív dizájn: Az oldal mobil- és asztali nézetben is jól működik.
+
+== Használt Technológiák icon:tools[]
+A projekt fejlesztése során a következő technológiákat és eszközöket használtuk:
+
+=== Frontend icon:desktop[]
+icon:react[] React: A felhasználói felület építéséhez (react).
+
+icon:flask[] React Testing Library: Komponensek teszteléséhez.
+
+icon:code[] Jest: Egységtesztek futtatásához.
+
+icon:paint-brush[] CSS Modules: Stílusok kezelésére (pl. AdminPage.module.css).
+
+icon:cubes[] Material-UI: UI komponensekhez (pl. snackbarok, gombok).
+
+=== Backend icon:server[]
+icon:leaf[] Spring Boot: A backend API fejlesztéséhez.
+
+icon:java[] Java: A backend logika implementálásához.
+
+icon:box[] Maven: A backend függőségek kezelésére.
+
+icon:database[] Liquibase: Adatbázis sémák kezelésére és inicializálására.
+
+icon:database[] MySQL: Adatbázis a backend számára (kötelező).
+
+=== Backend Kommunikáció icon:exchange-alt[]
+icon:cloud[] Axios: HTTP kérések kezelésére a frontend és backend között (pl. axios.get, axios.delete).
+
+=== Verziókezelés icon:code-branch[]
+icon:github[] GitHub: Kód tárolása, együttműködés és verziókezelés.
+
+=== Fejlesztőkörnyezet icon:wrench[]
+icon:code[] IntelliJ IDEA: A Spring Boot backend futtatásához és fejlesztéséhez (kötelező).
+
+icon:node-js[] Node.js: A frontend futtatásához.
+
+icon:box-open[] npm: A frontend csomagkezeléshez.
+
+icon:database[] MySQL: Adatbázis szerver (kötelező a Liquibase miatt).
+
+== Telepítési Útmutató icon:download[]
+Az alábbi lépések segítségével telepítheted és futtathatod a fitness weboldalt a saját gépeden. A weboldal működéséhez a Spring Boot alapú backend futtatása kötelező, amelyet IntelliJ IDEA segítségével kell elindítani. A backend Liquibase-t használ a MySQL adatbázis kezelésére, ezért a MySQL telepítése és konfigurálása is szükséges. A telepítés előtt győződj meg róla, hogy a szükséges eszközök telepítve vannak.
+
+=== Előfeltételek icon:check-circle[]
+icon:node-js[] Node.js (legalább 18.x verzió) és npm telepítve a frontendhez.
+
+icon:java[] Java (legalább 21.x verzió) telepítve a backendhez.
+
+icon:box[] Maven telepítve (általában az IntelliJ IDEA-val együtt érkezik).
+
+icon:code[] IntelliJ IDEA (Community vagy Ultimate verzió) telepítve a Spring Boot backend futtatásához.
+
+icon:database[] MySQL (legalább 8.x verzió) telepítve a gépeden, mivel a Liquibase MySQL adatbázist használ.
+
+icon:git[] Git telepítve a gépeden.
+
+=== Lépések
+Klónozd a repository-t icon:code-branch[]
+Nyisd meg a terminált, és klónozd a projektet a GitHub-ról:
+bash
+
+git clone https://github.com/<your-username>/fitness-weboldal.git
+cd fitness-weboldal
+
+Megjegyzés: A repository tartalmazza mind a frontend (frontend mappa), mind a backend (backend mappa) kódját.
+
+MySQL adatbázis beállítása icon:database[]
+A backend Liquibase-t használ a MySQL adatbázis inicializálására, ezért előbb be kell állítanod a MySQL szervert.
+
+Telepítsd a MySQL-t a gépedre, ha még nincs telepítve (pl. MySQL Community Server).
+
+Indítsd el a MySQL szervert.
+
+Backend beállítása és futtatása IntelliJ IDEA-val icon:server[]
+A backend futtatása kötelező, mivel a frontend API hívásokat küld a Spring Boot szervernek.
+Nyisd meg az IntelliJ IDEA-t, és importáld a backend mappát mint Maven projektet:
+Válaszd a File > Open menüpontot, majd navigálj a fitness-weboldal/backend mappához, és nyisd meg.
+
+Az IntelliJ automatikusan felismeri a pom.xml fájlt, és importálja a projektet.
+
+Ellenőrizd a függőségeket:
+
+Az IntelliJ letölti a Maven függőségeket (pl. Spring Boot Starter Web, Liquibase). Ha nem töltődnek be automatikusan, kattints a Maven fülre az IntelliJ jobb oldali paneljén, és nyomd meg a "Reload All Maven Projects" gombot (frissítés ikon).
+
+Futtasd a backend szervert:
+
+Nyisd meg a backend/src/main/java mappában található fő Spring Boot alkalmazás fájlt (pl. FitnessApplication.java).
+
+Kattints a jobb egérgombbal a fájlra, és válaszd a Run 'FitnessApplication' opciót, vagy nyomd meg a zöld "Run" gombot az IntelliJ tetején.
+
+A szerver elindul, és a konzolon láthatod, hogy a Spring Boot alkalmazás fut a http://localhost:8080 címen (vagy az application.properties-ben megadott porton).
+
+A Liquibase automatikusan inicializálja az adatbázist a db.changelog-master.yaml fájl alapján, létrehozva a szükséges táblákat (pl. trainer, training, blog).
+
+Frontend beállítása és futtatása icon:desktop[]
+A frontend a backend API-tól függ, ezért a backendnek futnia kell, mielőtt elindítod.
+Navigálj a frontend mappába:
+
+cd frontend
+
+Telepítsd a függőségeket:
+
+npm install
+
+Indítsd el a frontend fejlesztői szervert:
+
+npm start
+
+Az alkalmazás automatikusan elindul, és a böngésződben megnyílik a http://localhost:3000 címen.
+
+== További Információk icon:book[]
+A projekt részletes dokumentációját a docs mappában találod.
+

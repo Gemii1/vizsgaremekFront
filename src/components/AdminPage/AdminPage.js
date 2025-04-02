@@ -46,17 +46,12 @@ const AdminPage = () => {
     return (
         <div className={styles.adminPage}>
             <Navbar/>
-            <h2>
-                TRAINER FUNCTIONS <span className={styles.subtitle}>Manage Trainers</span>
-            </h2>
-
-            {/* Collapsible Section for Trainer Functions */}
             <div className={styles.section}>
                 <div
                     className={styles.sectionHeader}
                     onClick={() => setIsTrainerSectionOpen(!isTrainerSectionOpen)}
                 >
-                    <span>TRAINER MANAGEMENT</span>
+                    <span>Edzők kezelése</span>
                     <span className={styles.toggleIcon}>{isTrainerSectionOpen ? '▼' : '▶'}</span>
                 </div>
 
@@ -69,16 +64,16 @@ const AdminPage = () => {
                                     onClick={() => handleDeleteTrainer(trainer.id)}
                                     disabled={!canDeleteTrainer(trainer)}
                                 >
-                                    DELETE
+                                    TÖRLÉS
                                 </button>
                                 <span className={styles.endpointPath}>/trainer/{trainer.id}</span>
                                 <span className={styles.endpointDescription}>
-                  Delete Trainer: {trainer.name} (ID: {trainer.id})
+                    Edző: {trainer.name} (ID: {trainer.id})
                 </span>
                                 <span className={styles.status}>
                   {canDeleteTrainer(trainer)
-                      ? 'Eligible for deletion (No Program or Blog)'
-                      : 'Cannot delete (Has Program or Blog)'}
+                      ? 'Nem írt blogot vagy nincs programja'
+                      : 'Írt blogot vagy van programja'}
                 </span>
                             </div>
                         ))}

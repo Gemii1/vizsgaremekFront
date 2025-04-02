@@ -160,7 +160,7 @@ function Client() {
                     Lemondás
                 </Button>
             );
-        } else if (isLoggedIn && program.status === "COMPLETED" && participatedPrograms[program.id]) {
+        } else if (isLoggedIn && program.status === "COMPLETED") {
             return (
                 <div >
                     <Rating

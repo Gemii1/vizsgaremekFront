@@ -2,9 +2,7 @@ import AuthContext from './AuthContext';
 import axios from "axios";
 import * as response from "react-router";
 function AuthProvider({children}) {
-
     let accesToken = '';
-
     const login = async (email, password) => {
         try {
             const response = await axios.post('/auth/login', { email, password });

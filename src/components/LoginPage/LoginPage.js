@@ -27,9 +27,7 @@ function LoginPage() {
             const loginData = await login(data.email, data.password);
             setUserType(loginData.role);
             setIsUserLoggedIn(true);
-            //nincs még beállítva a user, mert nincs auth/me végpont
             const userResponse = await axios.get(`/auth/me`)
-
             setUser(userResponse.data);
             navigate('/landingPage')
         } catch (error) {
