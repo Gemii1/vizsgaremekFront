@@ -1,5 +1,3 @@
-import axios from 'axios';
-import {useContext, useEffect, useState} from 'react';
 import Registration from './components/Registration/Registration';
 import LandingPage from './components/LandingPage/LandingPage';
 import { BrowserRouter, Routes, Route } from "react-router";

@@ -102,6 +102,7 @@ function Client() {
     };
 
     const getProgramClients = async (program) => {
+        /*
         try {
             const response = await axios.get(`/program/${program.id}/client-list`);
             if (response.data && Array.isArray(response.data)) {
@@ -114,6 +115,12 @@ function Client() {
         } catch (error) {
             console.error("Hiba a jelentkezők lekérése során:", error);
         }
+         */
+        setRegisteredPrograms(prevState => ({
+            ...prevState,
+            [program.id]: true
+        }));
+
     };
 
     // Ellenőrzi, hogy a kliens részt vett-e a programon

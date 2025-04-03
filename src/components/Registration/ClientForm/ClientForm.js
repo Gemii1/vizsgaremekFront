@@ -4,8 +4,9 @@ import styles from "../TrainerForm/TrainerForm.module.css";
 import PhoneInput from "react-phone-input-2";
 import 'react-phone-input-2/lib/style.css';
 import { Button } from "@mui/material";
+import axios from "axios";
 
-function ClientForm({ save }) {
+function ClientForm({openSnackBarError}) {
     const navigate = useNavigate();
 
     const {
@@ -15,17 +16,13 @@ function ClientForm({ save }) {
         formState: { errors },
     } = useForm();
 
-    const onSubmit = (data) => {
+    const onSubmit = async (data) => {
         try {
-            const formattedData = {
-                name: data.name,
-                birthDate: data.birthDate,
-                gender: data.gender,
-                phone: data.phone,
-            };
-            save("", { email: data.email, password: data.password }, formattedData, false);
+            await axios.post('/auth/registerClient', data);
+            navigate('/login');
         } catch (error) {
             console.error("Form submission error:", error);
+            openSnackBarError();
         }
     };
 

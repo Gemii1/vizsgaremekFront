@@ -1,166 +1,229 @@
-
-.body{
-    font-family: Arial, sans-serif; 
-    margin: 0; 
-    padding: 0; 
-    display: flex; 
-    justify-content:flex-start;
-  }
-  
-.container{
-    width: 100%;
-    margin: 0; 
+.body {
+    margin: 0;
     padding: 0;
-    
 }
-  
-.nav{
-    min-height: 5vh;
-    max-height: 10vh;
 
+.container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.nav {
+    height: 60px; /* Fix magasság a stabilitásért */
     background-color: #2f4f4f;
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    padding: 0 20px;
-    font-size: larger;
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-    z-index: 2;
-    overflow: hidden;
-}
-.nav div{
-    float: left; 
     display: flex;
-    color: #f2f2f2;
-    text-align: center; 
-    padding: 14px 16px;
-    text-decoration: none;
-    justify-content: center;
-    align-items: center;
-}
-.nav Button{
-    padding: 14px 16px;
-}
-.pageBlog:hover, .pageTraining:hover, .pageAdmin:hover {
-    color: lightgray;
-}
-
-.loginButton{
-    color: black !important;
-    font-weight: bold;
-}
-
-.pages{
-    font-size: 20px;
-}
-
-.menuButton{
-    padding:3px !important;
-    color:white !important;
-}
-
-.menuButton:hover{
-    background-color: darkgray !important;
-}
-
-
-.dropdownHead{
-    display:flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 16px 0 16px;
-    gap: 40px;
+    padding: 0 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000; /* Magas z-index a banner felett */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.userType{
-    padding: 0px 16px 16px 24px;
+.logo {
+    color: #f2f2f2;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
 }
 
-.modalContainer{
+.logo svg {
+    font-size: 2rem;
+}
+
+.pages {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: #f2f2f2;
+    font-size: clamp(1rem, 2.5vw, 1.25rem); /* Fluid betűméret */
+}
+
+.pageItem {
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.pageItem:hover {
+    color: #b0bec5; /* Világosabb szürke hoverkor */
+}
+
+.loginButton {
+    padding: 8px 16px !important;
+    font-weight: 600;
+    text-transform: uppercase;
+    background-color: #ffffff !important;
+    color: #2f4f4f !important;
+    border-radius: 4px;
+}
+
+.menuButton {
+    padding: 8px !important;
+    color: #f2f2f2 !important;
+    background: none !important;
+}
+
+.menuButton:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.mobileMenuToggle {
+    display: none; /* Alapból rejtett */
+    color: #f2f2f2;
+    cursor: pointer;
+}
+
+.mobileMenuToggle svg {
+    font-size: 2rem;
+}
+
+/* Dropdown */
+.dropdown {
+    padding: 10px;
+}
+
+.dropdownHead {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 16px;
+}
+
+.dropdownMenu {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.userType {
+    padding: 8px 16px;
+    color: #616161;
+}
+
+/* Modal */
+.modalContainer {
     display: flex;
     flex-direction: column;
-    background-color: whitesmoke;
-    width: 500px;
-    max-height: 500px;
-    margin: 20vh auto auto;
-    border-radius: 15px;
+    background-color: #ffffff;
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    margin: 15vh auto;
+    border-radius: 12px;
+    overflow-y: auto;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
-.modalHeadder{
-    padding: 80px;
-    display: flex;
-    justify-content: space-between;
-    height: 40px;
-    width: 70%;
-    align-items: center;
-}
-
-.icon{
-    font-size: 60px !important;
-}
-.modalContainer h4{
-    display: flex;
-    margin-right: 10px;
-    width:100px
-}
-
-.info{
-    display: flex;
-    justify-content: space-between;
-    margin: 10px 60px;
-}
-.info >*{
+.modalHeader {
+    padding: 20px;
     display: flex;
     align-items: center;
+    gap: 16px;
 }
 
-.editInputs{
-    max-width: 100%;
-    width: 200px;
+.icon {
+    font-size: 3rem !important;
 }
 
-.deleteButton{
+.informations {
+    padding: 0 20px 20px;
+}
+
+.info {
     display: flex;
     align-items: center;
+    gap: 10px;
+    margin: 12px 0;
+}
+
+.info h4 {
+    min-width: 100px;
+    margin: 0;
+    font-weight: 600;
+    color: #424242;
+}
+
+.editInputs {
+    width: 100%;
+    max-width: 200px;
+}
+
+.deleteButton {
+    display: flex;
     justify-content: center;
-    margin: 8px;
+    margin-top: 20px;
 }
 
-@media only screen and (max-width: 720px) {
+@media (max-width: 720px) {
+    .nav {
+        padding: 0 15px;
+        height: 50px;
+    }
+
+    .logo svg {
+        font-size: 1.75rem;
+    }
+
+    .mobileMenuToggle {
+        display: flex;
+    }
+
     .pages {
-        font-size: 1.5rem;
-    }
-    .loginButton{
-        font-size: 1rem !important;
-        margin: 10px ! important;
-
-    }
-    .pageBlog, .pageTraining, .pageAdmin{
-        margin: 10px;
-    }
-
-    .menuButton{
-        margin: 10px !important;
+        display: none;
+        position: absolute;
+        top: 50px;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        background-color: #2f4f4f;
+        padding: 10px 0;
+        gap: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
-    .dropdown{
-        font-size: 30px !important;
+    .mobileMenuOpen {
+        display: flex;
     }
 
-    .dropdown li {
-        font-size: 30px !important;
+    .pageItem {
+        padding: 12px 20px;
+        font-size: 1.125rem;
+        text-align: center;
     }
-    .modalContainer{
-        font-size: 20px !important;
+
+    .loginButton {
+        margin: 10px 20px !important;
+        width: calc(100% - 40px);
     }
-    .editInputs input{
-        font-size: 25px !important;
+
+    .menuButton {
+        margin: 0 !important;
     }
-    .modalContainer button{
-        font-size: 20px !important;
+
+    .dropdownMenu {
+        width: 100%;
+        max-width: 300px;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+    }
+
+    .modalContainer {
+        width: 95%;
+        margin: 10vh auto;
+    }
+
+    .info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .editInputs {
+        max-width: 100%;
     }
 }
-

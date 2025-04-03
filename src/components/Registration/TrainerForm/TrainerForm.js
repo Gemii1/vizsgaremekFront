@@ -2,12 +2,14 @@ import styles from './TrainerForm.module.css';
 import { useForm, Controller } from "react-hook-form";
 import PhoneInput from "react-phone-input-2";
 import 'react-phone-input-2/lib/style.css';
-import { Button } from "@mui/material";
+import {Button, Snackbar} from "@mui/material";
 import { useNavigate } from "react-router";
 import axios from "axios";
+import React, {useState} from "react";
 
-function TrainerForm({ save }) {
+function TrainerForm({openSnackBarError}) {
     const navigate = useNavigate();
+
 
     const {
         register,
@@ -24,21 +26,23 @@ function TrainerForm({ save }) {
                 birthDate: data.birthDate,
                 gender: data.gender,
                 qualification: data.qualification,
-                picture: 'Images/img1.jpg',
                 phoneNumber: data.phoneNumber,
-                rating: 3
+                email: data.email,
+                password: data.password
             };
-            const response = await save(formattedData, { email: data.email, password: data.password }, "", true);
-            await savePictureToTrainer(response, data.file[0]); // Küldjük a fájlt
+            const response = await axios.post('/auth/registerTrainer', formattedData);
+            await savePictureToTrainer(response, data.file[0])
+            navigate('/login');
         } catch (error) {
             console.error("Form submission error:", error);
+            openSnackBarError()
         }
     };
 
     const savePictureToTrainer = async (response, file) => {
         try {
             const formData = new FormData();
-            formData.append('file', file); // Hozzáadjuk a fájlt a FormData-hoz
+            formData.append('file', file);
 
             const valasz = await axios.post(`/trainer/upload-picture/${response.data.id}`, formData, {
                 headers: {
@@ -186,6 +190,7 @@ function TrainerForm({ save }) {
                     <Button  variant="contained" color="info" type="submit">Regisztrálás</Button>
                 </div>
             </form>
+
         </div>
     );
 }

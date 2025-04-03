@@ -3,18 +3,21 @@ import React, { useContext, useEffect, useState } from 'react';
 import FitnessCenterOutlinedIcon from '@mui/icons-material/FitnessCenterOutlined';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import EditIcon from '@mui/icons-material/Edit';
-import { useNavigate } from "react-router";
-import { Button, Modal, Select, Snackbar, TextField, MenuItem } from "@mui/material";
+import MenuIcon from '@mui/icons-material/Menu';
+import { useNavigate } from 'react-router';
+import { Button, Modal, Select, Snackbar, TextField, MenuItem } from '@mui/material';
 import { Dropdown, Menu, MenuButton } from '@mui/joy';
-import UserContext from "../Context/User/UserContext";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs from "dayjs";
-import axios from "axios";
+import UserContext from '../Context/User/UserContext';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+import axios from 'axios';
+import AuthContext from '../Context/Auth/AuthContext';
 
 function Navbar() {
     const navigate = useNavigate();
-    const { userType,setUserType, isUserLoggedIn, setIsUserLoggedIn, user,fetchUser,deleteUser} = useContext(UserContext);
+    const { userType, setUserType, isUserLoggedIn, setIsUserLoggedIn, user, fetchUser, deleteUser } = useContext(UserContext);
+    const { logout } = useContext(AuthContext);
     const [openInfoModal, setOpenInfoModal] = useState(false);
     const [email, setEmail] = useState('');
     const [isSelectEdited, setIsSelectEdited] = useState(true);
@@ -23,36 +26,29 @@ function Navbar() {
     const [isNameEdited, setIsNameEdited] = useState(true);
     const [snackBarSuccess, setSnackBarSuccess] = useState(false);
     const [snackBarError, setSnackBarError] = useState(false);
-    const [patchData,setPatchData] = useState({});
+    const [patchData, setPatchData] = useState({});
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // Hamburger menü állapota
     const trainerQualifications = ["Personal Trainer", "Fitness Instructor", "Pilates Instructor", "Crossfit Coach", "TRX Trainer", "Pound Trainer", "Other"];
+
     const handleOpenInfo = () => setOpenInfoModal(true);
     const handleCloseInfo = () => setOpenInfoModal(false);
     const closeSnackBarSuccess = () => setSnackBarSuccess(false);
     const openSnackBarSuccess = () => setSnackBarSuccess(true);
     const closeSnackBarError = () => setSnackBarError(false);
     const openSnackBarError = () => setSnackBarError(true);
-    const whichUser = (userType) => userType==='TRAINER' ? <>Edző</> : <>Kliens</>;
-
-    const handleLogout = () => {
-        navigate('/landingPage');
-        setIsUserLoggedIn(false);
-        setUserType('');
-        localStorage.removeItem('accessToken');
-        axios.defaults.headers.common['Authorization'] = '';
-    };
+    const whichUser = (userType) => (userType === 'TRAINER' ? <>Edző</> : <>Kliens</>);
 
     const isThereQualification = () => {
-        if (userType ==='TRAINER') {
+        if (userType === 'TRAINER') {
             return (
                 <div className={styles.info}>
                     <h4>Végzettség:</h4>
                     <Select
-                        className={styles.textFields}
                         className={styles.editInputs}
                         disabled={isSelectEdited}
                         defaultValue={user.qualification}
                         onChange={handleChange}
-                        name = "qualification"
+                        name="qualification"
                     >
                         {trainerQualifications.map((qualification, key) => (
                             <MenuItem key={key} value={qualification.toUpperCase().replace(" ", "_")}>
@@ -61,40 +57,59 @@ function Navbar() {
                         ))}
                     </Select>
                     <div onClick={() => setIsSelectEdited(false)}>
-                        <EditIcon/>
-                        {!isSelectEdited && <Button onClick={(e) => {
-                            e.stopPropagation();
-                            setIsSelectEdited(true);
-                            patchUserData(patchData)
-                        }}>Mentés</Button>}
+                        <EditIcon />
+                        {!isSelectEdited && (
+                            <Button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setIsSelectEdited(true);
+                                    patchUserData(patchData);
+                                }}
+                            >
+                                Mentés
+                            </Button>
+                        )}
                     </div>
                 </div>
             );
         }
     };
+
     const handleLoginNavbar = () => {
         if (isUserLoggedIn) {
             return (
                 <Dropdown>
-                    <MenuButton className={styles.menuButton}><AccountCircleIcon style={{ fontSize: 'xxx-large' }}/></MenuButton>
-                    <Menu>
+                    <MenuButton className={styles.menuButton}>
+                        <AccountCircleIcon style={{ fontSize: '2rem' }} />
+                    </MenuButton>
+                    <Menu className={styles.dropdownMenu}>
                         <div className={styles.dropdown}>
                             <div className={styles.dropdownHead}>
-                                <div><AccountCircleIcon style={{ fontSize: 'xxx-large' }}/></div>
+                                <AccountCircleIcon style={{ fontSize: '2rem' }} />
                                 <div>{user.name}</div>
                             </div>
-                            <div className={styles.userType}>
-                                {whichUser(userType)}
-                            </div>
+                            <div className={styles.userType}>{whichUser(userType)}</div>
                             <MenuItem onClick={handleOpenInfo}>Adataim</MenuItem>
-                            <MenuItem onClick={handleLogout}>Kijelentkezés</MenuItem>
+                            <MenuItem
+                                onClick={() => {
+                                    logout();
+                                    navigate('/landingPage');
+                                }}
+                            >
+                                Kijelentkezés
+                            </MenuItem>
                         </div>
                     </Menu>
                 </Dropdown>
             );
         } else {
             return (
-                <Button className={styles.loginButton} variant="contained" color="inherit" onClick={() => navigate("/login")}>
+                <Button
+                    className={styles.loginButton}
+                    variant="contained"
+                    color="inherit"
+                    onClick={() => navigate('/login')}
+                >
                     Bejelentkezés
                 </Button>
             );
@@ -103,60 +118,77 @@ function Navbar() {
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
-
         const year = date.getFullYear();
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
         const day = date.getDate().toString().padStart(2, '0');
-
-
         return `${year}-${month}-${day}`;
     };
 
-    const handleChange = (event)=>{
-
+    const handleChange = (event) => {
         let targetName;
-        try{
-           targetName  = event.target.name;
-        }catch(e){
-            targetName = "birth_date";
-        }
-        if(targetName !== "birth_date"){
-            setPatchData(values => ({...values,
-                "selected" : event.target.name.toUpperCase(),
-                "value" : event.target.value
-            }));
-        }else{
-            setPatchData(values => ({...values,
-                "selected" : "BIRTH_DATE",
-                "value" : formatDate(event.$d)
-            }));
-        }
-    }
-
-
-    const patchUserData = async (data)=>{
         try {
-            if (userType ==='TRAINER'){
-                await axios.patch(`/trainer/${user.id}`,patchData);
-            }else if(userType==='CLIENT'){
-                await axios.patch(`/client/${user.id}`,patchData);
+            targetName = event.target.name;
+        } catch (e) {
+            targetName = 'birth_date';
+        }
+        if (targetName !== 'birth_date') {
+            setPatchData((values) => ({
+                ...values,
+                selected: event.target.name.toUpperCase(),
+                value: event.target.value,
+            }));
+        } else {
+            setPatchData((values) => ({
+                ...values,
+                selected: 'BIRTH_DATE',
+                value: formatDate(event.$d),
+            }));
+        }
+    };
+
+    const patchUserData = async (data) => {
+        try {
+            if (userType === 'TRAINER') {
+                await axios.patch(`/trainer/${user.id}`, patchData);
+            } else if (userType === 'CLIENT') {
+                await axios.patch(`/client/${user.id}`, patchData);
             }
             openSnackBarSuccess();
-
-        }catch (e){
+        } catch (e) {
             openSnackBarError();
         }
-
         await fetchUser(userType);
-    }
-    const handleAdminPage = (userType)=>{
-        if(userType==='ADMIN'){
-            return(
-                <div className={styles.pageAdmin} onClick={()=>navigate("/adminPage")}>Felhasználók</div>
+    };
+
+    const handleAdminPage = (userType) => {
+        if (userType === 'ADMIN') {
+            return (
+                <div className={styles.pageItem} onClick={() => navigate('/adminPage')}>
+                    Felhasználók
+                </div>
             );
         }
-    }
+    };
 
+    const handleDeleteButton = (userType) => {
+        if (userType === 'CLIENT') {
+            return (
+                <div className={styles.deleteButton}>
+                    <Button
+                        color="error"
+                        onClick={() => {
+                            deleteUser(userType);
+                            navigate('/landingPage');
+                            setIsUserLoggedIn(false);
+                            handleCloseInfo();
+                        }}
+                    >
+                        Fiók törlése
+                    </Button>
+                </div>
+            );
+        }
+    };
 
     useEffect(() => {
         if (user && user.login && user.login.email) {
@@ -164,59 +196,56 @@ function Navbar() {
         }
     }, [user]);
 
-    const handleDeleteButton=(userType)=>{
-        if(userType==='CLIENT'){
-            return (
-                <div className={styles.deleteButton}>
-                    <Button color="error" onClick={() => {
-                        deleteUser(userType);
-                        navigate("/landingPage");
-                        setIsUserLoggedIn(false);
-                        handleCloseInfo();
-                    }}>Fiók törlése</Button>
-                </div>
-            )
-        }
-    }
-
-
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <div className={styles.body}>
                 <div className={styles.container}>
                     <div className={styles.nav}>
-                        <div onClick={() => navigate("/landingPage")}>
-                            <FitnessCenterOutlinedIcon fontSize='large'/>
+                        <div className={styles.logo} onClick={() => navigate('/landingPage')}>
+                            <FitnessCenterOutlinedIcon fontSize="large" />
                         </div>
-                        <div className={styles.pages}>
+                        <div className={styles.mobileMenuToggle} onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+                            <MenuIcon fontSize="large" />
+                        </div>
+                        <div className={`${styles.pages} ${mobileMenuOpen ? styles.mobileMenuOpen : ''}`}>
                             {handleAdminPage('ADMIN')}
-                            <div className={styles.pageBlog} onClick={() => navigate("/blogs")}>Blogok</div>
-                            <div className={styles.pageTraining} onClick={() => navigate("/training")}>Programok</div>
+                            <div className={styles.pageItem} onClick={() => navigate('/blogs')}>
+                                Blogok
+                            </div>
+                            <div className={styles.pageItem} onClick={() => navigate('/training')}>
+                                Programok
+                            </div>
                             {handleLoginNavbar()}
                         </div>
                     </div>
                 </div>
                 <Modal open={openInfoModal} onClose={handleCloseInfo}>
                     <div className={styles.modalContainer}>
-                        <div className={styles.modalHeadder}>
-                            <div><AccountCircleIcon className={styles.icon}/></div>
+                        <div className={styles.modalHeader}>
+                            <AccountCircleIcon className={styles.icon} />
                             <h2>
                                 <div className={styles.info}>
                                     <TextField
                                         className={styles.editInputs}
-                                        label="név"
+                                        label="Név"
                                         disabled={isNameEdited}
                                         defaultValue={user.name}
-                                        name = "name"
+                                        name="name"
                                         onChange={handleChange}
                                     />
                                     <div onClick={() => setIsNameEdited(false)}>
-                                        <EditIcon/>
-                                        {!isNameEdited && <Button onClick={(e) => {
-                                            e.stopPropagation();
-                                            setIsNameEdited(true);
-                                            patchUserData(patchData)
-                                        }}>Mentés</Button>}
+                                        <EditIcon />
+                                        {!isNameEdited && (
+                                            <Button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setIsNameEdited(true);
+                                                    patchUserData(patchData);
+                                                }}
+                                            >
+                                                Mentés
+                                            </Button>
+                                        )}
                                     </div>
                                 </div>
                             </h2>
@@ -232,16 +261,22 @@ function Navbar() {
                                     disabled={isBirthYearEdited}
                                     defaultValue={dayjs(user.birthDate)}
                                     className={styles.editInputs}
-                                    name = "birth_date"
+                                    name="birth_date"
                                     onChange={handleChange}
                                 />
                                 <div onClick={() => setIsBirthYearEdited(false)}>
-                                    <EditIcon/>
-                                    {!isBirthYearEdited && <Button onClick={(e) => {
-                                        e.stopPropagation();
-                                        setIsBirthYearEdited(true);
-                                        patchUserData(patchData)
-                                    }}>Mentés</Button>}
+                                    <EditIcon />
+                                    {!isBirthYearEdited && (
+                                        <Button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setIsBirthYearEdited(true);
+                                                patchUserData(patchData);
+                                            }}
+                                        >
+                                            Mentés
+                                        </Button>
+                                    )}
                                 </div>
                             </div>
                             {isThereQualification()}
@@ -253,20 +288,25 @@ function Navbar() {
                                     disabled={isPhoneEdited}
                                     defaultValue={user.phoneNumber}
                                     onChange={handleChange}
-                                    name = "phone_Number"
+                                    name="phone_Number"
                                 />
                                 <div onClick={() => setIsPhoneEdited(false)}>
-                                    <EditIcon/>
-                                    {!isPhoneEdited && <Button onClick={(e) => {
-                                        e.stopPropagation();
-                                        setIsPhoneEdited(true);
-                                        patchUserData(patchData)
-                                    }}>Mentés</Button>}
+                                    <EditIcon />
+                                    {!isPhoneEdited && (
+                                        <Button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setIsPhoneEdited(true);
+                                                patchUserData(patchData);
+                                            }}
+                                        >
+                                            Mentés
+                                        </Button>
+                                    )}
                                 </div>
                             </div>
                             {handleDeleteButton(userType)}
                         </div>
-
                     </div>
                 </Modal>
                 <Snackbar
@@ -274,24 +314,15 @@ function Navbar() {
                     autoHideDuration={6000}
                     onClose={closeSnackBarSuccess}
                     message="Sikeres módosítás!"
-                    sx={{
-                        '& .MuiSnackbarContent-root': {
-                            backgroundColor: 'green',
-                        }
-                    }}
+                    sx={{ '& .MuiSnackbarContent-root': { backgroundColor: '#2e7d32' } }}
                 />
                 <Snackbar
                     open={snackBarError}
                     autoHideDuration={6000}
                     onClose={closeSnackBarError}
                     message="Sikertelen módosítás!"
-                    sx={{
-                        '& .MuiSnackbarContent-root': {
-                            backgroundColor: 'red',
-                        }
-                    }}
+                    sx={{ '& .MuiSnackbarContent-root': { backgroundColor: '#d32f2f' } }}
                 />
-
             </div>
         </LocalizationProvider>
     );

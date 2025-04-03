@@ -10,12 +10,12 @@ import {
     Grid,
     Divider
 } from '@mui/joy';
-import { Button } from "@mui/material";
-import { useNavigate } from "react-router";
-import { useContext } from "react";
-import UserContext from "../Context/User/UserContext";
+import { Button } from '@mui/material';
+import { useNavigate } from 'react-router';
+import { useContext } from 'react';
+import UserContext from '../Context/User/UserContext';
 import StarRateIcon from '@mui/icons-material/StarRate';
-import axios from "axios";
+import axios from 'axios';
 
 function LandingPage() {
     const navigate = useNavigate();
@@ -23,24 +23,21 @@ function LandingPage() {
     const [trainers, setTrainers] = useState([]);
     const [trainerImages, setTrainerImages] = useState({});
 
-    // Fetch trainers
     const fetchTrainers = async () => {
         try {
             const response = await axios.get('/trainer/');
             setTrainers(response.data);
-            // Fetch images for each trainer after trainers are loaded
             fetchTrainerImages(response.data);
         } catch (error) {
             console.log(error);
         }
     };
 
-    // Fetch trainer images
     const fetchTrainerImages = async (trainers) => {
         const imagePromises = trainers.map(async (trainer) => {
             try {
                 const response = await axios.get(`/trainer/picture/${trainer.id}`, {
-                    responseType: 'arraybuffer' // Get raw binary data instead of JSON
+                    responseType: 'arraybuffer'
                 });
                 const byteArray = new Uint8Array(response.data);
                 const blob = new Blob([byteArray], { type: 'image/jpeg' });
@@ -48,7 +45,7 @@ function LandingPage() {
                 return { id: trainer.id, url: imageUrl };
             } catch (error) {
                 console.error(`Failed to fetch image for trainer ${trainer.id}:`, error);
-                return { id: trainer.id, url: null }; // Fallback if image fetch fails
+                return { id: trainer.id, url: null };
             }
         });
 
@@ -68,12 +65,11 @@ function LandingPage() {
         if (!isUserLoggedIn) {
             return (
                 <Button
-                    style={{ fontSize: '200%' }}
                     variant="contained"
-                    color="info"
-                    onClick={() => navigate("/registration")}
+                    className={styles.regButton}
+                    onClick={() => navigate('/registration')}
                 >
-                    Regisztrálás
+                    Regisztráció
                 </Button>
             );
         }
@@ -94,34 +90,32 @@ function LandingPage() {
 
     return (
         <>
-            <link href="https://fonts.googleapis.com/css?family=Inter" rel="stylesheet" />
-            <meta name="viewport" content="width=720" />
-            <div style={{ fontFamily: "Inter" }}>
+            <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <div className={styles.pageWrapper}>
                 <Navbar />
                 <section className={styles.banner}>
-                    <div>
-                        <div className={styles.registration}>
-                            <h3 style={{ margin: '10px' }}>Eddz velünk!</h3>
-                            <p className={styles.quote}>„Nem a kő súlya az, ami számít. Hanem az ok, amiért felemeled.” --Hugo Girard</p>
-                            {handleRegButton()}
-                        </div>
+                    <div className={styles.bannerOverlay}></div>
+                    <div className={styles.bannerContent}>
+                        <h1 className={styles.bannerTitle}>Érd el céljaid profi segítséggel</h1>
+                        {handleRegButton()}
                     </div>
                 </section>
                 <Divider />
-                <section>
+                <section className={styles.trainerSection}>
                     <div className={styles.container}>
-                        <div className={styles.title}>Edzőink</div>
+                        <h2 className={styles.sectionTitle}>Edzőink</h2>
                         <div className={styles.cardsContainer}>
-                            <Grid container spacing={2} sx={{ flexGrow: 1 }}>
+                            <Grid container spacing={3} justifyContent="center">
                                 {trainers.length > 0 ? (
                                     trainers.map((trainer, index) => {
                                         if (index < 5) {
-                                            const imageUrl = trainerImages[trainer.id] || ''; // Use fetched image URL or empty string
+                                            const imageUrl = trainerImages[trainer.id] || '';
                                             return (
-                                                <div className={styles.cards} key={trainer.id}>
-                                                    <Card variant="outlined" sx={{ width: 320 }}>
+                                                <Grid item key={trainer.id} xs={12} sm={6} md={4} lg={3}>
+                                                    <Card variant="outlined" className={styles.card}>
                                                         <CardOverflow>
-                                                            <AspectRatio minHeight="575px">
+                                                            <AspectRatio ratio="4/5">
                                                                 <div
                                                                     className={styles.trainerImage}
                                                                     style={{ backgroundImage: `url(${imageUrl})` }}
@@ -130,23 +124,25 @@ function LandingPage() {
                                                         </CardOverflow>
                                                         <CardContent className={styles.cardContent}>
                                                             <div>
-                                                                <Typography>{trainer.name}</Typography>
+                                                                <Typography level="h6">{trainer.name}</Typography>
                                                                 <Typography>{formatPhoneNumber(trainer.phoneNumber)}</Typography>
                                                                 <Typography>{formatQualification(trainer.qualification)}</Typography>
                                                             </div>
                                                             <div className={styles.rating}>
-                                                                <label>{trainer.rating}</label>
-                                                                <StarRateIcon className={styles.star} color="primary" />
+                                                                <span>{trainer.rating}</span>
+                                                                <StarRateIcon className={styles.star} />
                                                             </div>
                                                         </CardContent>
                                                     </Card>
-                                                </div>
+                                                </Grid>
                                             );
                                         }
                                         return null;
                                     })
                                 ) : (
-                                    <h1 className={styles.trainerError}>Jelenleg egy edző se dolgozik nálunk!</h1>
+                                    <Typography level="h5" className={styles.trainerError}>
+                                        Jelenleg egy edző sem dolgozik nálunk!
+                                    </Typography>
                                 )}
                             </Grid>
                         </div>

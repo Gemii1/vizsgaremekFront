@@ -26,11 +26,12 @@ function LoginPage() {
         try {
             const loginData = await login(data.email, data.password);
             setUserType(loginData.role);
-            setIsUserLoggedIn(true);
+            console.log(loginData);
             const userResponse = await axios.get(`/auth/me`)
             setUser(userResponse.data);
             navigate('/landingPage')
         } catch (error) {
+            console.log(error);
             openSnackBarError();
         }
     };

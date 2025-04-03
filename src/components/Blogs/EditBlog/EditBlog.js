@@ -1,31 +1,21 @@
 import styles from './EditBlog.module.css';
-import React, { useContext, useState } from "react";
-import BlogContext from "../../Context/Blog/BlogContext";
-import { Controller, useForm } from "react-hook-form";
-import CloseIcon from "@mui/icons-material/Close";
-import { Select, Snackbar, TextField, MenuItem, Button } from "@mui/material";
-import { Textarea } from "@mui/joy";
-import axios from "axios";
+import React, { useContext, useState } from 'react';
+import BlogContext from '../../Context/Blog/BlogContext';
+import { Controller, useForm } from 'react-hook-form';
+import CloseIcon from '@mui/icons-material/Close';
+import { Select, Snackbar, TextField, MenuItem, Button } from '@mui/material';
+import { Textarea } from '@mui/joy';
+import axios from 'axios';
 
 function EditBlog({ blog, close }) {
     const { fetchBlogs } = useContext(BlogContext);
     const [successSnackBar, setSuccessSnackBar] = useState(false);
     const [errorSnackBar, setErrorSnackBar] = useState(false);
-    const blogTypes = ["TRAINING", "DIET"];
 
-    const closeSuccessSnackBar = () => {
-        setSuccessSnackBar(false);
-    };
-    const openSuccessSnackBar = () => {
-        setSuccessSnackBar(true);
-    };
-
-    const closeErrorSnackBar = () => {
-        setErrorSnackBar(false);
-    };
-    const openErrorSnackBar = () => {
-        setErrorSnackBar(true);
-    };
+    const closeSuccessSnackBar = () => setSuccessSnackBar(false);
+    const openSuccessSnackBar = () => setSuccessSnackBar(true);
+    const closeErrorSnackBar = () => setErrorSnackBar(false);
+    const openErrorSnackBar = () => setErrorSnackBar(true);
 
     const { reset, handleSubmit, control } = useForm({
         defaultValues: {
@@ -33,7 +23,7 @@ function EditBlog({ blog, close }) {
             headerText: blog.headerText,
             mainText: blog.mainText,
             blogType: blog.blogType,
-        }
+        },
     });
 
     const onSubmit = async (data) => {
@@ -59,92 +49,115 @@ function EditBlog({ blog, close }) {
         }
     };
 
+    const blogTypes = [
+        { value: 'TRAINING', label: 'Edzés' },
+        { value: 'DIET', label: 'Diéta' },
+    ];
+
     return (
-        <div className={styles.container}>
-            <div className={styles.closeButton}><CloseIcon onClick={close}/></div>
-            <div>
-                <h1 className={styles.pageTitle}>Blog módosítása</h1>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className={styles.textInputs}>
+        <div className={styles.overlay}>
+            <div className={styles.container}>
+                <div className={styles.header}>
+                    <h1 className={styles.title}>Blog Módosítása</h1>
+                    <CloseIcon className={styles.closeIcon} onClick={close} />
+                </div>
+                <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+                    <div className={styles.formSection}>
                         <Controller
                             name="title"
                             control={control}
-                            rules={{required: "A cím megadása kötelező!"}}
-                            render={({field, fieldState: {error}}) => (
-                                <>
-                                    <TextField
-                                        className={styles.titleInput}
-                                        label="Cím"
-                                        type="text"
-                                        {...field}
-                                    />
-                                    {error && <span style={{color: 'red'}}>{error.message}</span>}
-                                </>
+                            rules={{ required: 'A cím megadása kötelező!' }}
+                            render={({ field, fieldState: { error } }) => (
+                                <TextField
+                                    label="Cím"
+                                    variant="outlined"
+                                    fullWidth
+                                    className={styles.input}
+                                    {...field}
+                                    error={!!error}
+                                    helperText={error?.message}
+                                />
                             )}
                         />
-
                         <Controller
                             name="blogType"
                             control={control}
-                            rules={{required: "A blog típus megadása kötelező!"}}
-                            render={({field, fieldState: {error}}) => (
-                                <>
-                                    <Select
-                                        className={styles.typeSelect}
-                                        {...field}
-                                    >
-                                        {blogTypes.map((type, key) => (
-                                            <MenuItem key={key} value={type}>
-                                                {type}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                    {error && <span className={styles.errorMessage}>{error.message}</span>}
-                                </>
+                            rules={{ required: 'A blog típus megadása kötelező!' }}
+                            render={({ field, fieldState: { error } }) => (
+                                <Select
+                                    variant="outlined"
+                                    fullWidth
+                                    className={styles.input}
+                                    {...field}
+                                    error={!!error}
+                                    displayEmpty
+                                    renderValue={(selected) => {
+                                        if (!selected) return <em>Típus kiválasztása</em>;
+                                        return blogTypes.find(type => type.value === selected)?.label;
+                                    }}
+                                >
+                                    {blogTypes.map((type) => (
+                                        <MenuItem key={type.value} value={type.value}>
+                                            {type.label}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
                             )}
                         />
                     </div>
-
-                    <div>
-                        <Controller
-                            name="headerText"
-                            control={control}
-                            rules={{required: "A bevezetés szöveg megadása kötelező!"}}
-                            render={({field, fieldState: {error}}) => (
-                                <>
-                                    <Textarea
-                                        className={styles.textInput}
-                                        minRows={5}
-                                        maxRows={10}
-                                        placeholder="A Blog bevezetés szöveg megadása "
-                                        {...field}
-                                    />
-                                    {error && <span style={{color: 'red'}}>{error.message}</span>}
-                                </>
-                            )}
-                        />
-                    </div>
-                    <div>
-                        <Controller
-                            name="mainText"
-                            control={control}
-                            rules={{required: "A fő szöveg megadása kötelező!"}}
-                            render={({field, fieldState: {error}}) => (
-                                <>
-                                    <Textarea
-                                        className={styles.textInput}
-                                        minRows={5}
-                                        maxRows={15}
-                                        placeholder="A Blog fő szöveg megadása "
-                                        {...field}
-                                    />
-                                    {error && <span style={{color: 'red'}}>{error.message}</span>}
-                                </>
-                            )}
-                        />
-                    </div>
-                    <div>
-                        <Button type="submit" variant="contained" className={styles.submitButton}>
+                    <Controller
+                        name="headerText"
+                        control={control}
+                        rules={{ required: 'A bevezetés szöveg megadása kötelező!' }}
+                        render={({ field, fieldState: { error } }) => (
+                            <Textarea
+                                minRows={4}
+                                placeholder="Bevezetés szövege"
+                                variant="outlined"
+                                className={styles.textarea}
+                                {...field}
+                                error={!!error}
+                                sx={{ borderColor: error ? '#d32f2f' : undefined }}
+                            />
+                        )}
+                    />
+                    {control._formState.errors.headerText && (
+                        <span className={styles.error}>{control._formState.errors.headerText.message}</span>
+                    )}
+                    <Controller
+                        name="mainText"
+                        control={control}
+                        rules={{ required: 'A fő szöveg megadása kötelező!' }}
+                        render={({ field, fieldState: { error } }) => (
+                            <Textarea
+                                minRows={6}
+                                placeholder="Fő szöveg"
+                                variant="outlined"
+                                className={styles.textarea}
+                                {...field}
+                                error={!!error}
+                                sx={{ borderColor: error ? '#d32f2f' : undefined }}
+                            />
+                        )}
+                    />
+                    {control._formState.errors.mainText && (
+                        <span className={styles.error}>{control._formState.errors.mainText.message}</span>
+                    )}
+                    <div className={styles.actions}>
+                        <Button
+                            variant="outlined"
+                            color="secondary"
+                            onClick={close}
+                            className={styles.cancelButton}
+                        >
+                            Mégse
+                        </Button>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            className={styles.submitButton}
+                        >
                             Módosítás
                         </Button>
                     </div>
@@ -154,22 +167,14 @@ function EditBlog({ blog, close }) {
                     autoHideDuration={6000}
                     onClose={closeSuccessSnackBar}
                     message="Sikeresen módosítva!"
-                    sx={{
-                        '& .MuiSnackbarContent-root': {
-                            backgroundColor: 'green',
-                        }
-                    }}
+                    sx={{ '& .MuiSnackbarContent-root': { backgroundColor: '#2e7d32' } }}
                 />
                 <Snackbar
                     open={errorSnackBar}
                     autoHideDuration={6000}
                     onClose={closeErrorSnackBar}
-                    message="Sikertelen módosítás!"
-                    sx={{
-                        '& .MuiSnackbarContent-root': {
-                            backgroundColor: 'red',
-                        }
-                    }}
+                    message="Hiba történt a módosítás során!"
+                    sx={{ '& .MuiSnackbarContent-root': { backgroundColor: '#d32f2f' } }}
                 />
             </div>
         </div>
