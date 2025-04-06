@@ -1,12 +1,24 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Blogs from '../../components/Blogs/Blogs'; // Adjust path as needed
 import UserContext from '../../components/Context/User/UserContext';
 import BlogContext from '../../components/Context/Blog/BlogContext';
+import axios from 'axios';
 
 // Mock Navbar component
 jest.mock('../../components/Navbar/Navbar', () => () => <div>Mocked Navbar</div>);
+
+// Mock child components
+jest.mock('../../components/Blogs/CreateBlog/CreateBlog', () => ({ close }) => (
+    <div>CreateBlog <button onClick={close}>Close</button></div>
+));
+jest.mock('../../components/Blogs/EditBlog/EditBlog', () => ({ close, blog }) => (
+    <div>EditBlog {blog?.title} <button onClick={close}>Close</button></div>
+));
+jest.mock('../../components/Confirmation', () => ({ close, deleteFunction, deletingId }) => (
+    <div>Confirmation <button onClick={() => deleteFunction(deletingId)}>Confirm</button></div>
+));
 
 // Mock react-router-dom
 const mockNavigate = jest.fn();
@@ -15,11 +27,11 @@ jest.mock('react-router', () => ({
     useNavigate: () => mockNavigate,
 }));
 
-// Mock axios to prevent real API calls
+// Mock axios
 jest.mock('axios', () => ({
     __esModule: true,
     default: {
-        get: jest.fn().mockResolvedValue({ data: [] }),
+        get: jest.fn(),
         delete: jest.fn().mockResolvedValue({}),
     },
 }));
@@ -27,7 +39,7 @@ jest.mock('axios', () => ({
 // Mock BlogContext
 const mockBlogContext = {
     blogs: [],
-    fetchBlogs: jest.fn(),
+    fetchBlogs: jest.fn().mockResolvedValue([]),
 };
 
 // Mock UserContext
@@ -56,8 +68,8 @@ describe('Blogs', () => {
     beforeEach(() => {
         mockNavigate.mockClear();
         mockBlogContext.fetchBlogs.mockClear();
-        jest.mocked(require('axios').default.get).mockClear();
-        jest.mocked(require('axios').default.delete).mockClear();
+        axios.get.mockClear();
+        axios.delete.mockClear();
     });
 
     afterEach(() => {
@@ -65,38 +77,54 @@ describe('Blogs', () => {
     });
 
     // Test 1: Renders basic elements with no blogs
-    it('renders the blogs page with navbar and no blogs message', () => {
+    it('renders the blogs page with navbar and no blogs message', async () => {
         renderWithProviders(<Blogs />);
-        expect(screen.getByText('Mocked Navbar')).toBeInTheDocument();
-        expect(screen.getByText('Jelenleg egy blog sem elérhető')).toBeInTheDocument();
+        await waitFor(() => {
+            expect(screen.getByText('Mocked Navbar')).toBeInTheDocument();
+            expect(screen.getByText('Jelenleg egy blog sem elérhető')).toBeInTheDocument();
+        });
     });
 
-    // Test 2: Renders blogs when they are available
-    it('renders blogs when provided in context', () => {
+    // Test 2: Renders blogs with images when they are available
+    it('renders blogs with images when provided in context', async () => {
         const mockBlogs = [
             {
                 id: 1,
                 title: 'Test Blog',
-                image: 'http://example.com/image.jpg',
                 blogType: 'TRAINING',
             },
         ];
+        const mockImageBuffer = new ArrayBuffer(8);
+        const mockBlobUrl = 'blob:http://localhost/mock-url';
+
+        axios.get.mockResolvedValueOnce({ data: mockImageBuffer });
+        global.URL.createObjectURL = jest.fn(() => mockBlobUrl);
+
         renderWithProviders(<Blogs />, {
             blogContextValue: { ...mockBlogContext, blogs: mockBlogs },
         });
-        expect(screen.getByText('Test Blog')).toBeInTheDocument();
-        expect(screen.getByText('Edzés')).toBeInTheDocument(); // blogType = TRAINING
+
+        await waitFor(() => {
+            expect(screen.getByText('Test Blog')).toBeInTheDocument();
+            expect(screen.getByText('Edzés')).toBeInTheDocument();
+            expect(screen.getByAltText('Test Blog')).toHaveAttribute('src', mockBlobUrl);
+        });
+
+        expect(axios.get).toHaveBeenCalledWith('/blog/blog/picture/1', {
+            responseType: 'arraybuffer',
+            timeout: 3000,
+        });
     });
 
     // Test 3: Shows create button for trainer user type
-    it('shows create button when userType is trainer', () => {
+    it('shows create button when userType is TRAINER', () => {
         renderWithProviders(<Blogs />, {
-            userContextValue: { userType: true },
+            userContextValue: { userType: 'TRAINER' },
         });
         const createButton = screen.getByLabelText('add');
         expect(createButton).toBeInTheDocument();
         fireEvent.click(createButton);
-        expect(screen.getByText(/CreateBlog/i)).toBeInTheDocument(); // Assuming CreateBlog renders something identifiable
+        expect(screen.getByText(/CreateBlog/i)).toBeInTheDocument();
     });
 
     // Test 4: Hides create button for non-trainer user type
@@ -106,93 +134,155 @@ describe('Blogs', () => {
     });
 
     // Test 5: Shows edit and delete icons for trainer user type
-    it('shows edit and delete icons for trainer user type', () => {
+    it('shows edit and delete icons for trainer user type', async () => {
         const mockBlogs = [
             {
                 id: 1,
                 title: 'Test Blog',
-                image: 'http://example.com/image.jpg',
                 blogType: 'TRAINING',
             },
         ];
+        axios.get.mockResolvedValueOnce({ data: new ArrayBuffer(8) });
+        global.URL.createObjectURL = jest.fn(() => 'blob:http://localhost/mock-url');
+
         renderWithProviders(<Blogs />, {
             userContextValue: { userType: 'TRAINER' },
             blogContextValue: { ...mockBlogContext, blogs: mockBlogs },
         });
-        expect(screen.getByLabelText('edit')).toBeInTheDocument();
-        expect(screen.getByLabelText('delete')).toBeInTheDocument();
+
+        await waitFor(() => {
+            expect(screen.getByLabelText('edit')).toBeInTheDocument();
+            expect(screen.getByLabelText('delete')).toBeInTheDocument();
+        });
     });
 
     // Test 6: Hides edit and delete icons for non-trainer user type
-    it('hides edit and delete icons for non-trainer user type', () => {
+    it('hides edit and delete icons for non-trainer user type', async () => {
         const mockBlogs = [
             {
                 id: 1,
                 title: 'Test Blog',
-                image: 'http://example.com/image.jpg',
                 blogType: 'TRAINING',
             },
         ];
+        axios.get.mockResolvedValueOnce({ data: new ArrayBuffer(8) });
+        global.URL.createObjectURL = jest.fn(() => 'blob:http://localhost/mock-url');
+
         renderWithProviders(<Blogs />, {
             blogContextValue: { ...mockBlogContext, blogs: mockBlogs },
         });
-        expect(screen.queryByLabelText('edit')).not.toBeInTheDocument();
-        expect(screen.queryByLabelText('delete')).not.toBeInTheDocument();
+
+        await waitFor(() => {
+            expect(screen.queryByLabelText('edit')).not.toBeInTheDocument();
+            expect(screen.queryByLabelText('delete')).not.toBeInTheDocument();
+        });
     });
 
-    // Test 7: Navigates to blog details on click
-    it('navigates to blog details when blog card is clicked', () => {
+    // Test 7: Navigates to blog details on card click
+    it('navigates to blog details when blog card is clicked', async () => {
         const mockBlogs = [
             {
                 id: 1,
                 title: 'Test Blog',
-                image: 'http://example.com/image.jpg',
                 blogType: 'TRAINING',
             },
         ];
+        axios.get.mockResolvedValueOnce({ data: new ArrayBuffer(8) });
+        global.URL.createObjectURL = jest.fn(() => 'blob:http://localhost/mock-url');
+
         renderWithProviders(<Blogs />, {
             blogContextValue: { ...mockBlogContext, blogs: mockBlogs },
         });
-        const blogCard = screen.getByText('Test Blog');
-        fireEvent.click(blogCard);
-        expect(mockNavigate).toHaveBeenCalledWith('/openedBlog', { state: mockBlogs[0] });
+
+        await waitFor(() => {
+            const blogTitle = screen.getByText('Test Blog');
+            fireEvent.click(blogTitle);
+            expect(mockNavigate).toHaveBeenCalledWith('/openedBlog', {
+                state: expect.objectContaining({
+                    blog: mockBlogs[0],
+                    blogImages: expect.any(Object),
+                }),
+            });
+        });
     });
 
     // Test 8: Opens edit modal when edit icon is clicked
-    it('opens edit modal when edit icon is clicked', () => {
+    it('opens edit modal when edit icon is clicked', async () => {
         const mockBlogs = [
             {
                 id: 1,
                 title: 'Test Blog',
-                image: 'http://example.com/image.jpg',
                 blogType: 'TRAINING',
             },
         ];
+        axios.get.mockResolvedValueOnce({ data: new ArrayBuffer(8) });
+        global.URL.createObjectURL = jest.fn(() => 'blob:http://localhost/mock-url');
+
         renderWithProviders(<Blogs />, {
             userContextValue: { userType: 'TRAINER' },
             blogContextValue: { ...mockBlogContext, blogs: mockBlogs },
         });
-        const editIcon = screen.getByLabelText('edit');
-        fireEvent.click(editIcon);
-        expect(screen.getByText(/EditBlog/i)).toBeInTheDocument(); // Assuming EditBlog renders something identifiable
+
+        await waitFor(() => {
+            const editIcon = screen.getByLabelText('edit');
+            fireEvent.click(editIcon);
+            expect(screen.getByText('EditBlog Test Blog')).toBeInTheDocument();
+        });
     });
 
     // Test 9: Opens delete confirmation modal when delete icon is clicked
-    it('opens delete confirmation modal when delete icon is clicked', () => {
+    it('opens delete confirmation modal when delete icon is clicked', async () => {
         const mockBlogs = [
             {
                 id: 1,
                 title: 'Test Blog',
-                image: 'http://example.com/image.jpg',
                 blogType: 'TRAINING',
             },
         ];
+        axios.get.mockResolvedValueOnce({ data: new ArrayBuffer(8) });
+        global.URL.createObjectURL = jest.fn(() => 'blob:http://localhost/mock-url');
+
         renderWithProviders(<Blogs />, {
             userContextValue: { userType: 'TRAINER' },
             blogContextValue: { ...mockBlogContext, blogs: mockBlogs },
         });
-        const deleteIcon = screen.getByLabelText('delete');
-        fireEvent.click(deleteIcon);
-        expect(screen.getByText(/Confirmation/i)).toBeInTheDocument(); // Assuming Confirmation renders something identifiable
+
+        await waitFor(() => {
+            const deleteIcon = screen.getByLabelText('delete');
+            fireEvent.click(deleteIcon);
+            expect(screen.getByText(/Confirmation/i)).toBeInTheDocument();
+        });
+    });
+
+    // Test 10: Handles image fetch error with fallback
+    it('uses fallback image when blog image fetch fails', async () => {
+        const mockBlogs = [
+            {
+                id: 1,
+                title: 'Test Blog',
+                blogType: 'TRAINING',
+            },
+        ];
+        axios.get.mockRejectedValueOnce(new Error('Image fetch failed'));
+
+        renderWithProviders(<Blogs />, {
+            blogContextValue: { ...mockBlogContext, blogs: mockBlogs },
+        });
+
+        await waitFor(() => {
+            const blogImage = screen.getByAltText('Test Blog');
+            expect(blogImage).toHaveAttribute('src', 'https://via.placeholder.com/400x250?text=Nincs+kép');
+        });
+    });
+
+    // Test 11: Shows error snackbar on fetchBlogs failure
+    it('shows error snackbar when fetchBlogs fails', async () => {
+        mockBlogContext.fetchBlogs.mockRejectedValueOnce(new Error('Fetch failed'));
+
+        renderWithProviders(<Blogs />);
+
+        await waitFor(() => {
+            expect(screen.getByText('Sikertelen művelet!')).toBeInTheDocument();
+        });
     });
 });
