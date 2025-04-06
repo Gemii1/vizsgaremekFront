@@ -1,3 +1,4 @@
+// CreateTraining.jsx
 import styles from './CreateTraining.module.css';
 import { Controller, useForm } from "react-hook-form";
 import { DatePicker, LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
@@ -79,8 +80,9 @@ function CreateTraining({ close }) {
                                     <DatePicker
                                         label="Nap"
                                         {...field}
+                                        slotProps={{ textField: { size: 'small' } }}
                                     />
-                                    {error && <span style={{ color: 'red' }}>{error.message}</span>}
+                                    {error && <span className={styles.error}>{error.message}</span>}
                                 </>
                             )}
                         />
@@ -94,8 +96,9 @@ function CreateTraining({ close }) {
                                     <TimePicker
                                         label="Kezdete"
                                         {...field}
+                                        slotProps={{ textField: { size: 'small' } }}
                                     />
-                                    {error && <span style={{ color: 'red' }}>{error.message}</span>}
+                                    {error && <span className={styles.error}>{error.message}</span>}
                                 </>
                             )}
                         />
@@ -109,8 +112,9 @@ function CreateTraining({ close }) {
                                     <TimePicker
                                         label="Vége"
                                         {...field}
+                                        slotProps={{ textField: { size: 'small' } }}
                                     />
-                                    {error && <span style={{ color: 'red' }}>{error.message}</span>}
+                                    {error && <span className={styles.error}>{error.message}</span>}
                                 </>
                             )}
                         />
@@ -125,9 +129,10 @@ function CreateTraining({ close }) {
                                         className={styles.textFields}
                                         label="Ár"
                                         type="number"
+                                        size="small"
                                         {...field}
                                     />
-                                    {error && <span style={{ color: 'red' }}>{error.message}</span>}
+                                    {error && <span className={styles.error}>{error.message}</span>}
                                 </>
                             )}
                         />
@@ -142,9 +147,10 @@ function CreateTraining({ close }) {
                                         className={styles.textFields}
                                         label="Max létszám"
                                         type="number"
+                                        size="small"
                                         {...field}
                                     />
-                                    {error && <span style={{ color: 'red' }}>{error.message}</span>}
+                                    {error && <span className={styles.error}>{error.message}</span>}
                                 </>
                             )}
                         />
@@ -158,6 +164,7 @@ function CreateTraining({ close }) {
                                     <Select
                                         className={styles.textFields}
                                         aria-label="Program Típus"
+                                        size="small"
                                         {...field}
                                     >
                                         {programTypes.map((type, key) => (
@@ -166,11 +173,11 @@ function CreateTraining({ close }) {
                                             </MenuItem>
                                         ))}
                                     </Select>
-                                    {error && <span style={{ color: 'red' }}>{error.message}</span>}
+                                    {error && <span className={styles.error}>{error.message}</span>}
                                 </>
                             )}
                         />
-                        <Button type="submit" variant="contained" className={styles.submitButton}>
+                        <Button type="submit" variant="contained" size="small" className={styles.submitButton}>
                             Létrehozás
                         </Button>
                     </div>
@@ -181,22 +188,14 @@ function CreateTraining({ close }) {
                 autoHideDuration={6000}
                 onClose={closeSuccessSnackBar}
                 message="Sikeresen létrehozás!"
-                sx={{
-                    '& .MuiSnackbarContent-root': {
-                        backgroundColor: 'green',
-                    }
-                }}
+                sx={{ '& .MuiSnackbarContent-root': { backgroundColor: 'green' } }}
             />
             <Snackbar
                 open={errorSnackBar}
                 autoHideDuration={6000}
                 onClose={closeErrorSnackBar}
                 message="Sikertelen létrehozás!"
-                sx={{
-                    '& .MuiSnackbarContent-root': {
-                        backgroundColor: 'red',
-                    }
-                }}
+                sx={{ '& .MuiSnackbarContent-root': { backgroundColor: 'red' } }}
             />
         </div>
     );

@@ -1,15 +1,15 @@
+// TrainerForm.jsx
 import styles from './TrainerForm.module.css';
 import { useForm, Controller } from "react-hook-form";
 import PhoneInput from "react-phone-input-2";
 import 'react-phone-input-2/lib/style.css';
-import {Button, Snackbar} from "@mui/material";
+import { Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import axios from "axios";
-import React, {useState} from "react";
+import React from "react";
 
-function TrainerForm({openSnackBarError}) {
+function TrainerForm({ openSnackBarError }) {
     const navigate = useNavigate();
-
 
     const {
         register,
@@ -22,7 +22,7 @@ function TrainerForm({openSnackBarError}) {
         try {
             qualificationToEnum(data);
             const formattedData = {
-                name: data.name,
+                name: data.name.trim(),
                 birthDate: data.birthDate,
                 gender: data.gender,
                 qualification: data.qualification,
@@ -31,11 +31,11 @@ function TrainerForm({openSnackBarError}) {
                 password: data.password
             };
             const response = await axios.post('/auth/registerTrainer', formattedData);
-            await savePictureToTrainer(response, data.file[0])
+            await savePictureToTrainer(response, data.file[0]);
             navigate('/login');
         } catch (error) {
             console.error("Form submission error:", error);
-            openSnackBarError()
+            openSnackBarError();
         }
     };
 
@@ -43,8 +43,7 @@ function TrainerForm({openSnackBarError}) {
         try {
             const formData = new FormData();
             formData.append('file', file);
-
-            const valasz = await axios.post(`/trainer/upload-picture/${response.data.id}`, formData, {
+            await axios.put(`/trainer/upload-picture/${response.data.id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -54,7 +53,15 @@ function TrainerForm({openSnackBarError}) {
         }
     };
 
-    const trainerQualifications = ["Personal Trainer", "Fitness Instructor", "Pilates Instructor", "Crossfit Coach", "TRX Trainer", "Pound Trainer", "Other"];
+    const trainerQualifications = [
+        "Personal Trainer",
+        "Fitness Instructor",
+        "Pilates Instructor",
+        "Crossfit Coach",
+        "TRX Trainer",
+        "Pound Trainer",
+        "Other"
+    ];
 
     const qualificationToEnum = (data) => {
         let qualSplitted = data.qualification.toUpperCase().split(" ");
@@ -66,10 +73,10 @@ function TrainerForm({openSnackBarError}) {
     };
 
     return (
-        <div className={styles.form}>
-            <form onSubmit={handleSubmit(onSubmit)}>
+        <div className={styles.formContainer}>
+            <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
                 <div className={styles.inputs}>
-                    <div>
+                    <div className={styles.inputWrapper}>
                         <label>Teljes név:</label>
                         <input
                             className={styles.input}
@@ -80,15 +87,17 @@ function TrainerForm({openSnackBarError}) {
                                     value: 2,
                                     message: "A név legalább 2 karakter hosszú kell legyen!"
                                 },
-                                pattern: {
-                                    value: /^[A-Za-z]+$/i,
-                                    message: "A név csak betűket tartalmazhat!"
-                                },
+                                maxLength: {
+                                    value: 50,
+                                    message: "A név legfeljebb 50 karakter hosszú lehet!"
+                                }
+                                // Removed pattern: /^[A-Za-z]+$/i to allow spaces and special characters
                             })}
                         />
                         {errors.name && <span className={styles.error}>{errors.name.message}</span>}
                     </div>
-                    <div>
+
+                    <div className={styles.inputWrapper}>
                         <label>Email:</label>
                         <input
                             className={styles.input}
@@ -99,98 +108,146 @@ function TrainerForm({openSnackBarError}) {
                                 pattern: {
                                     value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                                     message: "Érvénytelen email formátum!"
-                                },
+                                }
                             })}
                         />
                         {errors.email && <span className={styles.error}>{errors.email.message}</span>}
                     </div>
-                    <div>
+
+                    <div className={styles.inputWrapper}>
                         <label>Telefonszám:</label>
                         <Controller
                             name="phoneNumber"
                             control={control}
-                            rules={{ required: 'A telefonszám megadása kötelező!' }}
+                            rules={{
+                                required: "A telefonszám megadása kötelező!",
+                                pattern: {
+                                    value: /^\d{11}$/,
+                                    message: "A telefonszám pontosan 11 számjegy kell legyen (pl. 36201234567)!"
+                                }
+                            }}
                             render={({ field: { onChange, value } }) => (
                                 <PhoneInput
                                     value={value}
                                     onChange={onChange}
                                     country="hu"
-                                    inputStyle={{ width: '110%', padding: '18px', height: 'auto', paddingInline: '50px' }}
+                                    className={styles.phone}
+                                    inputStyle={{ width: '100%' }}
+                                    inputProps={{ maxLength: 15 }}
                                 />
                             )}
                         />
-                        {errors.phoneNumber && <span className={styles.error}>{errors.phoneNumber.message + "!"}</span>}
+                        {errors.phoneNumber && <span className={styles.error}>{errors.phoneNumber.message}</span>}
                     </div>
-                    <div>
+
+                    <div className={styles.inputWrapper}>
                         <label>Születési év:</label>
                         <input
                             className={styles.input}
                             placeholder="Születési év"
                             type="date"
-                            {...register("birthDate", { required: "A születési év megadása kötelező!" })}
+                            {...register("birthDate", {
+                                required: "A születési év megadása kötelező!",
+                                validate: value => {
+                                    const date = new Date(value);
+                                    const today = new Date();
+                                    return date < today || "A születési dátum nem lehet a jövőben!";
+                                }
+                            })}
                         />
                         {errors.birthDate && <span className={styles.error}>{errors.birthDate.message}</span>}
                     </div>
-                    <div className={styles.select}>
+
+                    <div className={styles.inputWrapper}>
                         <label>Foglalkozás:</label>
-                        <select className={styles.input} {...register("qualification", { required: "Válasszon egy foglalkozást!" })}>
+                        <select
+                            className={styles.input}
+                            {...register("qualification", { required: "Válasszon egy foglalkozást!" })}
+                        >
+                            <option value="">Válasszon...</option>
                             {trainerQualifications.map((qualification, index) => (
-                                <option value={qualification} key={index}> {qualification}</option>
+                                <option value={qualification} key={index}>{qualification}</option>
                             ))}
                         </select>
                         {errors.qualification && <span className={styles.error}>{errors.qualification.message}</span>}
                     </div>
-                    <div>
+
+                    <div className={styles.inputWrapper}>
                         <label>Jelszó:</label>
                         <input
                             className={styles.input}
                             placeholder="Jelszó"
                             type="password"
-                            {...register("password", { required: "A jelszó megadása kötelező!" })}
+                            {...register("password", {
+                                required: "A jelszó megadása kötelező!",
+                                minLength: {
+                                    value: 8,
+                                    message: "A jelszó legalább 8 karakter hosszú kell legyen!"
+                                }
+                            })}
                         />
                         {errors.password && <span className={styles.error}>{errors.password.message}</span>}
                     </div>
-                    <div className={styles.formRadio}>
+
+                    <div className={styles.inputWrapper}>
                         <label>Nem:</label>
-                        <br />
-                        <label>
-                            <input
-                                type="radio"
-                                value="MALE"
-                                {...register("gender", { required: "Válasszon egy nemet!" })}
-                            />
-                            Férfi
-                        </label>
-                        <label>
-                            <input
-                                type="radio"
-                                value="FEMALE"
-                                {...register("gender", { required: "Válasszon egy nemet!" })}
-                            />
-                            Nő
-                        </label>
-                        <label>
-                            <input
-                                type="radio"
-                                value="OTHER"
-                                {...register("gender", { required: "Válasszon egy nemet!" })}
-                            />
-                            Egyéb
-                        </label>
+                        <div className={styles.formRadio}>
+                            <label>
+                                <input
+                                    type="radio"
+                                    value="MALE"
+                                    {...register("gender", { required: "Válasszon egy nemet!" })}
+                                />
+                                Férfi
+                            </label>
+                            <label>
+                                <input
+                                    type="radio"
+                                    value="FEMALE"
+                                    {...register("gender", { required: "Válasszon egy nemet!" })}
+                                />
+                                Nő
+                            </label>
+                            <label>
+                                <input
+                                    type="radio"
+                                    value="OTHER"
+                                    {...register("gender", { required: "Válasszon egy nemet!" })}
+                                />
+                                Egyéb
+                            </label>
+                        </div>
                         {errors.gender && <span className={styles.error}>{errors.gender.message}</span>}
                     </div>
-                    <div>
-                        <label>Kép: </label>
-                        <input type="file" {...register("file", { required: "A kép feltöltése kötelező!" })} />
+
+                    <div className={styles.inputWrapper}>
+                        <label>Kép:</label>
+                        <input
+                            type="file"
+                            className={styles.fileInput}
+                            {...register("file", { required: "A kép feltöltése kötelező!" })}
+                        />
                         {errors.file && <span className={styles.error}>{errors.file.message}</span>}
                     </div>
                 </div>
+
                 <div className={styles.buttons}>
-                    <Button  variant="contained" color="error" onClick={() => navigate("/landingPage")}>Bezárás</Button>
-                    <Button  variant="contained" color="info" type="submit">Regisztrálás</Button>
+                    <Button
+                        variant="contained"
+                        color="error"
+                        onClick={() => navigate("/landingPage")}
+                    >
+                        Bezárás
+                    </Button>
+                    <Button
+                        variant="contained"
+                        color="info"
+                        type="submit"
+                    >
+                        Regisztrálás
+                    </Button>
                 </div>
             </form>
-
         </div>
     );
 }

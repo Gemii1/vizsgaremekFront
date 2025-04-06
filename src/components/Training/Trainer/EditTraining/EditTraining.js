@@ -1,4 +1,4 @@
-import styles from "../CreateTraining/CreateTraining.module.css";
+import styles from "../EditTraining/EditTraining.module.css";
 import { DatePicker, LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Controller, useForm } from "react-hook-form";

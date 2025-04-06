@@ -1,6 +1,6 @@
 import styles from './LoginPage.module.css';
-import React, {useContext, useState} from 'react';
-import {Button, Snackbar} from "@mui/material";
+import React, { useContext, useState } from 'react';
+import { Button, Snackbar } from "@mui/material";
 import { useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -9,7 +9,7 @@ import AuthContext from "../Context/Auth/AuthContext";
 
 function LoginPage() {
     const navigate = useNavigate();
-    const {setUser,setIsUserLoggedIn,setUserType} = useContext(UserContext);
+    const { setUser, setIsUserLoggedIn, setUserType,userType } = useContext(UserContext);
     const [snackBarError, setSnackBarError] = useState(false);
     const closeSnackBarError = () => setSnackBarError(false);
     const openSnackBarError = () => setSnackBarError(true);
@@ -20,18 +20,20 @@ function LoginPage() {
         formState: { errors },
     } = useForm();
 
-    const {login} = useContext(AuthContext);
+    const { login } = useContext(AuthContext);
 
     const onSubmit = async (data) => {
         try {
             const loginData = await login(data.email, data.password);
+            console.log(loginData.role);
             setUserType(loginData.role);
-            console.log(loginData);
-            const userResponse = await axios.get(`/auth/me`)
+            console.log(userType)
+            const userResponse = await axios.get(`/auth/me`);
             setUser(userResponse.data);
-            navigate('/landingPage')
+            setIsUserLoggedIn(true);
+            navigate('/landingPage');
         } catch (error) {
-            console.log(error);
+            console.error("Login error:", error);
             openSnackBarError();
         }
     };
@@ -39,10 +41,10 @@ function LoginPage() {
     return (
         <div className={styles.login}>
             <div className={styles.container}>
-                <h2>Bejelentkezés</h2>
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <h2 className={styles.title}>Bejelentkezés</h2>
+                <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
                     <div className={styles.inputs}>
-                        <div>
+                        <div className={styles.inputWrapper}>
                             <input
                                 placeholder="Felhasználó név"
                                 className={styles.email}
@@ -54,9 +56,9 @@ function LoginPage() {
                                     }
                                 })}
                             />
-                            {errors.userName && <div className={styles.error}>{errors.userName.message}</div>}
+                            {errors.email && <div className={styles.error}>{errors.email.message}</div>}
                         </div>
-                        <div>
+                        <div className={styles.inputWrapper}>
                             <input
                                 placeholder="Jelszó"
                                 type="password"
@@ -82,7 +84,6 @@ function LoginPage() {
                             <Button
                                 className={styles.sendButton}
                                 variant="contained"
-                                color="info"
                                 type="submit"
                             >
                                 Bejelentkezés
@@ -98,7 +99,8 @@ function LoginPage() {
                 message="Sikertelen bejelentkezés! Hibás felhasználó név vagy jelszó!"
                 sx={{
                     '& .MuiSnackbarContent-root': {
-                        backgroundColor: 'red',
+                        backgroundColor: '#d32f2f',
+                        fontSize: '0.875rem',
                     }
                 }}
             />

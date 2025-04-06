@@ -1,0 +1,86 @@
+/* CreateTraining.module.css */
+.container {
+    display: flex;
+    flex-direction: column;
+    background-color: whitesmoke;
+    width: 400px;
+    min-height: 400px;
+    max-height: 80vh; /* Limits height to fit smaller screens */
+    margin: 0 auto; /* Centered, no top margin to avoid Navbar overlap */
+    padding: 15px;
+    padding-top: 70px; /* Space for Navbar */
+    border-radius: 15px;
+    position: relative;
+    overflow-y: auto; /* Allows scrolling if content exceeds max-height */
+}
+
+.form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.inputs {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.inputs > div {
+    margin: 8px 0;
+}
+
+.textFields {
+    width: 100%;
+}
+
+.submitButton {
+    margin: 15px 0;
+}
+
+.error {
+    color: red;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .container {
+        width: 90%;
+        min-height: auto; /* Allows natural height on mobile */
+        max-height: calc(100vh - 60px); /* Fits below Navbar */
+        padding: 10px;
+        padding-top: 60px; /* Adjusted for mobile Navbar */
+    }
+
+    .inputs {
+        width: 100%;
+    }
+
+    .inputs > div {
+        margin: 6px 0;
+    }
+
+    .submitButton {
+        margin: 10px 0;
+    }
+
+    .error {
+        font-size: 10px;
+    }
+}
+
+/* Larger screens */
+@media (min-width: 769px) {
+    .container {
+        width: 450px;
+        padding: 20px;
+        padding-top: 80px; /* More space for desktop Navbar */
+    }
+
+    .inputs {
+        width: 70%;
+    }
+}

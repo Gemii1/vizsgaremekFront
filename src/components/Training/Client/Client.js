@@ -1,3 +1,4 @@
+// Client.jsx
 import styles from './Client.module.css';
 import { Grid } from '@mui/joy';
 import { Divider, Button, Snackbar, IconButton } from "@mui/material";
@@ -27,7 +28,10 @@ function Client() {
     const getWeekDays = (startDate) => {
         const days = [];
         const start = new Date(startDate);
-        start.setDate(start.getDate() - start.getDay() + 1);
+        const dayOfWeek = start.getDay();
+        const offset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // Monday as first day
+        start.setDate(start.getDate() + offset);
+        start.setHours(0, 0, 0, 0); // Normalize to midnight
         for (let i = 0; i < 5; i++) {
             const day = new Date(start);
             day.setDate(start.getDate() + i);
@@ -60,19 +64,22 @@ function Client() {
 
     const filteredPrograms = programs.filter(program => {
         const programDate = new Date(program.startTime);
+        programDate.setHours(0, 0, 0, 0);
         const weekStart = new Date(weekDays[0]);
         const weekEnd = new Date(weekDays[4]);
-        return programDate >= weekStart && programDate <= weekEnd;
+        const isInWeek = programDate >= weekStart && programDate <= weekEnd;
+        return isInWeek;
     });
 
     const groupedPrograms = filteredPrograms.reduce((acc, program) => {
-        const day = formatDate(new Date(program.startTime));
-        if (!acc[day]) {
-            acc[day] = [];
-        }
+        const programDate = new Date(program.startTime);
+        programDate.setHours(0, 0, 0, 0);
+        const day = formatDate(programDate);
+        if (!acc[day]) acc[day] = [];
         acc[day].push(program);
         return acc;
     }, {});
+
 
     const getTime = (dateString) => {
         const date = new Date(dateString);
@@ -84,7 +91,7 @@ function Client() {
     const handleUserRegistrationToProgram = async (program) => {
         try {
             await axios.post(`/program/${program.id}/clients/${user.id}`);
-            await getProgramClients(program);
+            setRegisteredPrograms(prev => ({ ...prev, [program.id]: true }));
             openSnackBarSuccess();
         } catch (error) {
             openSnackBarError();
@@ -94,93 +101,58 @@ function Client() {
     const handleUserCancellationToProgram = async (program) => {
         try {
             await axios.delete(`/program/${program.id}/clients/${user.id}`);
-            await getProgramClients(program);
+            setRegisteredPrograms(prev => ({ ...prev, [program.id]: false }));
             openSnackBarSuccess();
         } catch (error) {
             openSnackBarError();
         }
     };
 
-    const getProgramClients = async (program) => {
-        /*
-        try {
-            const response = await axios.get(`/program/${program.id}/client-list`);
-            if (response.data && Array.isArray(response.data)) {
-                const isRegistered = response.data.some(client => client.id === user.id);
-                setRegisteredPrograms(prevState => ({
-                    ...prevState,
-                    [program.id]: isRegistered
-                }));
-            }
-        } catch (error) {
-            console.error("Hiba a jelentkezők lekérése során:", error);
-        }
-         */
-        setRegisteredPrograms(prevState => ({
-            ...prevState,
-            [program.id]: true
-        }));
 
-    };
-
-    // Ellenőrzi, hogy a kliens részt vett-e a programon
-    const wasOnProgram = async (clientId, programId) => {
-        try {
-            const response = await axios.get(`/program/${programId}/client-list`);
-            return response.data.some(client => client.id === clientId);
-        } catch (error) {
-            console.error("Hiba a program résztvevőinek ellenőrzésekor:", error);
-            return false;
-        }
-    };
-
-    useEffect(() => {
-        programs.forEach(program => {
-            getProgramClients(program);
-        });
-    }, [programs]);
 
     const handleRatingSubmit = async (trainerId, score) => {
         try {
             if (score > 0) {
-                await axios.post(`/trainer/${trainerId}/rating`, {
-                    score: score
-                });
+                await axios.post(`/trainer/${trainerId}/rating`, { score });
                 openSnackBarSuccess();
             }
         } catch (error) {
-            console.error("Hiba az értékelés beküldésekor:", error);
             openSnackBarError();
         }
     };
 
     const handleApplication = (isLoggedIn, program) => {
-        if (isLoggedIn && program.status === "UPCOMING" && !registeredPrograms[program.id]) {
+        if (!isLoggedIn || !user) return null;
+
+        const programId = program.id;
+        const isRegistered = registeredPrograms[programId] || false;
+        const hasParticipated = participatedPrograms[programId] || false;
+
+
+        if (program.status === "UPCOMING") {
+            if (!isRegistered) {
+                return (
+                    <Button variant='contained' size="small" onClick={() => handleUserRegistrationToProgram(program)}>
+                        Jelentkezés
+                    </Button>
+                );
+            } else {
+                return (
+                    <Button variant='outlined' color='error' size="small" onClick={() => handleUserCancellationToProgram(program)}>
+                        Lemondás
+                    </Button>
+                );
+            }
+        } else if (program.status === "COMPLETED" && hasParticipated) {
             return (
-                <Button variant='contained' sx={{ fontSize: '1.3rem' }} onClick={() => handleUserRegistrationToProgram(program)}>
-                    Jelentkezés
-                </Button>
-            );
-        } else if (isLoggedIn && program.status === "UPCOMING" && registeredPrograms[program.id]) {
-            return (
-                <Button variant='outlined' color='error' sx={{ fontSize: '1.3rem' }} onClick={() => handleUserCancellationToProgram(program)}>
-                    Lemondás
-                </Button>
-            );
-        } else if (isLoggedIn && program.status === "COMPLETED") {
-            return (
-                <div >
-                    <Rating
-                        name={`rating-${program.id}`}
-                        defaultValue={0}
-                        onChange={(event, newValue) => {
-                            if (newValue) {
-                                handleRatingSubmit(program.trainer.id, newValue);
-                            }
-                        }}
-                        size="medium"
-                    />
-                </div>
+                <Rating
+                    name={`rating-${programId}`}
+                    defaultValue={0}
+                    onChange={(event, newValue) => {
+                        if (newValue) handleRatingSubmit(program.trainer.id, newValue);
+                    }}
+                    size="small"
+                />
             );
         }
         return null;
@@ -189,50 +161,65 @@ function Client() {
     const handleStatus = (status) => {
         let color, statusText;
         switch (status) {
-            case "UPCOMING":
-                color = 'green';
-                statusText = 'Közelgő';
-                break;
-            case "ONGOING":
-                color = 'orange';
-                statusText = 'Folyamatban lévő';
-                break;
-            case "COMPLETED":
-                color = 'red';
-                statusText = 'Befejezett';
-                break;
-            default:
-                return null;
+            case "UPCOMING": color = 'green'; statusText = 'Közelgő'; break;
+            case "ONGOING": color = 'orange'; statusText = 'Folyamatban lévő'; break;
+            case "COMPLETED": color = 'red'; statusText = 'Befejezett'; break;
+            default: return null;
         }
         return (
             <>
-                <MoreVertIcon style={{ color: color }} />
+                <MoreVertIcon style={{ color }} />
                 <div>{statusText}</div>
             </>
         );
     };
 
     const handleProgramType = (programType) => {
-        let typeText;
         switch (programType) {
-            case "FUNCTIONAL_TRAINING":
-                typeText = "Funkcionális edzés";
-                break;
-            case "B_FIT":
-                typeText = "B edzés";
-                break;
-            case "PILATES":
-                typeText = "Pilates edzés";
-                break;
-            default:
-                return null;
+            case "FUNCTIONAL_TRAINING": return "Funkcionális edzés";
+            case "B_FIT": return "B edzés";
+            case "PILATES": return "Pilates edzés";
+            default: return null;
         }
-        return <>{typeText}</>;
     };
+
+    useEffect(() => {
+        const fetchStatuses = async () => {
+            if (!isUserLoggedIn || !user || programs.length === 0) return;
+
+            const promises = programs.map(async (program) => {
+                const programId = program.id;
+                const clientId = user.id;
+
+                if (registeredPrograms[programId] === undefined) {
+                    try {
+                        const regResponse = await axios.get(`/program/${programId}/clients/${clientId}`);
+                        setRegisteredPrograms(prev => ({ ...prev, [programId]: regResponse.data }));
+                    } catch (error) {
+                        setRegisteredPrograms(prev => ({ ...prev, [programId]: false }));
+                    }
+                }
+
+                if (program.status === "COMPLETED" && participatedPrograms[programId] === undefined) {
+                    try {
+                        const partResponse = await axios.get(`/program/${programId}/clients/${clientId}`);
+                        setParticipatedPrograms(prev => ({ ...prev, [programId]: partResponse.data }));
+                    } catch (error) {
+                        setParticipatedPrograms(prev => ({ ...prev, [programId]: false }));
+                    }
+                }
+            });
+
+            await Promise.all(promises);
+
+        };
+
+        fetchStatuses();
+    }, [isUserLoggedIn, user, programs]);
 
     return (
         <div className={styles.calendar}>
-            <meta name="viewport" content="width=720" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <div className={styles.calendarWeek}>
                 <IconButton onClick={handlePrevWeek}>
                     <ArrowBackIcon />
@@ -242,11 +229,11 @@ function Client() {
                     <ArrowForwardIcon />
                 </IconButton>
             </div>
-            <Grid container rowSpacing={1} spacing={2} columns={{ xs: 2, sm: 2, md: 12 }}>
+            <Grid container rowSpacing={1} spacing={2} columns={{ xs: 1, sm: 2, md: 5 }}>
                 {weekDays.map((date) => {
                     const day = formatDate(date);
                     return (
-                        <Grid item xs={2.4} key={day} className={styles.days}>
+                        <Grid item xs={1} key={day} className={styles.days}>
                             <div className={styles.program}>
                                 <h2>{day}</h2>
                                 <Divider color='black' />
@@ -260,11 +247,11 @@ function Client() {
                                                     {handleStatus(program.status)}
                                                 </div>
                                                 <div className={styles.dates}>
-                                                    <div><h3>Edzés: </h3> {handleProgramType(program.programType)}</div>
-                                                    <div><h3>Edző: </h3> {program.trainer.name}</div>
-                                                    <div><h3>Kezdés: </h3> {getTime(program.startTime)}</div>
-                                                    <div><h3>Vége: </h3> {getTime(program.endTime)}</div>
-                                                    <div><h3>Ár: </h3> {program.price} Ft</div>
+                                                    <div><strong>Edzés:</strong> {handleProgramType(program.programType)}</div>
+                                                    <div><strong>Edző:</strong> {program.trainer.name}</div>
+                                                    <div><strong>Kezdés:</strong> {getTime(program.startTime)}</div>
+                                                    <div><strong>Vége:</strong> {getTime(program.endTime)}</div>
+                                                    <div><strong>Ár:</strong> {program.price} Ft</div>
                                                 </div>
                                                 <div className={styles.signUpButton}>
                                                     {handleApplication(isUserLoggedIn, program)}

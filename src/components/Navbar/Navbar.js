@@ -27,7 +27,7 @@ function Navbar() {
     const [snackBarSuccess, setSnackBarSuccess] = useState(false);
     const [snackBarError, setSnackBarError] = useState(false);
     const [patchData, setPatchData] = useState({});
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // Hamburger menü állapota
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const trainerQualifications = ["Personal Trainer", "Fitness Instructor", "Pilates Instructor", "Crossfit Coach", "TRX Trainer", "Pound Trainer", "Other"];
 
     const handleOpenInfo = () => setOpenInfoModal(true);
@@ -36,19 +36,21 @@ function Navbar() {
     const openSnackBarSuccess = () => setSnackBarSuccess(true);
     const closeSnackBarError = () => setSnackBarError(false);
     const openSnackBarError = () => setSnackBarError(true);
-    const whichUser = (userType) => (userType === 'TRAINER' ? <>Edző</> : <>Kliens</>);
+    const whichUser = (userType) => (userType === 'TRAINER' ? <>Edző</> : userType === 'CLIENT' ? <>Kliens</> : <>Admin</>);
 
     const isThereQualification = () => {
-        if (userType === 'TRAINER') {
+        if (userType === 'TRAINER' && user) {
             return (
                 <div className={styles.info}>
                     <h4>Végzettség:</h4>
                     <Select
                         className={styles.editInputs}
                         disabled={isSelectEdited}
-                        defaultValue={user.qualification}
+                        defaultValue={user.qualification || ''}
                         onChange={handleChange}
                         name="qualification"
+                        variant="outlined"
+                        size="small"
                     >
                         {trainerQualifications.map((qualification, key) => (
                             <MenuItem key={key} value={qualification.toUpperCase().replace(" ", "_")}>
@@ -56,10 +58,12 @@ function Navbar() {
                             </MenuItem>
                         ))}
                     </Select>
-                    <div onClick={() => setIsSelectEdited(false)}>
-                        <EditIcon />
+                    <div className={styles.editButton}>
+                        <EditIcon onClick={() => setIsSelectEdited(false)} />
                         {!isSelectEdited && (
                             <Button
+                                variant="contained"
+                                size="small"
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     setIsSelectEdited(true);
@@ -76,7 +80,7 @@ function Navbar() {
     };
 
     const handleLoginNavbar = () => {
-        if (isUserLoggedIn) {
+        if (isUserLoggedIn && user) {
             return (
                 <Dropdown>
                     <MenuButton className={styles.menuButton}>
@@ -89,7 +93,9 @@ function Navbar() {
                                 <div>{user.name}</div>
                             </div>
                             <div className={styles.userType}>{whichUser(userType)}</div>
-                            <MenuItem onClick={handleOpenInfo}>Adataim</MenuItem>
+                            {userType !== 'ADMIN' && (
+                                <MenuItem onClick={handleOpenInfo}>Adataim</MenuItem>
+                            )}
                             <MenuItem
                                 onClick={() => {
                                     logout();
@@ -160,12 +166,23 @@ function Navbar() {
         await fetchUser(userType);
     };
 
-    const handleAdminPage = (userType) => {
+    const handleAdminPage = () => {
         if (userType === 'ADMIN') {
             return (
                 <div className={styles.pageItem} onClick={() => navigate('/adminPage')}>
                     Felhasználók
                 </div>
+            );
+        } else {
+            return (
+                <>
+                    <div className={styles.pageItem} onClick={() => navigate('/blogs')}>
+                        Blogok
+                    </div>
+                    <div className={styles.pageItem} onClick={() => navigate('/training')}>
+                        Programok
+                    </div>
+                </>
             );
         }
     };
@@ -176,6 +193,8 @@ function Navbar() {
                 <div className={styles.deleteButton}>
                     <Button
                         color="error"
+                        variant="contained"
+                        size="small"
                         onClick={() => {
                             deleteUser(userType);
                             navigate('/landingPage');
@@ -196,6 +215,12 @@ function Navbar() {
         }
     }, [user]);
 
+    useEffect(() => {
+        if (isUserLoggedIn && !user) {
+            fetchUser(userType);
+        }
+    }, [isUserLoggedIn, user, userType, fetchUser]);
+
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <div className={styles.body}>
@@ -208,35 +233,33 @@ function Navbar() {
                             <MenuIcon fontSize="large" />
                         </div>
                         <div className={`${styles.pages} ${mobileMenuOpen ? styles.mobileMenuOpen : ''}`}>
-                            {handleAdminPage('ADMIN')}
-                            <div className={styles.pageItem} onClick={() => navigate('/blogs')}>
-                                Blogok
-                            </div>
-                            <div className={styles.pageItem} onClick={() => navigate('/training')}>
-                                Programok
-                            </div>
+                            {handleAdminPage()}
                             {handleLoginNavbar()}
                         </div>
                     </div>
                 </div>
                 <Modal open={openInfoModal} onClose={handleCloseInfo}>
-                    <div className={styles.modalContainer}>
-                        <div className={styles.modalHeader}>
-                            <AccountCircleIcon className={styles.icon} />
-                            <h2>
-                                <div className={styles.info}>
+                    {user ? (
+                        <div className={styles.modalContainer}>
+                            <div className={styles.modalHeader}>
+                                <AccountCircleIcon className={styles.icon} />
+                                <div className={styles.nameWrapper}>
                                     <TextField
                                         className={styles.editInputs}
                                         label="Név"
                                         disabled={isNameEdited}
-                                        defaultValue={user.name}
+                                        defaultValue={user.name || ''}
                                         name="name"
                                         onChange={handleChange}
+                                        variant="outlined"
+                                        size="small"
                                     />
-                                    <div onClick={() => setIsNameEdited(false)}>
-                                        <EditIcon />
+                                    <div className={styles.editButton}>
+                                        <EditIcon onClick={() => setIsNameEdited(false)} />
                                         {!isNameEdited && (
                                             <Button
+                                                variant="contained"
+                                                size="small"
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     setIsNameEdited(true);
@@ -248,66 +271,79 @@ function Navbar() {
                                         )}
                                     </div>
                                 </div>
-                            </h2>
-                        </div>
-                        <div className={styles.informations}>
-                            <div className={styles.info}>
-                                <h4>Email:</h4>
-                                {email}
                             </div>
-                            <div className={styles.info}>
-                                <h4>Születési év:</h4>
-                                <DatePicker
-                                    disabled={isBirthYearEdited}
-                                    defaultValue={dayjs(user.birthDate)}
-                                    className={styles.editInputs}
-                                    name="birth_date"
-                                    onChange={handleChange}
-                                />
-                                <div onClick={() => setIsBirthYearEdited(false)}>
-                                    <EditIcon />
-                                    {!isBirthYearEdited && (
-                                        <Button
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                setIsBirthYearEdited(true);
-                                                patchUserData(patchData);
-                                            }}
-                                        >
-                                            Mentés
-                                        </Button>
-                                    )}
+                            <div className={styles.informations}>
+                                <div className={styles.info}>
+                                    <h4>Email:</h4>
+                                    <span>{email || ''}</span>
                                 </div>
-                            </div>
-                            {isThereQualification()}
-                            <div className={styles.info}>
-                                <h4>Telefonszám:</h4>
-                                <TextField
-                                    className={styles.editInputs}
-                                    type="number"
-                                    disabled={isPhoneEdited}
-                                    defaultValue={user.phoneNumber}
-                                    onChange={handleChange}
-                                    name="phone_Number"
-                                />
-                                <div onClick={() => setIsPhoneEdited(false)}>
-                                    <EditIcon />
-                                    {!isPhoneEdited && (
-                                        <Button
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                setIsPhoneEdited(true);
-                                                patchUserData(patchData);
-                                            }}
-                                        >
-                                            Mentés
-                                        </Button>
-                                    )}
+                                <div className={styles.info}>
+                                    <h4>Születési év:</h4>
+                                    <DatePicker
+                                        disabled={isBirthYearEdited}
+                                        defaultValue={user.birthDate ? dayjs(user.birthDate) : null}
+                                        className={styles.editInputs}
+                                        name="birth_date"
+                                        onChange={handleChange}
+                                        slotProps={{ textField: { size: 'small', variant: 'outlined' } }}
+                                    />
+                                    <div className={styles.editButton}>
+                                        <EditIcon onClick={() => setIsBirthYearEdited(false)} />
+                                        {!isBirthYearEdited && (
+                                            <Button
+                                                variant="contained"
+                                                size="small"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setIsBirthYearEdited(true);
+                                                    patchUserData(patchData);
+                                                }}
+                                            >
+                                                Mentés
+                                            </Button>
+                                        )}
+                                    </div>
                                 </div>
+                                {isThereQualification()}
+                                <div className={styles.info}>
+                                    <h4>Telefonszám:</h4>
+                                    <TextField
+                                        className={styles.editInputs}
+                                        type="number"
+                                        disabled={isPhoneEdited}
+                                        defaultValue={user.phoneNumber || ''}
+                                        onChange={handleChange}
+                                        name="phone_Number"
+                                        variant="outlined"
+                                        size="small"
+                                    />
+                                    <div className={styles.editButton}>
+                                        <EditIcon onClick={() => setIsPhoneEdited(false)} />
+                                        {!isPhoneEdited && (
+                                            <Button
+                                                variant="contained"
+                                                size="small"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setIsPhoneEdited(true);
+                                                    patchUserData(patchData);
+                                                }}
+                                            >
+                                                Mentés
+                                            </Button>
+                                        )}
+                                    </div>
+                                </div>
+                                {handleDeleteButton(userType)}
                             </div>
-                            {handleDeleteButton(userType)}
                         </div>
-                    </div>
+                    ) : (
+                        <div className={styles.modalContainer}>
+                            <div className={styles.modalHeader}>
+                                <p>Loading user data...</p>
+                            </div>
+                        </div>
+                    )}
                 </Modal>
                 <Snackbar
                     open={snackBarSuccess}

@@ -14,16 +14,16 @@ function Training() {
         fetchPrograms();
     }, []);
 
-    const handleUser = () => {
+    const handleUser = (userType) => {
+
         return userType==='TRAINER' ? <Trainer /> : <Client />;
     };
 
     return (
         <>
-            <meta name="viewport" content="width=720"/>
             <Navbar/>
             <div className={styles.calendar}>
-                {handleUser()}
+                {handleUser(userType)}
             </div>
         </>
     );

@@ -1,14 +1,14 @@
+// ClientForm.jsx (unchanged JSX, only CSS will be modified)
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router";
-import styles from "../TrainerForm/TrainerForm.module.css";
+import styles from "./ClientForm.module.css";
 import PhoneInput from "react-phone-input-2";
 import 'react-phone-input-2/lib/style.css';
 import { Button } from "@mui/material";
 import axios from "axios";
 
-function ClientForm({openSnackBarError}) {
+function ClientForm({ openSnackBarError }) {
     const navigate = useNavigate();
-
     const {
         register,
         handleSubmit,
@@ -27,10 +27,10 @@ function ClientForm({openSnackBarError}) {
     };
 
     return (
-        <div className={styles.form}>
-            <form onSubmit={handleSubmit(onSubmit)}>
+        <div className={styles.formContainer}>
+            <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
                 <div className={styles.inputs}>
-                    <div>
+                    <div className={styles.inputWrapper}>
                         <label>Teljes név:</label>
                         <input
                             className={styles.input}
@@ -49,7 +49,8 @@ function ClientForm({openSnackBarError}) {
                         />
                         {errors.name && <span className={styles.error}>{errors.name.message}</span>}
                     </div>
-                    <div>
+
+                    <div className={styles.inputWrapper}>
                         <label>Email:</label>
                         <input
                             className={styles.input}
@@ -65,7 +66,8 @@ function ClientForm({openSnackBarError}) {
                         />
                         {errors.email && <span className={styles.error}>{errors.email.message}</span>}
                     </div>
-                    <div>
+
+                    <div className={styles.inputWrapper}>
                         <label>Telefonszám:</label>
                         <Controller
                             name="phone"
@@ -77,13 +79,14 @@ function ClientForm({openSnackBarError}) {
                                     onChange={onChange}
                                     country="hu"
                                     className={styles.phone}
-                                    inputStyle={{ width: '110%', padding: '18px', height: 'auto', paddingInline: '50px' }}
+                                    inputStyle={{ width: '100%' }}
                                 />
                             )}
                         />
                         {errors.phone && <span className={styles.error}>{errors.phone.message + "!"}</span>}
                     </div>
-                    <div>
+
+                    <div className={styles.inputWrapper}>
                         <label>Születési év:</label>
                         <input
                             className={styles.input}
@@ -93,7 +96,8 @@ function ClientForm({openSnackBarError}) {
                         />
                         {errors.birthDate && <span className={styles.error}>{errors.birthDate.message}</span>}
                     </div>
-                    <div>
+
+                    <div className={styles.inputWrapper}>
                         <label>Jelszó:</label>
                         <input
                             className={styles.input}
@@ -103,39 +107,54 @@ function ClientForm({openSnackBarError}) {
                         />
                         {errors.password && <span className={styles.error}>{errors.password.message}</span>}
                     </div>
-                    <div className={styles.formRadio}>
+
+                    <div className={styles.inputWrapper}>
                         <label>Nem:</label>
-                        <br />
-                        <label>
-                            <input
-                                type="radio"
-                                value="MALE"
-                                {...register("gender", { required: "Válasszon egy nemet!" })}
-                            />
-                            Férfi
-                        </label>
-                        <label>
-                            <input
-                                type="radio"
-                                value="FEMALE"
-                                {...register("gender", { required: "Válasszon egy nemet!" })}
-                            />
-                            Nő
-                        </label>
-                        <label>
-                            <input
-                                type="radio"
-                                value="OTHER"
-                                {...register("gender", { required: "Válasszon egy nemet!" })}
-                            />
-                            Egyéb
-                        </label>
+                        <div className={styles.formRadio}>
+                            <label>
+                                <input
+                                    type="radio"
+                                    value="MALE"
+                                    {...register("gender", { required: "Válasszon egy nemet!" })}
+                                />
+                                Férfi
+                            </label>
+                            <label>
+                                <input
+                                    type="radio"
+                                    value="FEMALE"
+                                    {...register("gender", { required: "Válasszon egy nemet!" })}
+                                />
+                                Nő
+                            </label>
+                            <label>
+                                <input
+                                    type="radio"
+                                    value="OTHER"
+                                    {...register("gender", { required: "Válasszon egy nemet!" })}
+                                />
+                                Egyéb
+                            </label>
+                        </div>
                         {errors.gender && <span className={styles.error}>{errors.gender.message}</span>}
                     </div>
                 </div>
+
                 <div className={styles.buttons}>
-                    <Button variant="contained" color="error" onClick={() => navigate("/landingPage")}>Bezárás</Button>
-                    <Button variant="contained" color="info" type="submit">Regisztrálás</Button>
+                    <Button
+                        variant="contained"
+                        color="error"
+                        onClick={() => navigate("/landingPage")}
+                    >
+                        Bezárás
+                    </Button>
+                    <Button
+                        variant="contained"
+                        color="info"
+                        type="submit"
+                    >
+                        Regisztrálás
+                    </Button>
                 </div>
             </form>
         </div>

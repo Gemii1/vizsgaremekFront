@@ -1,54 +1,77 @@
+// AuthProvider.jsx
 import AuthContext from './AuthContext';
 import axios from "axios";
-import {useContext, useEffect, useState} from "react";
+import { useContext, useEffect } from "react";
 import UserContext from "../User/UserContext";
-function AuthProvider({children}) {
 
-    const {setIsUserLoggedIn} = useContext(UserContext);
+function AuthProvider({ children }) {
+    const { setIsUserLoggedIn, setUserType, setUser, userType } = useContext(UserContext);
 
-    const [accessToken, setAccessToken] = useState(' ');
-    const login = async (email, password) => {
-        try {
-            const response = await axios.post('/auth/login', { email, password });
-            const token = response.headers['jwt_token'];
-            handleLoginData(token);
-
-            return response.data;
-        } catch (error) {
-            console.error('Login Error:', error);
-            throw error;
-        }
+    const getRoleFromResponse = (data) => {
+        return data.login?.role || data.role || '';
     };
+
+    const login = (email, password) => {
+        return axios.post('/auth/login', { email, password })
+            .then(response => {
+                const token = response.headers['jwt_token'];
+                localStorage.setItem('access_token', token);
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+                setIsUserLoggedIn(true);
+
+                const role = getRoleFromResponse(response.data);
+                setUserType(role);
+                console.log("Login response:", response.data);
+                console.log("Extracted role:", role);
+
+                getUserData(token);
+                return response.data;
+            })
+            .catch(error => {
+                console.log('Login failed:', error);
+                throw error;
+            });
+    };
+
     const logout = () => {
-        setAccessToken(' ');
-        delete axios.defaults.headers.common['Authorization'];
         localStorage.removeItem('access_token');
+        delete axios.defaults.headers.common['Authorization'];
         setIsUserLoggedIn(false);
+        setUserType('');
+        setUser(null);
     };
 
-
-    const handleLoginData = (jwtToken) => {
-        setAccessToken(jwtToken);
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + jwtToken;
-        localStorage.setItem('access_token', jwtToken);
-        setIsUserLoggedIn(true);
-    }
+    const getUserData = (token) => {
+        axios.get('/auth/me', {
+            headers: { 'Authorization': 'Bearer ' + token }
+        })
+            .then(response => {
+                setUser(response.data);
+                const role = getRoleFromResponse(response.data);
+                setUserType(role);
+            })
+            .catch(error => {
+                console.log('Error getting user:', error);
+                logout();
+            });
+    };
 
     useEffect(() => {
-        const storedToken = localStorage.getItem('access_token');
-        if (storedToken) {
-            setAccessToken(storedToken);
-            axios.defaults.headers.common['Authorization'] = `Bearer ${storedToken}`;
+        const token = localStorage.getItem('access_token');
+        if (token) {
+            axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
             setIsUserLoggedIn(true);
+            getUserData(token);
         } else {
             logout();
         }
-    }, []);
+    }, [setIsUserLoggedIn, setUserType, setUser]);
 
     return (
-        <AuthContext.Provider value={{login,logout}}>
+        <AuthContext.Provider value={{ login, logout }}>
             {children}
         </AuthContext.Provider>
-    )
+    );
 }
+
 export default AuthProvider;

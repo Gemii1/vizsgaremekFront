@@ -31,7 +31,7 @@ const AdminPage = () => {
 
     const handleDeleteTrainer = async (trainerId) => {
         try {
-            const response = await axios.delete(`/api/trainers/${trainerId}`);
+            const response = await axios.delete(`/auth/delete/${trainerId}`);
             if (response.status === 200 || response.status === 204) {
                 setTrainers(trainers.filter((trainer) => trainer.id !== trainerId));
                 setDeleteModal(false);
@@ -102,7 +102,7 @@ const AdminPage = () => {
                 </div>
             </div>
             <Modal open={deleteModal} onClose={closeDeleteModal}>
-                <Confirmation close={closeDeleteModal} deletingId={deletingId} deleteAction={handleDeleteTrainer} />
+                <Confirmation close={closeDeleteModal} deletingId={deletingId} deleteFunction={handleDeleteTrainer} />
             </Modal>
             <Snackbar
                 open={snackBarError}

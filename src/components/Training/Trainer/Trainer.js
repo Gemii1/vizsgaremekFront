@@ -23,16 +23,19 @@ function Trainer() {
     const [openedProgram, setOpenedProgram] = useState(null);
     const [deletingId, setDeletingId] = useState(null);
     const [snackBarError, setSnackBarError] = useState(false);
-    const [currentWeekStart, setCurrentWeekStart] = useState(new Date()); // Aktuális hét kezdete
-
+    const [currentWeekStart, setCurrentWeekStart] = useState(new Date());
     const closeSnackBarError = () => setSnackBarError(false);
     const openSnackBarError = () => setSnackBarError(true);
 
     const getWeekDays = (startDate) => {
         const days = [];
         const start = new Date(startDate);
-        start.setDate(start.getDate() - start.getDay() + 1); // Hétfőre állítás
-        for (let i = 0; i < 5; i++) { // Csak munkanapok (Hétfő-Péntek)
+
+        const dayOfWeek = start.getDay();
+        const offset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+        start.setDate(start.getDate() + offset);
+        start.setHours(0, 0, 0, 0);
+        for (let i = 0; i < 5; i++) {
             const day = new Date(start);
             day.setDate(start.getDate() + i);
             days.push(day);
@@ -64,16 +67,18 @@ function Trainer() {
 
     const filteredPrograms = programs.filter(program => {
         const programDate = new Date(program.startTime);
+        programDate.setHours(0, 0, 0, 0);
         const weekStart = new Date(weekDays[0]);
         const weekEnd = new Date(weekDays[4]);
-        return programDate >= weekStart && programDate <= weekEnd;
+        const isInWeek = programDate >= weekStart && programDate <= weekEnd;
+        return isInWeek;
     });
 
     const groupedPrograms = filteredPrograms.reduce((acc, program) => {
-        const day = formatDate(new Date(program.startTime));
-        if (!acc[day]) {
-            acc[day] = [];
-        }
+        const programDate = new Date(program.startTime);
+        programDate.setHours(0, 0, 0, 0);
+        const day = formatDate(programDate);
+        if (!acc[day]) acc[day] = [];
         acc[day].push(program);
         return acc;
     }, {});
@@ -89,7 +94,6 @@ function Trainer() {
     const closeCreateModal = () => setCreateModal(false);
     const openEditModal = () => setEditModal(true);
     const closeEditModal = () => setEditModal(false);
-
     const openDeleteModal = (id) => {
         setDeleteModal(true);
         setDeletingId(id);
@@ -134,30 +138,30 @@ function Trainer() {
 
     return (
         <div className={styles.calendar}>
-            <meta name="viewport" content="width=720"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <div className={styles.calendarWeek}>
                 <IconButton onClick={handlePrevWeek}>
-                    <ArrowBackIcon/>
+                    <ArrowBackIcon />
                 </IconButton>
                 <h3>{`${weekDays[0].toLocaleDateString('hu-HU')} - ${weekDays[4].toLocaleDateString('hu-HU')}`}</h3>
                 <IconButton onClick={handleNextWeek}>
-                    <ArrowForwardIcon/>
+                    <ArrowForwardIcon />
                 </IconButton>
             </div>
-            <Grid container rowSpacing={1} spacing={2} columns={{xs: 2, sm: 2, md: 12}}>
+            <Grid container rowSpacing={1} spacing={2} columns={{ xs: 1, sm: 2, md: 5 }}>
                 {weekDays.map((date) => {
                     const day = formatDate(date);
                     return (
-                        <Grid item xs={2.4} key={day} className={styles.days}>
+                        <Grid item xs={1} key={day} className={styles.days}>
                             <div className={styles.program}>
                                 <h2>{day}</h2>
-                                <Divider color='black'/>
+                                <Divider color='black' />
                                 <div className={styles.programOnDay}>
                                     <p>Foglalt időpontok:</p>
                                     {groupedPrograms[day] ? (
                                         groupedPrograms[day].map((program) => (
                                             <div key={program.id}>
-                                                <Divider/>
+                                                <Divider />
                                                 <div className={styles.dates}>
                                                     <div>{getProgramTime(program.startTime)} - {getProgramTime(program.endTime)}</div>
                                                     {handleUserLoggedInEditAndDelete(program)}
@@ -166,7 +170,7 @@ function Trainer() {
                                         ))
                                     ) : (
                                         <>
-                                            <Divider/>
+                                            <Divider />
                                             <div className={styles.dates}>Nincs program</div>
                                         </>
                                     )}
@@ -180,20 +184,20 @@ function Trainer() {
                 {handleCreateButton()}
             </div>
             <Modal open={createModal} onClose={closeCreateModal}>
-                <CreateTraining close={closeCreateModal}/>
+                <CreateTraining close={closeCreateModal} />
             </Modal>
             <Modal open={editModal} onClose={closeEditModal}>
-                <EditTraining program={openedProgram} close={closeEditModal}/>
+                <EditTraining program={openedProgram} close={closeEditModal} />
             </Modal>
             <Modal open={deleteModal} onClose={closeDeleteModal}>
-                <Confirmation close={closeDeleteModal} deleteFunction={deleteProgram} deletingId={deletingId}/>
+                <Confirmation close={closeDeleteModal} deleteFunction={deleteProgram} deletingId={deletingId} />
             </Modal>
             <Snackbar
                 open={snackBarError}
                 autoHideDuration={6000}
                 onClose={closeSnackBarError}
                 message="Sikertelen próbálkozás!"
-                sx={{'& .MuiSnackbarContent-root': {backgroundColor: 'red'}}}
+                sx={{ '& .MuiSnackbarContent-root': { backgroundColor: 'red' } }}
             />
         </div>
     );

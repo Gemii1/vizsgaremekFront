@@ -1,11 +1,11 @@
+// Registration.jsx
 import styles from './Registration.module.css';
 import { Tabs, TabList, Tab, TabPanel } from '@mui/joy';
 import React, { useState } from "react";
-import { useNavigate } from "react-router";
-import axios from "axios";
+
 import TrainerForm from "./TrainerForm/TrainerForm";
 import ClientForm from "./ClientForm/ClientForm";
-import {Snackbar} from "@mui/material";
+import { Snackbar } from "@mui/material";
 
 function Registration() {
     const [snackBarError, setSnackBarError] = useState(false);
@@ -14,18 +14,17 @@ function Registration() {
 
     return (
         <div className={styles.container}>
-            <meta name="viewport" content="width=720"/>
             <Tabs>
                 <TabList tabFlex="auto">
                     <Tab className={styles.tab}>
-                        <div className={styles.tabText} >Edzőként</div>
+                        <div className={styles.tabText}>Edzőként</div>
                     </Tab>
                     <Tab className={styles.tab}>
-                        <div className={styles.tabText} >Kliensként</div>
+                        <div className={styles.tabText}>Kliensként</div>
                     </Tab>
                 </TabList>
                 <TabPanel value={0}>
-                    <TrainerForm openSnackBarError={openSnackBarError}/>
+                    <TrainerForm openSnackBarError={openSnackBarError} />
                 </TabPanel>
                 <TabPanel value={1}>
                     <ClientForm openSnackBarError={openSnackBarError} />
@@ -36,12 +35,11 @@ function Registration() {
                 autoHideDuration={1000}
                 onClose={closeSnackBarError}
                 message="Sikertelen Regisztráció!"
-                style={{position:"relative"}}
+                style={{ position: "relative" }}
                 sx={{
                     '& .MuiSnackbarContent-root': {
                         backgroundColor: 'red',
                     }
-
                 }}
             />
         </div>

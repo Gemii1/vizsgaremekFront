@@ -25,7 +25,7 @@ function LandingPage() {
 
     const fetchTrainers = async () => {
         try {
-            const response = await axios.get('/trainer/');
+            const response = await axios.get('/trainer/bestRatedTrainers');
             setTrainers(response.data);
             fetchTrainerImages(response.data);
         } catch (error) {

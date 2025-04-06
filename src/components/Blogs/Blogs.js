@@ -1,14 +1,13 @@
 import Navbar from "../Navbar/Navbar";
 import styles from "./Blogs.module.css";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import {
     Card,
     CardContent,
     CardOverflow,
     Typography,
     AspectRatio,
-    Divider,
-    Grid
+    Divider
 } from '@mui/joy';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -32,7 +31,6 @@ function Blogs() {
     const [deleteModal, setDeleteModal] = useState(false);
     const [deletingId, setDeletingId] = useState(null);
     const [blogImages, setBlogImages] = useState({});
-    const [isLoadingImages, setIsLoadingImages] = useState(true);
     const [snackBarError, setSnackBarError] = useState(false);
 
     const closeSnackBarError = () => setSnackBarError(false);
@@ -44,52 +42,56 @@ function Blogs() {
     };
     const closeDeleteModal = () => setDeleteModal(false);
 
+    const fetchBlogImage = useCallback(async (blogId) => {
+        if (blogImages[blogId]) return blogImages[blogId];
+
+        try {
+            const response = await axios.get(`/blog/blog/picture/${blogId}`, {
+                responseType: 'arraybuffer',
+                timeout: 3000
+            });
+            const byteArray = new Uint8Array(response.data);
+            const blob = new Blob([byteArray], { type: 'image/jpeg' });
+            const imageUrl = URL.createObjectURL(blob);
+            setBlogImages((prev) => ({ ...prev, [blogId]: imageUrl }));
+            return imageUrl;
+        } catch (error) {
+            console.error(`Failed to fetch image for blog ${blogId}:`, error.message);
+            setBlogImages((prev) => ({
+                ...prev,
+                [blogId]: 'https://via.placeholder.com/400x250?text=Nincs+kép'
+            }));
+            return 'https://via.placeholder.com/400x250?text=Nincs+kép';
+        }
+    }, [blogImages]);
+
     useEffect(() => {
-        const loadBlogsAndImages = async () => {
+        const loadBlogs = async () => {
             try {
-                setIsLoadingImages(true);
                 await fetchBlogs();
-                await fetchBlogImages(blogs);
             } catch (e) {
-                console.error("Error loading blogs or images:", e);
+                console.error("Error loading blogs:", e);
                 openSnackBarError();
-            } finally {
-                setIsLoadingImages(false);
             }
         };
-        loadBlogsAndImages();
-    }, []);
+        loadBlogs();
+    }, [fetchBlogs]);
 
-    const fetchBlogImages = async (blogs) => {
-        if (!blogs || blogs.length === 0) return;
-        const imagePromises = blogs.map(async (blog) => {
-            try {
-                const response = await axios.get(`/blog/blog/picture/${blog.id}`, {
-                    responseType: 'arraybuffer'
-                });
-                const byteArray = new Uint8Array(response.data);
-                const blob = new Blob([byteArray], { type: 'image/jpeg' });
-                const imageUrl = URL.createObjectURL(blob);
-                return { id: blog.id, url: imageUrl };
-            } catch (error) {
-                console.error(`Failed to fetch image for blog ${blog.id}:`, error.response?.status || error.message);
-                return { id: blog.id, url: null };
-            }
-        });
-
-        const images = await Promise.all(imagePromises);
-        const imageMap = images.reduce((acc, { id, url }) => {
-            acc[id] = url;
-            return acc;
-        }, {});
-        setBlogImages(imageMap);
-    };
+    useEffect(() => {
+        if (blogs.length > 0) {
+            blogs.forEach((blog) => {
+                if (!blogImages[blog.id]) {
+                    fetchBlogImage(blog.id);
+                }
+            });
+        }
+    }, [blogs, fetchBlogImage]);
 
     const blogDelete = async (id) => {
         try {
             await axios.delete(`/blog/${id}`);
             await fetchBlogs();
-            await fetchBlogImages(blogs);
+            setDeleteModal(false);
         } catch (error) {
             console.error("Error deleting blog:", error);
             openSnackBarError();
@@ -97,7 +99,7 @@ function Blogs() {
     };
 
     const isUserTypeTrainer = (userType, blog) => {
-        if (userType==='TRAINER') {
+        if (userType === 'TRAINER') {
             return (
                 <div className={styles.trainerButtons}>
                     <EditIcon onClick={() => {
@@ -112,10 +114,10 @@ function Blogs() {
     };
 
     const handleCreateButton = (userType) => {
-        if (userType==='TRAINER') {
+        if (userType === 'TRAINER') {
             return (
                 <div className={styles.buttons}>
-                    <Fab size="small" color="info" aria-label="add" onClick={() => setCreateBlog(true)}>
+                    <Fab size="medium" className={styles.fabButton} aria-label="add" onClick={() => setCreateBlog(true)}>
                         <AddIcon />
                     </Fab>
                 </div>
@@ -129,85 +131,75 @@ function Blogs() {
 
     return (
         <div className={styles.blogs}>
-            <meta name="viewport" content="width=720" />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
             <Navbar />
-            <div>
+            <div className={styles.contentWrapper}>
                 <div className={styles.container}>
-                    <div className={styles.blogContainer}>
-                        <Grid container style={{ justifyContent: 'center' }} spacing={2} sx={{ flexGrow: 1 }}>
-                            {blogs.length > 0 ? (
-                                blogs.map((blog, index) => {
-                                    const imageUrl = blogImages[blog.id] || '';
-                                    return (
-                                        <div key={index} className={styles.blog}>
-                                            <Card variant="outlined" className={styles.card}>
-                                                <CardOverflow onClick={() => navigate("/openedBlog", { state: {blog,blogImages}})}>
-                                                    <AspectRatio ratio="1.6">
-                                                        {isLoadingImages ? (
-                                                            <Typography>Loading image...</Typography>
-                                                        ) : (
-                                                            <img
-                                                                src={imageUrl}
-                                                                alt={blog.title}
-                                                            />
-                                                        )}
-                                                    </AspectRatio>
-                                                </CardOverflow>
-                                                <CardContent onClick={() => navigate("/openedBlog", { state: blog })}>
-                                                    <Typography sx={{ fontWeight: 'xl', fontSize: '1.3rem' }}>
-                                                        {blog.title}
+                    <div className={styles.blogGrid}>
+                        {blogs.length > 0 ? (
+                            blogs.map((blog, index) => {
+                                const imageUrl = blogImages[blog.id] || 'https://via.placeholder.com/400x250?text=Betöltés...';
+                                return (
+                                    <div key={index} className={styles.cardWrapper}>
+                                        <Card variant="outlined" className={styles.card}>
+                                            <CardOverflow onClick={() => navigate("/openedBlog", { state: { blog, blogImages } })}>
+                                                <AspectRatio ratio="16/9">
+                                                    <img
+                                                        src={imageUrl}
+                                                        alt={blog.title}
+                                                        loading="lazy"
+                                                        onError={(e) => {
+                                                            e.target.src = 'https://via.placeholder.com/400x250?text=Nincs+kép';
+                                                        }}
+                                                    />
+                                                </AspectRatio>
+                                            </CardOverflow>
+                                            <CardContent onClick={() => navigate("/openedBlog", { state: { blog, blogImages } })}>
+                                                <Typography className={styles.blogTitle}>
+                                                    {blog.title}
+                                                </Typography>
+                                            </CardContent>
+                                            <CardOverflow variant="soft" className={styles.cardFooter}>
+                                                <Divider inset="context" />
+                                                <CardContent orientation="horizontal">
+                                                    <Typography className={styles.blogType}>
+                                                        {handleBlogType(blog.blogType)}
+                                                    </Typography>
+                                                    <Divider orientation="vertical" />
+                                                    <Typography className={styles.trainerActions}>
+                                                        {isUserTypeTrainer(userType, blog)}
                                                     </Typography>
                                                 </CardContent>
-                                                <CardOverflow variant="soft">
-                                                    <Divider inset="context" />
-                                                    <CardContent orientation="horizontal">
-                                                        <Typography
-                                                            textColor="text.secondary"
-                                                            sx={{ fontWeight: 'md', fontSize: '1rem' }}
-                                                        >
-                                                            {handleBlogType(blog.blogType)}
-                                                        </Typography>
-                                                        <Divider orientation="vertical" />
-                                                        <Typography
-                                                            textColor="text.secondary"
-                                                            sx={{ fontWeight: 'md' }}
-                                                        >
-                                                            {isUserTypeTrainer(userType, blog)}
-                                                        </Typography>
-                                                    </CardContent>
-                                                </CardOverflow>
-                                            </Card>
-                                        </div>
-                                    );
-                                })
-                            ) : (
-                                <h1 className={styles.blogError}>Jelenleg egy blog sem elérhető</h1>
-                            )}
-                        </Grid>
-                        {handleCreateButton(userType)}
+                                            </CardOverflow>
+                                        </Card>
+                                    </div>
+                                );
+                            })
+                        ) : (
+                            <Typography level="h1" className={styles.blogError}>
+                                Jelenleg egy blog sem elérhető
+                            </Typography>
+                        )}
                     </div>
-                    <Modal open={createBlog} onClose={() => setCreateBlog(false)}>
-                        <CreateBlog close={() => setCreateBlog(false)} />
-                    </Modal>
-                    <Modal open={editBlog} onClose={() => setEditBlog(false)}>
-                        <EditBlog close={() => setEditBlog(false)} blog={editedBlog} />
-                    </Modal>
-                    <Modal open={deleteModal} onClose={closeDeleteModal}>
-                        <Confirmation close={closeDeleteModal} deleteFunction={blogDelete} deletingId={deletingId} />
-                    </Modal>
-                    <Snackbar
-                        open={snackBarError}
-                        autoHideDuration={6000}
-                        onClose={closeSnackBarError}
-                        message="Sikertelen próbálkozás!"
-                        sx={{
-                            '& .MuiSnackbarContent-root': {
-                                backgroundColor: 'red',
-                            }
-                        }}
-                    />
+                    {handleCreateButton(userType)}
                 </div>
             </div>
+            <Modal open={createBlog} onClose={() => setCreateBlog(false)}>
+                <CreateBlog close={() => setCreateBlog(false)} />
+            </Modal>
+            <Modal open={editBlog} onClose={() => setEditBlog(false)}>
+                <EditBlog close={() => setEditBlog(false)} blog={editedBlog} />
+            </Modal>
+            <Modal open={deleteModal} onClose={closeDeleteModal}>
+                <Confirmation close={closeDeleteModal} deleteFunction={blogDelete} deletingId={deletingId} />
+            </Modal>
+            <Snackbar
+                open={snackBarError}
+                autoHideDuration={6000}
+                onClose={closeSnackBarError}
+                message="Sikertelen művelet!"
+                sx={{ '& .MuiSnackbarContent-root': { backgroundColor: '#d32f2f' } }}
+            />
         </div>
     );
 }

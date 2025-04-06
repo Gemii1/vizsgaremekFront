@@ -33,7 +33,6 @@ function CreateBlog({ close }) {
             headerText: data.headerText,
             mainText: data.mainText,
             blogType: data.blogType,
-            image: 'Images/etrendKep2.jpg',
         };
 
         try {
@@ -50,10 +49,11 @@ function CreateBlog({ close }) {
     };
 
     const savePictureToBlog = async (response, file) => {
+        console.log(file)
         try {
             const formData = new FormData();
             formData.append('file', file);
-            await axios.post(`/blog/upload-picture/${response.data.id}`, formData, {
+            await axios.post(`/blog/upload-image/${response.data.id}`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
         } catch (e) {
