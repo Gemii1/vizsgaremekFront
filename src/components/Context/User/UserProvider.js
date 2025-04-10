@@ -24,24 +24,9 @@ const UserProvider = ({ children }) => {
         }
     }
 
-    const deleteUser = async (usertype) => {
 
-        try{
-            if (usertype==='TRAINER'){
-                const response = await axios.delete(`/trainer/${user.id}`);
-                setUser(response.data);
-            }
-            if(usertype==='CLIENT'){
-                const response = await axios.delete(`/client/${user.id}`);
-                setUser(response.data);
-            }
-
-        }catch(err){
-            console.log("Error deleting User"+err);
-        }
-    }
     return (
-        <UserContext.Provider value={{userType,isUserLoggedIn, setIsUserLoggedIn, user, setUser,setUserType, fetchUser, deleteUser}}>
+        <UserContext.Provider value={{userType,isUserLoggedIn, setIsUserLoggedIn, user, setUser,setUserType, fetchUser}}>
             {children}
         </UserContext.Provider>
     );

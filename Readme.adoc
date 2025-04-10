@@ -17,11 +17,11 @@ A fitness weboldal egy olyan platform, amelyet mi, a csapat – Nagy Kristóf, V
 
 === Főbb funkciók
 
-- 👤 *Kliensek:* Edzéstervek böngészése, jelentkezés, edzők értékelése.
-- 🧑‍🏫 *Edzők:* Edzéstervek létrehozása, szerkesztése, törlése; blogok írása.
-- 🛡️ *Adminisztrátorok:* Edzők kezelése, törlése (kirúgása) az admin panelen keresztül.
-- 📝 *Blogrendszer:* Blogok olvasása, írása (edzők számára).
-- 📱 *Reszponzív dizájn:* Az oldal mobil- és asztali nézetben is jól működik.
+-  *Kliensek:* Edzéstervek böngészése, jelentkezés, edzők értékelése.
+-  *Edzők:* Edzéstervek létrehozása, szerkesztése, törlése; blogok írása.
+-  *Adminisztrátorok:* Edzők kezelése, törlése (kirúgása) az admin panelen keresztül.
+-  *Blogrendszer:* Blogok olvasása, írása (edzők számára).
+-  *Reszponzív dizájn:* Az oldal mobil- és asztali nézetben is jól működik.
 
 == Használt Technológiák 🛠️
 
@@ -29,34 +29,34 @@ A projekt fejlesztése során a következő technológiákat és eszközöket ha
 
 === Frontend 🖥️
 
-- ⚛️ *React:* A felhasználói felület építéséhez (`react`).
-- 🧪 *React Testing Library:* Komponensek teszteléséhez.
-- 💻 *Jest:* Egységtesztek futtatásához.
-- 🎨 *CSS Modules:* Stílusok kezelésére (pl. `AdminPage.module.css`).
-- 🧱 *Material-UI:* UI komponensekhez (pl. snackbarok, gombok).
+-  *React:* A felhasználói felület építéséhez (`react`).
+-  *React Testing Library:* Komponensek teszteléséhez.
+-  *Jest:* Egységtesztek futtatásához.
+-  *CSS Modules:* Stílusok kezelésére (pl. `AdminPage.module.css`).
+-  *Material-UI:* UI komponensekhez (pl. snackbarok, gombok).
 
 === Backend 🖧
 
-- 🌱 *Spring Boot:* A backend API fejlesztéséhez.
-- ☕ *Java:* A backend logika implementálásához.
-- 📦 *Maven:* A backend függőségek kezelésére.
-- 🗄️ *Liquibase:* Adatbázis sémák kezelésére és inicializálására.
-- 🗃️ *MySQL:* Adatbázis a backend számára (kötelező).
+-  *Spring Boot:* A backend API fejlesztéséhez.
+-  *Java:* A backend logika implementálásához.
+-  *Maven:* A backend függőségek kezelésére.
+-  *Liquibase:* Adatbázis sémák kezelésére és inicializálására.
+-  *MySQL:* Adatbázis a backend számára (kötelező).
 
 === Backend Kommunikáció 🔄
 
-- ☁️ *Axios:* HTTP kérések kezelésére a frontend és backend között (pl. `axios.get`, `axios.delete`).
+- ️ *Axios:* HTTP kérések kezelésére a frontend és backend között (pl. `axios.get`, `axios.delete`).
 
 === Verziókezelés 🌿
 
-- 🐙 *GitHub:* Kód tárolása, együttműködés és verziókezelés.
+- *GitHub:* Kód tárolása, együttműködés és verziókezelés.
 
 === Fejlesztőkörnyezet 🔧
 
-- 💻 *IntelliJ IDEA:* A Spring Boot backend futtatásához és fejlesztéséhez (kötelező).
-- 📦 *Node.js:* A frontend futtatásához.
-- 📦 *npm:* A frontend csomagkezeléshez.
-- 🗃️ *MySQL:* Adatbázis szerver (kötelező a Liquibase miatt).
+- *IntelliJ IDEA:* A Spring Boot backend futtatásához és fejlesztéséhez (kötelező).
+- *Node.js:* A frontend futtatásához.
+- *npm:* A frontend csomagkezeléshez.
+-  *MySQL:* Adatbázis szerver (kötelező a Liquibase miatt).
 
 == Telepítési Útmutató 📥
 
@@ -64,12 +64,12 @@ Az alábbi lépések segítségével telepítheted és futtathatod a fitness web
 
 === Előfeltételek ✅
 
-- 📦 *Node.js* (legalább 18.x verzió) és *npm* telepítve a frontendhez.
-- ☕ *Java* (legalább 21.x verzió) telepítve a backendhez.
-- 📦 *Maven* telepítve (általában az IntelliJ IDEA-val együtt érkezik).
-- 💻 *IntelliJ IDEA* (Community vagy Ultimate verzió) telepítve a Spring Boot backend futtatásához.
-- 🗃️ *MySQL* (legalább 8.x verzió) telepítve a gépeden, mivel a Liquibase MySQL adatbázist használ.
-- 🐙 *Git* telepítve a gépeden.
+-  *Node.js* (legalább 18.x verzió) és *npm* telepítve a frontendhez.
+-  *Java* (legalább 21.x verzió) telepítve a backendhez.
+-  *Maven* telepítve (általában az IntelliJ IDEA-val együtt érkezik).
+-  *IntelliJ IDEA* (Community vagy Ultimate verzió) telepítve a Spring Boot backend futtatásához.
+-  *MySQL* (legalább 8.x verzió) telepítve a gépeden, mivel a Liquibase MySQL adatbázist használ.
+-  *Git* telepítve a gépeden.
 
 Klónozd a repository-t
 

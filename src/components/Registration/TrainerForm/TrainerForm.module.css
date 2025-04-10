@@ -1,4 +1,4 @@
-/* TrainerForm.module.css */
+
 .formContainer {
     padding: 10px;
     max-width: 400px;
@@ -81,7 +81,6 @@ label {
     font-size: 12px;
 }
 
-/* Mobile adjustments */
 @media (max-width: 768px) {
     .formContainer {
         padding: 8px;
@@ -122,7 +121,7 @@ label {
     }
 }
 
-/* Larger screens */
+
 @media (min-width: 769px) {
     .inputs {
         gap: 10px;

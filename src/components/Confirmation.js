@@ -12,7 +12,7 @@ function Confirmation({ close, deleteFunction, deletingId }) {
                     color="error"
                     size="small"
                     onClick={() => {
-                        deleteFunction(deletingId);
+                        deleteFunction(deletingId) || deleteFunction();
                         close();
                     }}
                 >

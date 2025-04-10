@@ -1,4 +1,3 @@
-// ClientForm.jsx (unchanged JSX, only CSS will be modified)
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router";
 import styles from "./ClientForm.module.css";
@@ -6,6 +5,7 @@ import PhoneInput from "react-phone-input-2";
 import 'react-phone-input-2/lib/style.css';
 import { Button } from "@mui/material";
 import axios from "axios";
+import React from "react";
 
 function ClientForm({ openSnackBarError }) {
     const navigate = useNavigate();
@@ -66,23 +66,30 @@ function ClientForm({ openSnackBarError }) {
                         />
                         {errors.email && <span className={styles.error}>{errors.email.message}</span>}
                     </div>
-
                     <div className={styles.inputWrapper}>
                         <label>Telefonszám:</label>
                         <Controller
-                            name="phone"
+                            name="phoneNumber"
                             control={control}
-                            rules={{ required: 'A telefonszám megadása kötelező!' }}
-                            render={({ field: { onChange, value } }) => (
+                            rules={{
+                                required: "A telefonszám megadása kötelező!",
+                                pattern: {
+                                    value: /^\d{11}$/,
+                                    message: "A telefonszám pontosan 11 számjegy kell legyen (pl. 36201234567)!"
+                                }
+                            }}
+                            render={({field: {onChange, value}}) => (
                                 <PhoneInput
                                     value={value}
                                     onChange={onChange}
                                     country="hu"
                                     className={styles.phone}
-                                    inputStyle={{ width: '100%' }}
+                                    inputStyle={{width: '100%'}}
+                                    inputProps={{maxLength: 15}}
                                 />
                             )}
                         />
+                        {errors.phoneNumber && <span className={styles.error}>{errors.phoneNumber.message}</span>}
                         {errors.phone && <span className={styles.error}>{errors.phone.message + "!"}</span>}
                     </div>
 
@@ -92,7 +99,14 @@ function ClientForm({ openSnackBarError }) {
                             className={styles.input}
                             placeholder="Születési év"
                             type="date"
-                            {...register("birthDate", { required: "A születési év megadása kötelező!" })}
+                            {...register("birthDate", {
+                                required: "A születési év megadása kötelező!",
+                                validate: value => {
+                                    const date = new Date(value);
+                                    const today = new Date();
+                                    return date < today || "A születési dátum nem lehet a jövőben!";
+                                }
+                            })}
                         />
                         {errors.birthDate && <span className={styles.error}>{errors.birthDate.message}</span>}
                     </div>
@@ -103,7 +117,13 @@ function ClientForm({ openSnackBarError }) {
                             className={styles.input}
                             placeholder="Jelszó"
                             type="password"
-                            {...register("password", { required: "A jelszó megadása kötelező!" })}
+                            {...register("password", {
+                                required: "A jelszó megadása kötelező!",
+                                minLength: {
+                                    value: 8,
+                                    message: "A jelszó legalább 8 karakter hosszú kell legyen!"
+                                }
+                            })}
                         />
                         {errors.password && <span className={styles.error}>{errors.password.message}</span>}
                     </div>
@@ -115,7 +135,7 @@ function ClientForm({ openSnackBarError }) {
                                 <input
                                     type="radio"
                                     value="MALE"
-                                    {...register("gender", { required: "Válasszon egy nemet!" })}
+                                    {...register("gender", {required: "Válasszon egy nemet!" })}
                                 />
                                 Férfi
                             </label>

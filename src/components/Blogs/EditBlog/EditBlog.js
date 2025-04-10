@@ -43,7 +43,6 @@ function EditBlog({ blog, close }) {
             openSuccessSnackBar();
             setTimeout(close, 2000);
         } catch (error) {
-            console.error('Error updating blog:', error);
             openErrorSnackBar();
             setTimeout(close, 2000);
         }
@@ -127,7 +126,7 @@ function EditBlog({ blog, close }) {
                     <Controller
                         name="mainText"
                         control={control}
-                        rules={{ required: 'A fő szöveg megadása kötelező!' }}
+                        rules={{ required: 'A tárgyalás szövegének megadása kötelező!' }}
                         render={({ field, fieldState: { error } }) => (
                             <Textarea
                                 minRows={6}

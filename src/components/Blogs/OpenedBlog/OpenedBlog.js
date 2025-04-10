@@ -10,17 +10,15 @@ function OpenedBlog() {
     const navigate = useNavigate();
     const { blogs } = useContext(BlogContext);
 
-    // Biztosítjuk, hogy a blog és a blogImages mindig létezzen
     const blog = location.state?.blog || location.state?.moreBlog;
     const blogImages = location.state?.blogImages || {};
 
-    // Ha a blog nem létezik, visszaugrunk a blogok oldalra
     if (!blog) {
         navigate("/blogs");
         return null;
     }
 
-    const imageUrl = blogImages[blog.id] || 'https://via.placeholder.com/400x250?text=Nincs+kép';
+    const imageUrl = blogImages[blog.id] || ' ';
 
     return (
         <div className={styles.openedBlog}>
@@ -33,9 +31,7 @@ function OpenedBlog() {
                         <img
                             src={imageUrl}
                             alt="Blog Image"
-                            onError={(e) => {
-                                e.target.src = 'https://via.placeholder.com/400x250?text=Nincs+kép';
-                            }}
+
                         />
                     </div>
                 </div>
@@ -50,7 +46,7 @@ function OpenedBlog() {
                     {blogs.length > 0 ? (
                         blogs.map((moreBlog, index) => {
                             if (moreBlog.id !== blog.id && index < 3) {
-                                const moreBlogImage = blogImages[moreBlog.id] || 'https://via.placeholder.com/400x250?text=Nincs+kép';
+                                const moreBlogImage = blogImages[moreBlog.id] || '';
                                 return (
                                     <div key={index} className={styles.blog}>
                                         <Card variant="outlined" className={styles.card}>
@@ -60,9 +56,7 @@ function OpenedBlog() {
                                                         src={moreBlogImage}
                                                         loading="lazy"
                                                         alt={moreBlog.title}
-                                                        onError={(e) => {
-                                                            e.target.src = 'https://via.placeholder.com/400x250?text=Nincs+kép';
-                                                        }}
+
                                                     />
                                                 </AspectRatio>
                                             </CardOverflow>

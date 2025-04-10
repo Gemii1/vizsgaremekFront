@@ -59,9 +59,9 @@ function Blogs() {
             console.error(`Failed to fetch image for blog ${blogId}:`, error.message);
             setBlogImages((prev) => ({
                 ...prev,
-                [blogId]: 'https://via.placeholder.com/400x250?text=Nincs+kép'
+                [blogId]: ' '
             }));
-            return 'https://via.placeholder.com/400x250?text=Nincs+kép';
+            return '';
         }
     }, [blogImages]);
 
@@ -70,7 +70,6 @@ function Blogs() {
             try {
                 await fetchBlogs();
             } catch (e) {
-                console.error("Error loading blogs:", e);
                 openSnackBarError();
             }
         };
@@ -93,7 +92,6 @@ function Blogs() {
             await fetchBlogs();
             setDeleteModal(false);
         } catch (error) {
-            console.error("Error deleting blog:", error);
             openSnackBarError();
         }
     };
@@ -138,7 +136,7 @@ function Blogs() {
                     <div className={styles.blogGrid}>
                         {blogs.length > 0 ? (
                             blogs.map((blog, index) => {
-                                const imageUrl = blogImages[blog.id] || 'https://via.placeholder.com/400x250?text=Betöltés...';
+                                const imageUrl = blogImages[blog.id] || ' ';
                                 return (
                                     <div key={index} className={styles.cardWrapper}>
                                         <Card variant="outlined" className={styles.card}>
@@ -148,9 +146,6 @@ function Blogs() {
                                                         src={imageUrl}
                                                         alt={blog.title}
                                                         loading="lazy"
-                                                        onError={(e) => {
-                                                            e.target.src = 'https://via.placeholder.com/400x250?text=Nincs+kép';
-                                                        }}
                                                     />
                                                 </AspectRatio>
                                             </CardOverflow>

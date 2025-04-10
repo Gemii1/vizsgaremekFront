@@ -114,6 +114,7 @@ function TrainerForm({ openSnackBarError }) {
                         {errors.email && <span className={styles.error}>{errors.email.message}</span>}
                     </div>
 
+
                     <div className={styles.inputWrapper}>
                         <label>Telefonszám:</label>
                         <Controller
@@ -126,20 +127,19 @@ function TrainerForm({ openSnackBarError }) {
                                     message: "A telefonszám pontosan 11 számjegy kell legyen (pl. 36201234567)!"
                                 }
                             }}
-                            render={({ field: { onChange, value } }) => (
+                            render={({field: {onChange, value}}) => (
                                 <PhoneInput
                                     value={value}
                                     onChange={onChange}
                                     country="hu"
                                     className={styles.phone}
-                                    inputStyle={{ width: '100%' }}
-                                    inputProps={{ maxLength: 15 }}
+                                    inputStyle={{width: '100%'}}
+                                    inputProps={{maxLength: 15}}
                                 />
                             )}
                         />
                         {errors.phoneNumber && <span className={styles.error}>{errors.phoneNumber.message}</span>}
                     </div>
-
                     <div className={styles.inputWrapper}>
                         <label>Születési év:</label>
                         <input
@@ -162,7 +162,7 @@ function TrainerForm({ openSnackBarError }) {
                         <label>Foglalkozás:</label>
                         <select
                             className={styles.input}
-                            {...register("qualification", { required: "Válasszon egy foglalkozást!" })}
+                            {...register("qualification", {required: "Válasszon egy foglalkozást!"})}
                         >
                             <option value="">Válasszon...</option>
                             {trainerQualifications.map((qualification, index) => (
@@ -196,7 +196,7 @@ function TrainerForm({ openSnackBarError }) {
                                 <input
                                     type="radio"
                                     value="MALE"
-                                    {...register("gender", { required: "Válasszon egy nemet!" })}
+                                    {...register("gender", {required: "Válasszon egy nemet!"})}
                                 />
                                 Férfi
                             </label>
@@ -204,7 +204,7 @@ function TrainerForm({ openSnackBarError }) {
                                 <input
                                     type="radio"
                                     value="FEMALE"
-                                    {...register("gender", { required: "Válasszon egy nemet!" })}
+                                    {...register("gender", {required: "Válasszon egy nemet!"})}
                                 />
                                 Nő
                             </label>
@@ -212,7 +212,7 @@ function TrainerForm({ openSnackBarError }) {
                                 <input
                                     type="radio"
                                     value="OTHER"
-                                    {...register("gender", { required: "Válasszon egy nemet!" })}
+                                    {...register("gender", {required: "Válasszon egy nemet!"})}
                                 />
                                 Egyéb
                             </label>
@@ -225,7 +225,7 @@ function TrainerForm({ openSnackBarError }) {
                         <input
                             type="file"
                             className={styles.fileInput}
-                            {...register("file", { required: "A kép feltöltése kötelező!" })}
+                            {...register("file", {required: "A kép feltöltése kötelező!"})}
                         />
                         {errors.file && <span className={styles.error}>{errors.file.message}</span>}
                     </div>

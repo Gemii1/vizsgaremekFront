@@ -10,8 +10,7 @@
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: clamp(20px, 4vw, 40px);
-    padding-top: clamp(80px, 10vh, 100px);
+    padding: clamp(80px, 10vh, 100px) clamp(20px, 4vw, 40px) clamp(20px, 4vw, 40px);
     box-sizing: border-box;
 }
 

@@ -25,15 +25,12 @@ function LoginPage() {
     const onSubmit = async (data) => {
         try {
             const loginData = await login(data.email, data.password);
-            console.log(loginData.role);
             setUserType(loginData.role);
-            console.log(userType)
             const userResponse = await axios.get(`/auth/me`);
             setUser(userResponse.data);
             setIsUserLoggedIn(true);
             navigate('/landingPage');
         } catch (error) {
-            console.error("Login error:", error);
             openSnackBarError();
         }
     };
@@ -46,10 +43,10 @@ function LoginPage() {
                     <div className={styles.inputs}>
                         <div className={styles.inputWrapper}>
                             <input
-                                placeholder="Felhasználó név"
+                                placeholder="Email"
                                 className={styles.email}
                                 {...register("email", {
-                                    required: "Felhasználó név kötelező!",
+                                    required: "Az email kötelező!",
                                     minLength: {
                                         value: 2,
                                         message: "A felhasználó név legalább 2 karakter hosszú kell legyen!"

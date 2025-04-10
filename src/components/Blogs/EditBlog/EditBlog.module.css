@@ -60,7 +60,7 @@
 }
 
 .input {
-    margin: 0 !important; /* Override MUI default margins */
+    margin: 0 !important;
 }
 
 .textarea {

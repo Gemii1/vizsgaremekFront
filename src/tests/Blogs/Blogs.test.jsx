@@ -1,33 +1,29 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Blogs from '../../components/Blogs/Blogs'; // Adjust path as needed
+import Blogs from '../../components/Blogs/Blogs';
 import UserContext from '../../components/Context/User/UserContext';
 import BlogContext from '../../components/Context/Blog/BlogContext';
 import axios from 'axios';
 
-// Mock Navbar component
-jest.mock('../../components/Navbar/Navbar', () => () => <div>Mocked Navbar</div>);
+jest.mock('../../components/Navbar/Navbar', () => () => <div>Mockolt Navbar</div>);
 
-// Mock child components
 jest.mock('../../components/Blogs/CreateBlog/CreateBlog', () => ({ close }) => (
-    <div>CreateBlog <button onClick={close}>Close</button></div>
+    <div>Blog Létrehozása <button onClick={close}>Bezár</button></div>
 ));
 jest.mock('../../components/Blogs/EditBlog/EditBlog', () => ({ close, blog }) => (
-    <div>EditBlog {blog?.title} <button onClick={close}>Close</button></div>
+    <div>Blog Szerkesztése {blog?.title} <button onClick={close}>Bezár</button></div>
 ));
 jest.mock('../../components/Confirmation', () => ({ close, deleteFunction, deletingId }) => (
-    <div>Confirmation <button onClick={() => deleteFunction(deletingId)}>Confirm</button></div>
+    <div>Megerősítés <button onClick={() => deleteFunction(deletingId)}>Megerősít</button></div>
 ));
 
-// Mock react-router-dom
 const mockNavigate = jest.fn();
 jest.mock('react-router', () => ({
     BrowserRouter: ({ children }) => <div>{children}</div>,
     useNavigate: () => mockNavigate,
 }));
 
-// Mock axios
 jest.mock('axios', () => ({
     __esModule: true,
     default: {
@@ -36,18 +32,15 @@ jest.mock('axios', () => ({
     },
 }));
 
-// Mock BlogContext
 const mockBlogContext = {
     blogs: [],
     fetchBlogs: jest.fn().mockResolvedValue([]),
 };
 
-// Mock UserContext
 const mockUserContext = {
-    userType: null, // Default to non-trainer
+    userType: null,
 };
 
-// Helper to wrap the component with necessary providers
 const renderWithProviders = (
     ui,
     {
@@ -76,21 +69,21 @@ describe('Blogs', () => {
         jest.clearAllMocks();
     });
 
-    // Test 1: Renders basic elements with no blogs
-    it('renders the blogs page with navbar and no blogs message', async () => {
+    // 1. teszt: Megjelenik a blogok oldal navbarral és üres üzenettel
+    it('megjeleníti a blogok oldalt navbarral és az "nincs blog" üzenettel', async () => {
         renderWithProviders(<Blogs />);
         await waitFor(() => {
-            expect(screen.getByText('Mocked Navbar')).toBeInTheDocument();
+            expect(screen.getByText('Mockolt Navbar')).toBeInTheDocument();
             expect(screen.getByText('Jelenleg egy blog sem elérhető')).toBeInTheDocument();
         });
     });
 
-    // Test 2: Renders blogs with images when they are available
-    it('renders blogs with images when provided in context', async () => {
+    // 2. teszt: Blogok képekkel együtt megjelennek, ha vannak a kontextusban
+    it('megjeleníti a blogokat képekkel, ha vannak a kontextusban', async () => {
         const mockBlogs = [
             {
                 id: 1,
-                title: 'Test Blog',
+                title: 'Teszt Blog',
                 blogType: 'TRAINING',
             },
         ];
@@ -105,9 +98,9 @@ describe('Blogs', () => {
         });
 
         await waitFor(() => {
-            expect(screen.getByText('Test Blog')).toBeInTheDocument();
+            expect(screen.getByText('Teszt Blog')).toBeInTheDocument();
             expect(screen.getByText('Edzés')).toBeInTheDocument();
-            expect(screen.getByAltText('Test Blog')).toHaveAttribute('src', mockBlobUrl);
+            expect(screen.getByAltText('Teszt Blog')).toHaveAttribute('src', mockBlobUrl);
         });
 
         expect(axios.get).toHaveBeenCalledWith('/blog/blog/picture/1', {
@@ -116,29 +109,29 @@ describe('Blogs', () => {
         });
     });
 
-    // Test 3: Shows create button for trainer user type
-    it('shows create button when userType is TRAINER', () => {
+    // 3. teszt: Megjelenik a "létrehozás" gomb, ha edző a felhasználó
+    it('megjeleníti a létrehozás gombot, ha a userType edző', () => {
         renderWithProviders(<Blogs />, {
             userContextValue: { userType: 'TRAINER' },
         });
         const createButton = screen.getByLabelText('add');
         expect(createButton).toBeInTheDocument();
         fireEvent.click(createButton);
-        expect(screen.getByText(/CreateBlog/i)).toBeInTheDocument();
+        expect(screen.getByText(/Blog Létrehozása/i)).toBeInTheDocument();
     });
 
-    // Test 4: Hides create button for non-trainer user type
-    it('hides create button when userType is null', () => {
+    // 4. teszt: Nem jelenik meg a "létrehozás" gomb, ha nem edző a felhasználó
+    it('elrejti a létrehozás gombot, ha a userType null', () => {
         renderWithProviders(<Blogs />);
         expect(screen.queryByLabelText('add')).not.toBeInTheDocument();
     });
 
-    // Test 5: Shows edit and delete icons for trainer user type
-    it('shows edit and delete icons for trainer user type', async () => {
+    // 5. teszt: Megjelennek a szerkesztés és törlés ikonok edzőnél
+    it('megjeleníti a szerkesztés és törlés ikonokat edző típusú felhasználónál', async () => {
         const mockBlogs = [
             {
                 id: 1,
-                title: 'Test Blog',
+                title: 'Teszt Blog',
                 blogType: 'TRAINING',
             },
         ];
@@ -156,12 +149,12 @@ describe('Blogs', () => {
         });
     });
 
-    // Test 6: Hides edit and delete icons for non-trainer user type
-    it('hides edit and delete icons for non-trainer user type', async () => {
+    // 6. teszt: Nem jelennek meg a szerkesztés és törlés ikonok nem edzőnél
+    it('elrejti a szerkesztés és törlés ikonokat nem edző típusú felhasználónál', async () => {
         const mockBlogs = [
             {
                 id: 1,
-                title: 'Test Blog',
+                title: 'Teszt Blog',
                 blogType: 'TRAINING',
             },
         ];
@@ -178,12 +171,12 @@ describe('Blogs', () => {
         });
     });
 
-    // Test 7: Navigates to blog details on card click
-    it('navigates to blog details when blog card is clicked', async () => {
+    // 7. teszt: Átnavigál a blog részleteire, ha rákattintunk a kártyára
+    it('átnavigál a blog részleteire, ha rákattintunk a blog kártyára', async () => {
         const mockBlogs = [
             {
                 id: 1,
-                title: 'Test Blog',
+                title: 'Teszt Blog',
                 blogType: 'TRAINING',
             },
         ];
@@ -195,7 +188,7 @@ describe('Blogs', () => {
         });
 
         await waitFor(() => {
-            const blogTitle = screen.getByText('Test Blog');
+            const blogTitle = screen.getByText('Teszt Blog');
             fireEvent.click(blogTitle);
             expect(mockNavigate).toHaveBeenCalledWith('/openedBlog', {
                 state: expect.objectContaining({
@@ -206,12 +199,12 @@ describe('Blogs', () => {
         });
     });
 
-    // Test 8: Opens edit modal when edit icon is clicked
-    it('opens edit modal when edit icon is clicked', async () => {
+    // 8. teszt: Megnyitja a szerkesztő modalt, ha a szerkesztés ikonra kattintunk
+    it('megnyitja a szerkesztő modalt, ha a szerkesztés ikonra kattintunk', async () => {
         const mockBlogs = [
             {
                 id: 1,
-                title: 'Test Blog',
+                title: 'Teszt Blog',
                 blogType: 'TRAINING',
             },
         ];
@@ -226,16 +219,16 @@ describe('Blogs', () => {
         await waitFor(() => {
             const editIcon = screen.getByLabelText('edit');
             fireEvent.click(editIcon);
-            expect(screen.getByText('EditBlog Test Blog')).toBeInTheDocument();
+            expect(screen.getByText('Blog Szerkesztése Teszt Blog')).toBeInTheDocument();
         });
     });
 
-    // Test 9: Opens delete confirmation modal when delete icon is clicked
-    it('opens delete confirmation modal when delete icon is clicked', async () => {
+    // 9. teszt: Megnyitja a törlés megerősítő modalt, ha a törlés ikonra kattintunk
+    it('megnyitja a törlés megerősítő modalt, ha a törlés ikonra kattintunk', async () => {
         const mockBlogs = [
             {
                 id: 1,
-                title: 'Test Blog',
+                title: 'Teszt Blog',
                 blogType: 'TRAINING',
             },
         ];
@@ -250,34 +243,34 @@ describe('Blogs', () => {
         await waitFor(() => {
             const deleteIcon = screen.getByLabelText('delete');
             fireEvent.click(deleteIcon);
-            expect(screen.getByText(/Confirmation/i)).toBeInTheDocument();
+            expect(screen.getByText(/Megerősítés/i)).toBeInTheDocument();
         });
     });
 
-    // Test 10: Handles image fetch error with fallback
-    it('uses fallback image when blog image fetch fails', async () => {
+    // 10. teszt: Helyettesítő képet használ, ha a kép betöltése sikertelen
+    it('helyettesítő képet használ, ha a blog kép betöltése nem sikerül', async () => {
         const mockBlogs = [
             {
                 id: 1,
-                title: 'Test Blog',
+                title: 'Teszt Blog',
                 blogType: 'TRAINING',
             },
         ];
-        axios.get.mockRejectedValueOnce(new Error('Image fetch failed'));
+        axios.get.mockRejectedValueOnce(new Error('Kép betöltése sikertelen'));
 
         renderWithProviders(<Blogs />, {
             blogContextValue: { ...mockBlogContext, blogs: mockBlogs },
         });
 
         await waitFor(() => {
-            const blogImage = screen.getByAltText('Test Blog');
+            const blogImage = screen.getByAltText('Teszt Blog');
             expect(blogImage).toHaveAttribute('src', 'https://via.placeholder.com/400x250?text=Nincs+kép');
         });
     });
 
-    // Test 11: Shows error snackbar on fetchBlogs failure
-    it('shows error snackbar when fetchBlogs fails', async () => {
-        mockBlogContext.fetchBlogs.mockRejectedValueOnce(new Error('Fetch failed'));
+    // 11. teszt: Hibaüzenetet mutat, ha a blogok betöltése nem sikerül
+    it('hibaüzenetet mutat, ha a fetchBlogs nem sikerül', async () => {
+        mockBlogContext.fetchBlogs.mockRejectedValueOnce(new Error('Betöltés sikertelen'));
 
         renderWithProviders(<Blogs />);
 

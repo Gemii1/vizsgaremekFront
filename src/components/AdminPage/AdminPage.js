@@ -15,6 +15,11 @@ const AdminPage = () => {
     const closeSnackBarError = () => setSnackBarError(false);
     const openSnackBarError = () => setSnackBarError(true);
 
+    const [snackBarSuccess, setSnackBarSuccess] = useState(false);
+
+    const closeSnackBarSuccess = () => setSnackBarSuccess(false);
+    const openSnackBarSuccess = () => setSnackBarSuccess(true);
+
     useEffect(() => {
         const fetchTrainers = async () => {
             try {
@@ -29,12 +34,13 @@ const AdminPage = () => {
         fetchTrainers();
     }, []);
 
-    const handleDeleteTrainer = async (trainerId) => {
+    const handleDeleteTrainer = async (loginId) => {
         try {
-            const response = await axios.delete(`/auth/delete/${trainerId}`);
+            const response = await axios.delete(`/auth/delete/${loginId}`);
             if (response.status === 200 || response.status === 204) {
-                setTrainers(trainers.filter((trainer) => trainer.id !== trainerId));
+                setTrainers(trainers.filter((trainer) => trainer.login.loginId !== loginId));
                 setDeleteModal(false);
+                openSnackBarSuccess();
             } else {
                 openSnackBarError();
             }
@@ -44,15 +50,7 @@ const AdminPage = () => {
         }
     };
 
-    const canDeleteTrainer = async (trainer) => {
-        try {
-            const blogResponse = await axios.get(`/blog/`);
-            return !trainer.hasProgram && !trainer.hasBlog;
-        } catch (error) {
-            console.error('Error checking trainer deletability:', error);
-            return false;
-        }
-    };
+
 
     const openDeleteModal = (id) => {
         setDeleteModal(true);
@@ -79,8 +77,7 @@ const AdminPage = () => {
                                 <div key={trainer.id} className={styles.endpoint}>
                                     <button
                                         className={styles.deleteBtn}
-                                        onClick={() => openDeleteModal(trainer.id)}
-                                        disabled={!canDeleteTrainer(trainer)}
+                                        onClick={() => openDeleteModal(trainer.login.loginId)}
                                     >
                                         Törlés
                                     </button>
@@ -90,9 +87,7 @@ const AdminPage = () => {
                                             Edző: {trainer.name} (ID: {trainer.id})
                                         </span>
                                         <span className={styles.status}>
-                                            {canDeleteTrainer(trainer)
-                                                ? 'Nem írt blogot vagy nincs programja'
-                                                : 'Írt blogot vagy van programja'}
+                                           Törlés esetén, minden program és blog, amit az edző írt kitörlésre kerül!
                                         </span>
                                     </div>
                                 </div>
@@ -110,6 +105,13 @@ const AdminPage = () => {
                 onClose={closeSnackBarError}
                 message="Sikertelen művelet!"
                 sx={{ '& .MuiSnackbarContent-root': { backgroundColor: '#d32f2f' } }}
+            />
+            <Snackbar
+                open={snackBarSuccess}
+                autoHideDuration={6000}
+                onClose={closeSnackBarSuccess}
+                message="Sikeres törlés!"
+                sx={{ '& .MuiSnackbarContent-root': { backgroundColor: '#2e7d32' } }}
             />
         </div>
     );

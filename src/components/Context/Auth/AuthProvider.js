@@ -1,4 +1,3 @@
-// AuthProvider.jsx
 import AuthContext from './AuthContext';
 import axios from "axios";
 import { useContext, useEffect } from "react";
@@ -18,11 +17,8 @@ function AuthProvider({ children }) {
                 localStorage.setItem('access_token', token);
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
                 setIsUserLoggedIn(true);
-
                 const role = getRoleFromResponse(response.data);
                 setUserType(role);
-                console.log("Login response:", response.data);
-                console.log("Extracted role:", role);
 
                 getUserData(token);
                 return response.data;

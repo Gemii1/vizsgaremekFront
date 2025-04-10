@@ -1,4 +1,3 @@
-// CreateTraining.jsx
 import styles from './CreateTraining.module.css';
 import { Controller, useForm } from "react-hook-form";
 import { DatePicker, LocalizationProvider, TimePicker } from "@mui/x-date-pickers";

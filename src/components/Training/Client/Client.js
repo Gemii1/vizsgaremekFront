@@ -1,4 +1,3 @@
-// Client.jsx
 import styles from './Client.module.css';
 import { Grid } from '@mui/joy';
 import { Divider, Button, Snackbar, IconButton } from "@mui/material";
@@ -29,9 +28,9 @@ function Client() {
         const days = [];
         const start = new Date(startDate);
         const dayOfWeek = start.getDay();
-        const offset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // Monday as first day
+        const offset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
         start.setDate(start.getDate() + offset);
-        start.setHours(0, 0, 0, 0); // Normalize to midnight
+        start.setHours(0, 0, 0, 0);
         for (let i = 0; i < 5; i++) {
             const day = new Date(start);
             day.setDate(start.getDate() + i);
@@ -123,11 +122,9 @@ function Client() {
 
     const handleApplication = (isLoggedIn, program) => {
         if (!isLoggedIn || !user) return null;
-
         const programId = program.id;
         const isRegistered = registeredPrograms[programId] || false;
         const hasParticipated = participatedPrograms[programId] || false;
-
 
         if (program.status === "UPCOMING") {
             if (!isRegistered) {

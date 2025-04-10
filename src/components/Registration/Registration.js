@@ -1,4 +1,3 @@
-// Registration.jsx
 import styles from './Registration.module.css';
 import { Tabs, TabList, Tab, TabPanel } from '@mui/joy';
 import React, { useState } from "react";

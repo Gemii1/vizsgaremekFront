@@ -13,10 +13,12 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import axios from 'axios';
 import AuthContext from '../Context/Auth/AuthContext';
+import Confirmation from "../Confirmation";
+import PhoneInput from "react-phone-input-2";
 
 function Navbar() {
     const navigate = useNavigate();
-    const { userType, setUserType, isUserLoggedIn, setIsUserLoggedIn, user, fetchUser, deleteUser } = useContext(UserContext);
+    const { userType, setUserType, isUserLoggedIn, setIsUserLoggedIn, user, fetchUser } = useContext(UserContext);
     const { logout } = useContext(AuthContext);
     const [openInfoModal, setOpenInfoModal] = useState(false);
     const [email, setEmail] = useState('');
@@ -28,7 +30,16 @@ function Navbar() {
     const [snackBarError, setSnackBarError] = useState(false);
     const [patchData, setPatchData] = useState({});
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const trainerQualifications = ["Personal Trainer", "Fitness Instructor", "Pilates Instructor", "Crossfit Coach", "TRX Trainer", "Pound Trainer", "Other"];
+    const [deleteModal, setDeleteModal] = useState(false);
+    const trainerQualifications = [
+        "Personal Trainer",
+        "Fitness Instructor",
+        "Pilates Instructor",
+        "Crossfit Coach",
+        "TRX Trainer",
+        "Pound Trainer",
+        "Other",
+    ];
 
     const handleOpenInfo = () => setOpenInfoModal(true);
     const handleCloseInfo = () => setOpenInfoModal(false);
@@ -36,6 +47,9 @@ function Navbar() {
     const openSnackBarSuccess = () => setSnackBarSuccess(true);
     const closeSnackBarError = () => setSnackBarError(false);
     const openSnackBarError = () => setSnackBarError(true);
+
+    const openDeleteModal = () => setDeleteModal(true);
+    const closeDeleteModal = () => setDeleteModal(false);
     const whichUser = (userType) => (userType === 'TRAINER' ? <>Edző</> : userType === 'CLIENT' ? <>Kliens</> : <>Admin</>);
 
     const isThereQualification = () => {
@@ -152,7 +166,7 @@ function Navbar() {
         }
     };
 
-    const patchUserData = async (data) => {
+    const patchUserData = async () => {
         try {
             if (userType === 'TRAINER') {
                 await axios.patch(`/trainer/${user.id}`, patchData);
@@ -195,17 +209,26 @@ function Navbar() {
                         color="error"
                         variant="contained"
                         size="small"
-                        onClick={() => {
-                            deleteUser(userType);
-                            navigate('/landingPage');
-                            setIsUserLoggedIn(false);
-                            handleCloseInfo();
-                        }}
+                        onClick={openDeleteModal}
                     >
                         Fiók törlése
                     </Button>
                 </div>
             );
+        }
+    };
+
+    const deleteUser = async () => {
+        try {
+            await axios.delete(`/auth/delete`);
+            setIsUserLoggedIn(false);
+            navigate('/landingPage');
+            closeDeleteModal();
+            handleCloseInfo()
+            openSnackBarSuccess();
+        } catch (e) {
+            openSnackBarError();
+            console.error('Delete error:', e);
         }
     };
 
@@ -238,6 +261,7 @@ function Navbar() {
                         </div>
                     </div>
                 </div>
+
                 <Modal open={openInfoModal} onClose={handleCloseInfo}>
                     {user ? (
                         <div className={styles.modalContainer}>
@@ -285,10 +309,10 @@ function Navbar() {
                                         className={styles.editInputs}
                                         name="birth_date"
                                         onChange={handleChange}
-                                        slotProps={{ textField: { size: 'small', variant: 'outlined' } }}
+                                        slotProps={{textField: {size: 'small', variant: 'outlined'}}}
                                     />
                                     <div className={styles.editButton}>
-                                        <EditIcon onClick={() => setIsBirthYearEdited(false)} />
+                                        <EditIcon onClick={() => setIsBirthYearEdited(false)}/>
                                         {!isBirthYearEdited && (
                                             <Button
                                                 variant="contained"
@@ -307,18 +331,18 @@ function Navbar() {
                                 {isThereQualification()}
                                 <div className={styles.info}>
                                     <h4>Telefonszám:</h4>
-                                    <TextField
+                                    <PhoneInput
                                         className={styles.editInputs}
                                         type="number"
                                         disabled={isPhoneEdited}
-                                        defaultValue={user.phoneNumber || ''}
-                                        onChange={handleChange}
-                                        name="phone_Number"
-                                        variant="outlined"
-                                        size="small"
+                                        value={user.phoneNumber || ''}
+                                        onChange={(value) => handleChange({target: {name: "phone_Number", value}})}
+                                        country="hu"
+                                        inputStyle={{width: '100%'}}
+                                        inputProps={{maxLength: 15}}
                                     />
                                     <div className={styles.editButton}>
-                                        <EditIcon onClick={() => setIsPhoneEdited(false)} />
+                                        <EditIcon onClick={() => setIsPhoneEdited(false)}/>
                                         {!isPhoneEdited && (
                                             <Button
                                                 variant="contained"
@@ -340,17 +364,22 @@ function Navbar() {
                     ) : (
                         <div className={styles.modalContainer}>
                             <div className={styles.modalHeader}>
-                                <p>Loading user data...</p>
+                                <p>Felhasználói adatok betöltése</p>
                             </div>
                         </div>
                     )}
                 </Modal>
+
+                <Modal open={deleteModal} onClose={closeDeleteModal}>
+                    <Confirmation close={closeDeleteModal} deleteFunction={deleteUser}/>
+                </Modal>
+
                 <Snackbar
                     open={snackBarSuccess}
                     autoHideDuration={6000}
                     onClose={closeSnackBarSuccess}
                     message="Sikeres módosítás!"
-                    sx={{ '& .MuiSnackbarContent-root': { backgroundColor: '#2e7d32' } }}
+                    sx={{'& .MuiSnackbarContent-root': {backgroundColor: '#2e7d32'}}}
                 />
                 <Snackbar
                     open={snackBarError}
@@ -363,5 +392,4 @@ function Navbar() {
         </LocalizationProvider>
     );
 }
-
 export default Navbar;

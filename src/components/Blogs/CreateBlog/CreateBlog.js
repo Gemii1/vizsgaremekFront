@@ -49,7 +49,6 @@ function CreateBlog({ close }) {
     };
 
     const savePictureToBlog = async (response, file) => {
-        console.log(file)
         try {
             const formData = new FormData();
             formData.append('file', file);
@@ -143,7 +142,7 @@ function CreateBlog({ close }) {
                         name="mainText"
                         control={control}
                         defaultValue=""
-                        rules={{ required: 'A fő szöveg megadása kötelező!' }}
+                        rules={{ required: 'A tárgyalás szövegének megadása kötelező!' }}
                         render={({ field, fieldState: { error } }) => (
                             <Textarea
                                 minRows={6}

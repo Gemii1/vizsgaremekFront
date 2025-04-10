@@ -8,8 +8,8 @@
 .contentWrapper {
     max-width: 1200px;
     margin: 0 auto;
-    padding: clamp(20px, 5vw, 50px); /* Fluid padding */
-    padding-top: clamp(70px, 10vh, 80px); /* Navbar magassága + extra tér */
+    padding: clamp(20px, 5vw, 50px);
+    padding-top: clamp(70px, 10vh, 80px);
 }
 
 .section {
@@ -28,7 +28,7 @@
     justify-content: space-between;
     align-items: center;
     font-weight: 600;
-    font-size: clamp(1.25rem, 3vw, 1.5rem); /* Fluid betűméret */
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
     color: #333;
     border-radius: 8px 8px 0 0;
 }
@@ -94,16 +94,16 @@
 }
 
 .status {
-    color: #999;
+    color: red;
     font-style: italic;
     font-size: clamp(0.75rem, 2vw, 0.875rem);
 }
 
-/* Reszponzív dizájn telefonra */
+
 @media (max-width: 720px) {
     .contentWrapper {
         padding: 15px;
-        padding-top: 60px; /* Kisebb Navbar-hoz igazítva */
+        padding-top: 60px;
     }
 
     .sectionHeader {
